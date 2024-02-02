@@ -1,0 +1,67 @@
+.dealers_section{
+background: var(--dashboard-bg, #FAFAFE);
+padding: 0px 70px;
+}
+.section_text{
+  
+    color: var(--dashboard-txt-black, #19181C);
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 40px;
+}
+.text_thumb{
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 45px;
+}
+.dealers_amount{
+    color: var(--dashboard-txt-grey, #ADAABE);
+
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        letter-spacing: -0.078px;
+}
+.add_dealer_btn{
+    border:1px transparent;
+    border-radius: 10px;
+        background: var(--app-black, #10101C);
+        color:#fff;
+        outline:none;
+}
+.cross_icon{
+    vertical-align: text-bottom;
+    margin-right: 5px;
+}
+.dealers_thumb{
+    border-radius: 20px;
+        background: var(--app-white, #FFF);
+}
+.dealers_thumb_titles{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 22px;
+}
+.checkbox{
+    margin-left: 30px;
+    width: 15px;
+        height: 15px;
+        flex-shrink: 0;border-radius: 2px;
+            border: 2px solid var(--app-stroke-light, #B5A89C);
+}
+.dealers_company_title{
+    color: var(--dashboard-txt-grey, #ADAABE);
+    
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+     
+}
+.az_filter_icon{
+    vertical-align: middle;
+    
+}
