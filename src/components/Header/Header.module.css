@@ -1,66 +1,63 @@
-
 @font-face {
-    font-family: 'SF-Pro';
-    src:  url(../fonts/SF-Pro-Text-Medium.otf) format('otf');
+  font-family: 'SF-Pro';
+  src: url(../fonts/SF-Pro-Text-Medium.otf) format('otf');
 }
-.navigation{
-    padding-top:20px;
-    padding-left: 60px;
-    display:flex;
-    align-items: center;
-    justify-content: space-between;
+.navigation {
+  padding-top: 20px;
+  padding-left: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.logo_icon{
-    padding-top: 5px;
+.logo_icon {
+  padding-top: 5px;
 }
-.nav_link{
-    color:#000;
-  
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        letter-spacing: 0px;
-        text-align: center;
+.nav_link {
+  color: #000;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: center;
 }
-.nav_link:not(:last-child){
-    margin-right: 30px;
+.nav_link:not(:last-child) {
+  margin-right: 30px;
 }
-.log_out_thumb{
+.log_out_thumb {
   padding-right: 60px;
   display: flex;
+  padding-bottom: 20px;
 }
-.user_status_thumb{
+.user_status_thumb {
+  padding: 6px;
+  border-radius: 30px;
+  background: rgba(218, 211, 204, 0.2);
+  color: var(--app-primary, #9c8d7f);
+  text-align: center;
 
-    padding: 6px;
-    border-radius: 30px;
-background: rgba(218, 211, 204, 0.20);
-color: var(--app-primary, #9C8D7F);
-    text-align: center;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 10px;
+}
+.user_status_icon {
+  vertical-align: middle;
+  margin-left: 3px;
+}
+.user_email {
+  color: var(--dashboard-txt-black, #19181c);
+  text-align: center;
 
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 10px;
- 
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
 }
-.user_status_icon{
-    vertical-align: middle;
-    margin-left: 3px;
-}
-.user_email{
-    color: var(--dashboard-txt-black, #19181C);
-        text-align: center;
-   
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 20px;
-   
-}
-.grey_border{
-    width: 1px;
-      height: 40px;
-background: #DAD3CC;
-    margin-left: 30px;
-    margin-right: 30px;
+.grey_border {
+  width: 1px;
+  height: 40px;
+  background: #dad3cc;
+  margin-left: 30px;
+  margin-right: 30px;
 }
