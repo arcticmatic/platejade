@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/platejade/static/css/main.dbffa6ae.css",
-    "main.js": "/platejade/static/js/main.956594a8.js",
+    "main.js": "/platejade/static/js/main.73bcfebd.js",
     "static/media/SF-Pro-Text-Medium.otf": "/platejade/static/media/SF-Pro-Text-Medium.d8bb87473fe937958666.otf",
     "static/media/plate-jade-logo.svg": "/platejade/static/media/plate-jade-logo.18147d9579aca91f6405f64afc9dfbc3.svg",
     "static/media/editIcon.svg": "/platejade/static/media/editIcon.b8268fe7756d3565cc75d064ccc8eff8.svg",
@@ -12,10 +12,10 @@
     "static/media/cross.svg": "/platejade/static/media/cross.aa771eb3c3aebbe9f045bbad4e444c8d.svg",
     "static/media/star.svg": "/platejade/static/media/star.e0961ca20c5e1036094e6a93f5acfd88.svg",
     "main.dbffa6ae.css.map": "/platejade/static/css/main.dbffa6ae.css.map",
-    "main.956594a8.js.map": "/platejade/static/js/main.956594a8.js.map"
+    "main.73bcfebd.js.map": "/platejade/static/js/main.73bcfebd.js.map"
   },
   "entrypoints": [
     "static/css/main.dbffa6ae.css",
-    "static/js/main.956594a8.js"
+    "static/js/main.73bcfebd.js"
   ]
 }
