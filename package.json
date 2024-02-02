@@ -2,11 +2,12 @@
   "name": "platejade",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/arcticmatic/platejade",
+  "homepage": "https://arcticmatic.github.io/platejade/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "gh-pages": "^6.1.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.21.3",
@@ -18,7 +19,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:js": "eslint src/**/*.{js,jsx}"
+    "lint:js": "eslint src/**/*.{js,jsx}",
+    "predeploy": "npm run build",
+"deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
