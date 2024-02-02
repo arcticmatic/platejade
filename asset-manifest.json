@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/arcticmatic/platejade/static/css/main.02e532c1.css",
-    "main.js": "/arcticmatic/platejade/static/js/main.b0a5ce0f.js",
-    "static/media/SF-Pro-Text-Medium.otf": "/arcticmatic/platejade/static/media/SF-Pro-Text-Medium.d8bb87473fe937958666.otf",
-    "static/media/plate-jade-logo.svg": "/arcticmatic/platejade/static/media/plate-jade-logo.18147d9579aca91f6405f64afc9dfbc3.svg",
-    "static/media/editIcon.svg": "/arcticmatic/platejade/static/media/editIcon.b8268fe7756d3565cc75d064ccc8eff8.svg",
-    "static/media/deleteIcon.svg": "/arcticmatic/platejade/static/media/deleteIcon.8ab545b7e1803580706a6821d03aff20.svg",
-    "static/media/logoutIcon.svg": "/arcticmatic/platejade/static/media/logoutIcon.c617e09f6b7d5b746780017c2125729d.svg",
-    "index.html": "/arcticmatic/platejade/index.html",
-    "static/media/AZFilterIcon.svg": "/arcticmatic/platejade/static/media/AZFilterIcon.5ab9bc90f5b934f5fde4096892955334.svg",
-    "static/media/cross.svg": "/arcticmatic/platejade/static/media/cross.aa771eb3c3aebbe9f045bbad4e444c8d.svg",
-    "static/media/star.svg": "/arcticmatic/platejade/static/media/star.e0961ca20c5e1036094e6a93f5acfd88.svg",
-    "main.02e532c1.css.map": "/arcticmatic/platejade/static/css/main.02e532c1.css.map",
-    "main.b0a5ce0f.js.map": "/arcticmatic/platejade/static/js/main.b0a5ce0f.js.map"
+    "main.css": "/platejade/static/css/main.dbffa6ae.css",
+    "main.js": "/platejade/static/js/main.956594a8.js",
+    "static/media/SF-Pro-Text-Medium.otf": "/platejade/static/media/SF-Pro-Text-Medium.d8bb87473fe937958666.otf",
+    "static/media/plate-jade-logo.svg": "/platejade/static/media/plate-jade-logo.18147d9579aca91f6405f64afc9dfbc3.svg",
+    "static/media/editIcon.svg": "/platejade/static/media/editIcon.b8268fe7756d3565cc75d064ccc8eff8.svg",
+    "static/media/deleteIcon.svg": "/platejade/static/media/deleteIcon.8ab545b7e1803580706a6821d03aff20.svg",
+    "static/media/logoutIcon.svg": "/platejade/static/media/logoutIcon.c617e09f6b7d5b746780017c2125729d.svg",
+    "index.html": "/platejade/index.html",
+    "static/media/AZFilterIcon.svg": "/platejade/static/media/AZFilterIcon.5ab9bc90f5b934f5fde4096892955334.svg",
+    "static/media/cross.svg": "/platejade/static/media/cross.aa771eb3c3aebbe9f045bbad4e444c8d.svg",
+    "static/media/star.svg": "/platejade/static/media/star.e0961ca20c5e1036094e6a93f5acfd88.svg",
+    "main.dbffa6ae.css.map": "/platejade/static/css/main.dbffa6ae.css.map",
+    "main.956594a8.js.map": "/platejade/static/js/main.956594a8.js.map"
   },
   "entrypoints": [
-    "static/css/main.02e532c1.css",
-    "static/js/main.b0a5ce0f.js"
+    "static/css/main.dbffa6ae.css",
+    "static/js/main.956594a8.js"
   ]
 }
