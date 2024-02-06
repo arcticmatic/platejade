@@ -4,11 +4,15 @@ import AZFilterIcon from '../icons/AZFilterIcon.svg';
 import editIcon from '../icons/editIcon.svg';
 import deleteIcon from '../icons/deleteIcon.svg';
 import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const DealersPage = () => {
   const [dealers, setDealers] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const getAllDealers = () => {
     fetch('https://car-plates.onrender.com/api/auth/admin/alldealers', {
       method: 'GET',
       header: {},
@@ -17,7 +21,38 @@ const DealersPage = () => {
       .then(result => {
         setDealers(result.dealers);
       });
-  }, []);
+  };
+
+  const handleDelete = dealerId => {
+    fetch(
+      `https://car-plates.onrender.com/api/auth/admin/delete-dealer/${dealerId}`,
+      {
+        method: 'DELETE',
+        headers: {},
+      }
+    )
+      .then(res => res.json())
+      .then(result => {
+        console.log('refresh');
+        // setDealers(result.dealers);
+        // console.log('result.dealers', result.dealers);
+      });
+    setRefresh(true);
+  };
+
+  const handleRedirect = companyName => {
+    // event.preventDefault();
+
+    navigate({
+      pathname: '/edit-dealer/',
+      search: `?dealer=${companyName}`,
+    });
+  };
+
+  useEffect(() => {
+    getAllDealers();
+    setRefresh(false);
+  }, [refresh]);
 
   return (
     <>
@@ -27,10 +62,12 @@ const DealersPage = () => {
             Dealers
             <span className={css.dealers_amount}>({dealers.length})</span>
           </p>
-          <button className={css.add_dealer_btn}>
-            <img alt="cross" className={css.cross_icon} src={cross} />
-            Add new
-          </button>
+          <NavLink to="/add-dealer">
+            <button className={css.add_dealer_btn}>
+              <img alt="cross" className={css.cross_icon} src={cross} />
+              Add new
+            </button>
+          </NavLink>
         </div>
         <div className={css.dealers_thumb}>
           <div className={css.dealers_thumb_titles}>
@@ -74,14 +111,18 @@ const DealersPage = () => {
 
                   <div className={css.dealers_admin_actions_thumb}>
                     <p className={css.dealers_company_title}>View info</p>
+                    {/* <Link to={`/edit-dealer/${dealer.company_name}`}> */}
                     <img
+                      onClick={() => handleRedirect(dealer.company_name)}
                       className={css.edit_icon}
                       alt="edit icon"
                       width="20"
                       height="20"
                       src={editIcon}
                     />
+                    {/* </Link> */}
                     <img
+                      onClick={() => handleDelete(dealer._id)}
                       className={css.delete_icon}
                       alt="delete icon"
                       width="20"

@@ -20,13 +20,13 @@ const Header = () => {
             <NavLink to="/license-plates" className={css.nav_link}>
               License Plates
             </NavLink>
-            <NavLink to="/license-plates" className={css.nav_link}>
+            <NavLink to="/plate-frame" className={css.nav_link}>
               Plate Frame
             </NavLink>
-            <NavLink to="/license-plates" className={css.nav_link}>
+            <NavLink to="/users" className={css.nav_link}>
               Users
             </NavLink>
-            <NavLink to="/license-plates" className={css.nav_link}>
+            <NavLink to="/dealers" className={css.nav_link}>
               Dealers
             </NavLink>
           </div>
