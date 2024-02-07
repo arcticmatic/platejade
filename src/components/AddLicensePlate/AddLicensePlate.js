@@ -1,18 +1,19 @@
-import css from './AddDealer.module.css';
+import css from './AddLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
 import dealerPhoto from '../icons/dealerPhoto.svg';
 // import brownCross from '../icons/brownCross.svg';
 import copyIcon from '../icons/copyIcon.svg';
+// import bottomArrowFrom
 import { useState } from 'react';
 
-const AddDealer = () => {
+const AddLicensePlate = () => {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [contactPerson, setContactPerson] = useState('');
   const [doingBusinessAs, setDoingBusinessAs] = useState('');
   const [number, setNumber] = useState('');
-  const [e_mail, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
 
   const handleChange = event => {
@@ -31,7 +32,7 @@ const AddDealer = () => {
         setNumber(value);
         break;
 
-      case 'e_mail':
+      case 'email':
         setEmail(value);
         break;
 
@@ -55,7 +56,7 @@ const AddDealer = () => {
     console.log('password', generatedPassword);
     event.preventDefault();
 
-    fetch('https://car-plates.onrender.com/api/auth/admin/add-dealer', {
+    fetch('https://car-plates.onrender.com/api/auth/admin/add-plate', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -67,7 +68,7 @@ const AddDealer = () => {
         // logo: { type: String },
         contact_person: contactPerson,
         number: number,
-        e_mail: e_mail,
+        e_mail: email,
         doing_business_as: doingBusinessAs,
         password: generatedPassword,
       }),
@@ -116,32 +117,6 @@ const AddDealer = () => {
     // navigate('/user', { replace: true });
   };
 
-  // const handleCopy = () => {
-  //   console.log('click');
-  // };
-
-  const handleGeneratePassword = event => {
-    event.preventDefault();
-    console.log('click');
-    const charset =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?';
-    const passwordArray = new Uint32Array(21);
-
-    // Use window.crypto for browser or crypto module for Node.js
-    window.crypto.getRandomValues(passwordArray);
-
-    const newPassword = Array.from(passwordArray)
-      .map(value => charset[value % charset.length])
-      .join('');
-
-    setGeneratedPassword(newPassword);
-  };
-
-  // const handleAddNewPerson = event => {
-  //   event.preventDefault();
-  //   setIsClickedOnce(true);
-  // };
-
   return (
     <>
       <section className={css.add_dealers_section}>
@@ -149,13 +124,13 @@ const AddDealer = () => {
           <div className={css.back_btn_thumb}>
             <img alt="back" className={css.back_icon} src={backArrow} />
 
-            <Link to="/dealers">
+            <Link to="/license-plates">
               <button className={css.back_to_dealers_btn}>
-                Back to dealers
+                Back to plates
               </button>
             </Link>
           </div>
-          <p className={css.add_dealer_text}>Add Dealer</p>
+          <p className={css.add_dealer_text}>Add Plate</p>
           <form onSubmit={handleSubmit} className={css.add_dealer_blocks_thumb}>
             <div>
               <div className={css.add_dealer_company_info}>
@@ -171,96 +146,14 @@ const AddDealer = () => {
                     PNG or JPG recommended size (1000px*1000px)
                   </p>
                 </div>
-                <div className={css.add_dealer_border}></div>
-                <div className={css.add_dealer_company_thumb}>
-                  <p className={css.add_dealer_company_text}>Company Info</p>
-                  <ul className={css.add_dealer_company_list}>
-                    <li className={css.company_item}>
-                      <p className={css.company_label}> Company name</p>
-
-                      <input
-                        type="text"
-                        name="companyName"
-                        onChange={handleChange}
-                        className={css.company_input}
-                        placeholder="Company name"
-                      />
-                    </li>
-                    <li className={css.company_item}>
-                      <p className={css.company_label}> Doing Business As</p>
-
-                      <input
-                        type="text"
-                        name="doingBusinessAs"
-                        onChange={handleChange}
-                        className={css.company_input}
-                        placeholder="Doing Business As"
-                      />
-                    </li>
-                  </ul>
-
-                  <p className={css.company_label}> Company Address</p>
-
-                  <input
-                    type="text"
-                    name="address"
-                    onChange={handleChange}
-                    className={css.company_input_address}
-                    placeholder="Company Address"
-                  />
-                </div>
-              </div>
-              <div className={css.add_dealer_password_thumb}>
-                <div className={css.password_text_thumb}>
-                  <p className={css.password_text}>Generate a password</p>
-                  <p
-                    className={css.password_description}
-                    type="text"
-                    name="password"
-                    onChange={handleChange}
-                  >
-                    After generating the password, copy and send it to the
-                    dealer
-                  </p>
-                </div>
-
-                <button
-                  //   disabled={generatedPassword ? true : false}
-                  onClick={
-                    !generatedPassword
-                      ? handleGeneratePassword
-                      : () => {
-                          console.log('click');
-                        }
-                  }
-                  className={
-                    generatedPassword
-                      ? css.password_generated_btn
-                      : css.password_generate_btn
-                  }
-                >
-                  {generatedPassword
-                    ? generatedPassword
-                    : 'Generate a password'}
-                  {generatedPassword ? (
-                    <img
-                      onClick={() =>
-                        navigator.clipboard.writeText(generatedPassword)
-                      }
-                      alt="copy icon"
-                      className={css.copy_icon}
-                      src={copyIcon}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </button>
               </div>
             </div>
             <div className={css.dealer_contact_thumb}>
               <div className={css.add_dealer_contact_person}>
                 <div className={css.add_dealer_company_thumb}>
-                  <p className={css.add_dealer_company_text}>Сontact person</p>
+                  <p className={css.add_dealer_company_text}>
+                    Plate Information
+                  </p>
                   <ul className={css.add_dealer_company_list}>
                     <li className={css.company_item}>
                       <p className={css.company_label}>Name</p>
@@ -274,46 +167,110 @@ const AddDealer = () => {
                       />
                     </li>
                     <li className={css.company_item}>
-                      <p className={css.company_label}> Phone number</p>
+                      <p className={css.company_label}> Choose a dealer </p>
 
                       <input
                         type="text"
                         name="number"
                         onChange={handleChange}
                         className={css.company_input}
-                        placeholder="1-394-803-3508 x776"
+                        placeholder="Start typing or select from the list"
+                      />
+                    </li>
+                    <li>
+                      <p className={css.product_description_label}>
+                        Product description
+                      </p>
+                      <input
+                        type="text"
+                        name="email"
+                        onChange={handleChange}
+                        className={css.product_description_input}
+                        placeholder="Type here"
                       />
                     </li>
                   </ul>
 
-                  <p className={css.company_label}> E-mail</p>
+                  <p className={css.add_dealer_company_text}>Add Filter</p>
 
-                  <input
-                    type="text"
-                    name="e_mail"
-                    onChange={handleChange}
-                    className={css.person_input_address}
-                    placeholder="sportinginc@gmail.com"
-                  />
-                  {/*                   
-                  <button
-                    onClick={handleAddNewPerson}
-                    className={css.add_dealer_person}
-                  >
-                    <img
-                      alt="cross exit"
-                      className={css.cross}
-                      src={brownCross}
-                    />
-                    Add new
-                  </button> */}
+                  <ul className={css.add_item_filter_list}>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}> Choose category </p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="Start typing or select from the list"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}> Choose state </p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="Start typing or select from the list"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}> Choose status </p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="Start typing or select from the list"
+                      />
+                    </li>
+                  </ul>
+
+                  <p className={css.add_dealer_company_text}>
+                    Add link and price
+                  </p>
+
+                  <ul className={css.add_item_filter_list}>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}>Shop name</p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="Amazon"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}>
+                        Attach a link to the product
+                      </p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="Link"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}> Price ($) </p>
+                      <input
+                        type="text"
+                        name="number"
+                        onChange={handleChange}
+                        className={css.filter_item_input}
+                        placeholder="0.00"
+                      />
+                    </li>
+                  </ul>
                 </div>
               </div>
               <div className={css.add_dealer_buttons_thumb}>
-                <Link to="/">
+                <Link to="/license-plates">
                   <button className={css.cancel_btn}>Cancel</button>
                 </Link>
-                <button className={css.add_dealer_btn}>Add dealer</button>
+                <button className={css.add_dealer_btn}>Add plate</button>
               </div>
             </div>
           </form>
@@ -322,4 +279,4 @@ const AddDealer = () => {
     </>
   );
 };
-export default AddDealer;
+export default AddLicensePlate;

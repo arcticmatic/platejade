@@ -1,4 +1,4 @@
-import css from './LicensePlates.module.css';
+import css from './PlatesFrames.module.css';
 import { useState, useEffect } from 'react';
 import cross from '../icons/cross.svg';
 import editIcon from '../icons/editIcon.svg';
@@ -8,7 +8,7 @@ import startIcon from '../icons/startIcon.svg';
 import pauseIcon from '../icons/pauseIcon.svg';
 import { NavLink } from 'react-router-dom';
 
-const LicensePlates = () => {
+const PlatesFrames = () => {
   const [plates, setPlates] = useState([]);
 
   useEffect(() => {
@@ -136,4 +136,4 @@ const LicensePlates = () => {
     </>
   );
 };
-export default LicensePlates;
+export default PlatesFrames;

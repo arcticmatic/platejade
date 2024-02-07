@@ -2,22 +2,15 @@ import css from './EditDealer.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
 import dealerPhoto from '../icons/dealerPhoto.svg';
-// import brownCross from '../icons/brownCross.svg';
+
 import copyIcon from '../icons/copyIcon.svg';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const EditDealer = () => {
-  // console.log('dealer id', dealerId);
   const [searchParams] = useSearchParams();
 
   const [generatedPassword, setGeneratedPassword] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [doingBusinessAs, setDoingBusinessAs] = useState('');
-  const [number, setNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
   const [currentDealer, setCurrentDealer] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
@@ -26,7 +19,7 @@ const EditDealer = () => {
     contact_person: '',
     doing_business_as: '',
     number: '',
-    email: '',
+    e_mail: '',
     address: '',
     password: '',
   });
@@ -52,7 +45,6 @@ const EditDealer = () => {
     const dealerId = currentDealer[0]._id;
     console.log('payload', payload);
 
-    console.log('company name', companyName);
     console.log('password', generatedPassword);
     event.preventDefault();
 
@@ -64,17 +56,7 @@ const EditDealer = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(
-          payload
-
-          // company_name: companyName,
-          // company_address: address,
-          // // logo: { type: String },
-          // contact_person: contactPerson,
-          // number: number,
-          // e_mail: email,
-          // doing_business_as: doingBusinessAs,
-        ),
+        body: JSON.stringify(payload),
       }
     )
       .then(res => res.json())
@@ -142,7 +124,7 @@ const EditDealer = () => {
     setGeneratedPassword(newPassword);
   };
   const currentUser = searchParams.get('dealer');
-  // const getCurrentDealer = () => {};
+
   useEffect(() => {
     setRefresh(false);
     fetch(
@@ -167,7 +149,7 @@ const EditDealer = () => {
               <div className={css.back_btn_thumb}>
                 <img alt="back" className={css.back_icon} src={backArrow} />
 
-                <Link to="/">
+                <Link to="/dealers">
                   <button className={css.back_to_dealers_btn}>
                     Back to dealers
                   </button>
@@ -323,27 +305,15 @@ const EditDealer = () => {
                       <input
                         value={formData.email}
                         type="text"
-                        name="email"
+                        name="e_mail"
                         onChange={handleChange}
                         className={css.person_input_address}
                         placeholder={currentDealer[0].email}
                       />
-                      {/*                   
-                  <button
-                    onClick={handleAddNewPerson}
-                    className={css.add_dealer_person}
-                  >
-                    <img
-                      alt="cross exit"
-                      className={css.cross}
-                      src={brownCross}
-                    />
-                    Add new
-                  </button> */}
                     </div>
                   </div>
                   <div className={css.add_dealer_buttons_thumb}>
-                    <Link to="/">
+                    <Link to="/dealers">
                       <button className={css.cancel_btn}>Cancel</button>
                     </Link>
                     <button className={css.add_dealer_btn}>Edit dealer</button>
