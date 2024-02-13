@@ -2,119 +2,264 @@ import css from './AddLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
 import dealerPhoto from '../icons/dealerPhoto.svg';
-// import brownCross from '../icons/brownCross.svg';
-import copyIcon from '../icons/copyIcon.svg';
-// import bottomArrowFrom
-import { useState } from 'react';
+import bottomArrow from '../icons/bottomArrow.svg';
+import openMenuIcon from '../icons/openMenuIcon.svg';
+import { useState, useEffect } from 'react';
+import AWS from 'aws-sdk';
 
 const AddLicensePlate = () => {
-  const [generatedPassword, setGeneratedPassword] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [doingBusinessAs, setDoingBusinessAs] = useState('');
-  const [number, setNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [states, setStates] = useState([]);
+  const [dealers, setDealers] = useState([]);
 
-  const handleChange = event => {
-    const { name, value } = event.target;
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
 
-    switch (name) {
-      case 'companyName':
-        setCompanyName(value);
-        break;
+  const handleFileInputChange = event => {
+    setImageFile(event.target.files[0]);
+  };
 
-      case 'doingBusinessAs':
-        setDoingBusinessAs(value);
-        break;
+  const handleUpload = async () => {
+    if (!imageFile) {
+      console.error('No image selected');
+      return;
+    }
 
-      case 'number':
-        setNumber(value);
-        break;
+    console.log('image file', imageFile);
+    // Create an instance of the AWS S3 service
+    const s3 = new AWS.S3({
+      accessKeyId: 'AKIAZI2LEPBOBLEXUTWX',
+      secretAccessKey: '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',
+    });
 
-      case 'email':
-        setEmail(value);
-        break;
+    console.log('s3', s3);
+    // Define parameters for the S3 upload
+    const params = {
+      Bucket: 'plate-jade-2024',
+      Key: imageFile.name,
+      Body: imageFile,
+      ACL: 'public-read', // Set ACL to public-read to make the uploaded file publicly accessible
+    };
 
-      case 'address':
-        setAddress(value);
-        break;
+    try {
+      // Upload the image to S3
+      console.log('inside upload block');
+      const response = await s3.upload(params).promise();
+      console.log('Upload successful:', response);
+      console.log('after response');
 
-      case 'contactPerson':
-        setContactPerson(value);
-        break;
+      // Get the URL of the uploaded image
+      const imageUrl = response.Location;
+      setImageUrl(imageUrl);
 
-      default:
-        return;
+      console.log('image url', imageUrl);
+      // Send the imageUrl and other data to your backend API
+      // Example: axios.post('/api/upload', { imageUrl, otherData });
+    } catch (error) {
+      console.error('Error uploading image:', error);
     }
   };
 
-  const handleSubmit = async event => {
-    console.log('submitted');
-
-    console.log('company name', companyName);
-    console.log('password', generatedPassword);
-    event.preventDefault();
-
-    fetch('https://car-plates.onrender.com/api/auth/admin/add-plate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        company_name: companyName,
-        company_address: address,
-        // logo: { type: String },
-        contact_person: contactPerson,
-        number: number,
-        e_mail: email,
-        doing_business_as: doingBusinessAs,
-        password: generatedPassword,
-      }),
+  useEffect(() => {
+    // RECEIVE AND SET DEALERS
+    fetch('https://car-plates.onrender.com/api/auth/admin/alldealers', {
+      method: 'GET',
+      header: {},
     })
       .then(res => res.json())
-      .then(res => console.log(res));
+      .then(result => {
+        const dealersArray = Array.from(
+          new Set(result.dealers.map(item => item.company_name))
+        );
+        setDealers(dealersArray);
 
-    // if (email === '' || !email.includes('@')) {
-    //   return Notiflix.Notify.failure('Please, enter a valid email!');
-    // }
+        setFields(prevFields => {
+          const updatedFields = prevFields.map(field => {
+            if (field.name === 'dealer') {
+              return { ...field, options: dealersArray };
+            }
+            return field;
+          });
+          return updatedFields;
+        });
+      });
+    // RECEIVE AND SET CATEGORIES
+    fetch('https://car-plates.onrender.com/api/auth/plates/allcategories', {
+      method: 'GET',
+      header: {},
+    })
+      .then(res => res.json())
+      .then(result => {
+        const categoriesArray = Array.from(
+          new Set(result.categories.map(item => item.category))
+        );
+        setCategories(categoriesArray);
+        setFields(prevFields => {
+          const updatedFields = prevFields.map(field => {
+            if (field.name === 'category') {
+              return { ...field, options: categoriesArray };
+            }
+            return field;
+          });
+          return updatedFields;
+        });
+      });
 
-    // if (password === '' || password.includes(' ')) {
-    //   return Notiflix.Notify.failure(
-    //     'Please, enter a valid password without spaces!'
-    //   );
-    // }
+    // RECEIVE AND SET STATES
+    fetch('https://car-plates.onrender.com/api/auth/states', {
+      method: 'GET',
+      header: {},
+    })
+      .then(res => res.json())
+      .then(result => {
+        const statesArray = Array.from(
+          new Set(result.states.map(item => item.state))
+        );
+        setStates(statesArray);
+        setFields(prevFields => {
+          const updatedFields = prevFields.map(field => {
+            if (field.name === 'state') {
+              return { ...field, options: statesArray };
+            }
+            return field;
+          });
+          return updatedFields;
+        });
+      });
+  }, []);
 
-    // if (confirmedPassword !== password || confirmedPassword === '') {
-    //   return Notiflix.Notify.failure('Passwords do not match!');
-    // }
+  const categoriesArray = Array.from(
+    new Set(categories.map(item => item.category))
+  );
 
-    // if (!/^[a-zA-Z]{2,30}/g.test(name)) {
-    //   return Notiflix.Notify.info('Name may only include letters');
-    // }
-    // if (name === '') {
-    //   return Notiflix.Notify.failure('Please, enter your name');
-    // }
+  const statesArray = Array.from(new Set(states.map(item => item.state)));
 
-    // if (city === '') {
-    //   return Notiflix.Notify.failure('Please, enter your city and region ');
-    // }
-    // if (!/^(([a-zA-Z ](,)?)*)+$/g.test(city)) {
-    //   return Notiflix.Notify.info(
-    //     'Please, enter your city and region separated by comma and without spaces'
-    //   );
-    // }
-    // if (phone === '') {
-    //   return Notiflix.Notify.failure('Please, enter your phone number');
-    // }
-    // if (!/^[+0-9]{13}$/g.test(phone)) {
-    //   return Notiflix.Notify.info(
-    //     'Your phone number must start with + and consist of 12 numbers'
-    //   );
-    // }
+  const dealersArray = Array.from(new Set(dealers.map(item => item.dealers)));
 
-    // navigate('/user', { replace: true });
+  const initialFields = [
+    {
+      name: 'category',
+      value: '',
+      options: categoriesArray,
+      showDropdown: false,
+    },
+    {
+      name: 'state',
+      value: '',
+      options: statesArray,
+      showDropdown: false,
+    },
+    {
+      name: 'status',
+      value: '',
+      options: ['Active', 'Not available'],
+      showDropdown: false,
+    },
+    {
+      name: 'dealer',
+      value: '',
+      options: dealersArray,
+      showDropdown: false,
+    },
+    { name: 'name', value: '' },
+    // Input without menu example
+  ];
+
+  const [fields, setFields] = useState(initialFields);
+  const [directInputs, setDirectInputs] = useState({
+    name: '',
+    productDescription: '',
+    shopName: '',
+    link: '',
+    price: '',
+  });
+
+  const handleInputChange = (name, value) => {
+    setFields(
+      fields.map(field =>
+        field.name === name ? { ...field, value: value } : field
+      )
+    );
+  };
+
+  const handleOptionClick = (name, option) => {
+    setFields(
+      fields.map(field =>
+        field.name === name
+          ? { ...field, value: option, showDropdown: false }
+          : field
+      )
+    );
+  };
+
+  const toggleDropdown = name => {
+    setFields(
+      fields.map(field =>
+        field.name === name
+          ? { ...field, showDropdown: !field.showDropdown }
+          : field
+      )
+    );
+  };
+
+  const handleSubmit = () => {
+    const unmatchedCategory = fields.find(
+      field => field.name === 'category'
+    )?.value;
+
+    if (unmatchedCategory && !categories.includes(unmatchedCategory)) {
+      fetch('https://car-plates.onrender.com/api/auth/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category: unmatchedCategory }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Response from other backend route:', data);
+        })
+        .catch(error => {
+          console.error('Error sending data to other backend route:', error);
+        });
+    }
+
+    const unmatchedState = fields.find(field => field.name === 'state')?.value;
+
+    if (unmatchedState && !states.includes(unmatchedState)) {
+      fetch('https://car-plates.onrender.com/api/auth/states', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ state: unmatchedState }),
+      })
+        .then(response => response.json(console.log(response.json)))
+        .then(data => {
+          console.log('Response from other backend route:', data);
+        })
+        .catch(error => {
+          console.error('Error sending data to other backend route:', error);
+        });
+    }
+
+    const formData = [
+      ...fields.map(field => ({ [field.name]: field.value })),
+      ...Object.entries(directInputs).map(([key, value]) => ({ [key]: value })),
+    ].reduce((acc, obj) => ({ ...acc, ...obj }), {});
+
+    // Send formData to the backend
+    console.log('Form Data:', formData);
+
+    // // Reset values after submission
+    // setFields(
+    //   initialFields.map(field => ({ ...field, value: '', showDropdown: false }))
+    // );
+    // setDirectInputs({
+    //   directInput1: '',
+    //   directInput2: '',
+    //   // Reset direct input values
+    // });
   };
 
   return (
@@ -131,7 +276,7 @@ const AddLicensePlate = () => {
             </Link>
           </div>
           <p className={css.add_dealer_text}>Add Plate</p>
-          <form onSubmit={handleSubmit} className={css.add_dealer_blocks_thumb}>
+          <form className={css.add_dealer_blocks_thumb}>
             <div>
               <div className={css.add_dealer_company_info}>
                 <div className={css.add_dealer_upload_image_thumb}>
@@ -140,7 +285,20 @@ const AddLicensePlate = () => {
                     className={css.logo_icon}
                     src={dealerPhoto}
                   />
-                  <p className={css.add_dealer_upload_text}> Click to upload</p>
+                  <div className={css.add_dealer_upload_text}>
+                    <label htmlFor="fileInput">
+                      Click to upload
+                      <input
+                        type="file"
+                        id="fileInput"
+                        onChange={handleFileInputChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                      />
+                      {imageFile && <p>Uploaded image: {imageFile.name}</p>}
+                    </label>
+                    <button onClick={handleUpload}>Upload Image</button>
+                  </div>
                   <div className={css.border}></div>
                   <p className={css.add_dealer_image_size}>
                     PNG or JPG recommended size (1000px*1000px)
@@ -159,72 +317,306 @@ const AddLicensePlate = () => {
                       <p className={css.company_label}>Name</p>
 
                       <input
-                        className={css.company_input}
-                        placeholder="Name"
                         type="text"
-                        name="contactPerson"
-                        onChange={handleChange}
+                        className={css.company_input}
+                        value={directInputs.name}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            name: e.target.value,
+                          })
+                        }
+                        placeholder="Name"
                       />
                     </li>
                     <li className={css.company_item}>
-                      <p className={css.company_label}> Choose a dealer </p>
-
-                      <input
-                        type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.company_input}
-                        placeholder="Start typing or select from the list"
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <div className={css.filter_thumb_all}>
+                          <p className={css.company_label}> Choose a dealer </p>
+                          <input
+                            className={css.company_input}
+                            type="text"
+                            value={
+                              fields.find(field => field.name === 'dealer')
+                                ?.value || ''
+                            }
+                            readOnly
+                            placeholder="Select from the list"
+                          />
+                          {fields.find(field => field.name === 'dealer')
+                            ?.options &&
+                          fields.find(field => field.name === 'dealer')
+                            .showDropdown ? (
+                            <img
+                              className={css.dropdown_arrow_open_menu}
+                              src={openMenuIcon}
+                              alt="Dropdown Arrow"
+                              onClick={() => toggleDropdown('dealer')}
+                            />
+                          ) : (
+                            <img
+                              className={css.dropdown_arrow}
+                              src={bottomArrow}
+                              alt="Dropdown Arrow"
+                              onClick={() => toggleDropdown('dealer')}
+                            />
+                          )}
+                        </div>
+                        {fields.find(field => field.name === 'dealer')
+                          ?.showDropdown &&
+                          fields.find(field => field.name === 'dealer')
+                            ?.options && ( // Render dropdown menu if options exist
+                            <ul className={css.menu_items_list} id="style-2">
+                              {fields
+                                .find(field => field.name === 'dealer')
+                                ?.options.map((option, index) => (
+                                  <li
+                                    type="text"
+                                    key={index}
+                                    className={css.menu_item}
+                                  >
+                                    <label htmlFor={`dealer_option_${index}`}>
+                                      <input
+                                        className={css.input_checkbox}
+                                        style={{ display: 'none' }}
+                                        type="checkbox"
+                                        id={`dealer_option_${index}`}
+                                        checked={fields
+                                          .find(
+                                            field => field.name === 'dealer'
+                                          )
+                                          ?.value.includes(option)}
+                                        onChange={() =>
+                                          handleOptionClick('dealer', option)
+                                        }
+                                      />
+                                      {/* Render the SVG icon */}
+                                      <span
+                                        className={css.customCheckbox}
+                                      ></span>{' '}
+                                      {option}
+                                    </label>
+                                  </li>
+                                ))}
+                            </ul>
+                          )}
+                      </div>
                     </li>
+
                     <li>
                       <p className={css.product_description_label}>
                         Product description
                       </p>
                       <input
                         type="text"
-                        name="email"
-                        onChange={handleChange}
-                        className={css.product_description_input}
-                        placeholder="Type here"
+                        className={css.company_input}
+                        value={directInputs.productDescription}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            productDescription: e.target.value,
+                          })
+                        }
+                        placeholder="Product description"
                       />
                     </li>
                   </ul>
 
                   <p className={css.add_dealer_company_text}>Add Filter</p>
 
-                  <ul className={css.add_item_filter_list}>
-                    <li className={css.filter_item}>
-                      <p className={css.company_label}> Choose category </p>
-                      <input
-                        type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
-                        placeholder="Start typing or select from the list"
-                      />
-                    </li>
-                    <li className={css.filter_item}>
-                      <p className={css.company_label}> Choose state </p>
-                      <input
-                        type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
-                        placeholder="Start typing or select from the list"
-                      />
-                    </li>
-                    <li className={css.filter_item}>
-                      <p className={css.company_label}> Choose status </p>
-                      <input
-                        type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
-                        placeholder="Start typing or select from the list"
-                      />
-                    </li>
-                  </ul>
+                  <div className={css.menu_filters_thumb}>
+                    <div
+                      className={css.filter_thumb}
+                      style={{ position: 'relative' }}
+                    >
+                      <div className={css.filter_thumb_all}>
+                        <p className={css.company_label}> Choose category </p>
+                        <input
+                          className={css.filter_item_input}
+                          type="text"
+                          value={
+                            fields.find(field => field.name === 'category')
+                              ?.value || ''
+                          }
+                          onChange={event =>
+                            handleInputChange('category', event.target.value)
+                          }
+                          placeholder="Start typing or select from the list"
+                        />
+                        {fields.find(field => field.name === 'category')
+                          ?.options &&
+                        fields.find(field => field.name === 'category')
+                          .showDropdown ? (
+                          <img
+                            className={css.dropdown_arrow_open_menu}
+                            src={openMenuIcon}
+                            alt="Dropdown Arrow"
+                            onClick={() => toggleDropdown('category')}
+                          />
+                        ) : (
+                          <img
+                            className={css.dropdown_arrow}
+                            src={bottomArrow}
+                            alt="Dropdown Arrow"
+                            onClick={() => toggleDropdown('category')}
+                          />
+                        )}
+                      </div>
+                      {fields.find(field => field.name === 'category')
+                        ?.showDropdown &&
+                        fields.find(field => field.name === 'category')
+                          ?.options && ( // Render dropdown menu if options exist
+                          <ul className={css.menu_items_list} id="style-2">
+                            {fields
+                              .find(field => field.name === 'category')
+                              ?.options.map((option, index) => (
+                                <li className={css.menu_item} key={index}>
+                                  <label htmlFor={`category_option_${index}`}>
+                                    <input
+                                      className={css.input_checkbox}
+                                      style={{ display: 'none' }}
+                                      type="checkbox"
+                                      id={`category_option_${index}`}
+                                      checked={fields
+                                        .find(
+                                          field => field.name === 'category'
+                                        )
+                                        ?.value.includes(option)}
+                                      onChange={() =>
+                                        handleOptionClick('category', option)
+                                      }
+                                    />
+                                    {/* Render the SVG icon */}
+                                    <span className={css.customCheckbox}></span>
+                                    {option}
+                                  </label>
+                                </li>
+                              ))}
+                          </ul>
+                        )}
+                    </div>
+                    <div style={{ position: 'relative' }}>
+                      <div className={css.filter_thumb_all}>
+                        <p className={css.company_label}> Choose state </p>
+                        <input
+                          className={css.filter_item_input}
+                          type="text"
+                          value={
+                            fields.find(field => field.name === 'state')
+                              ?.value || ''
+                          }
+                          onChange={event =>
+                            handleInputChange('state', event.target.value)
+                          }
+                          placeholder="Start typing or select from the list"
+                        />
+                        {fields.find(field => field.name === 'state')
+                          ?.options &&
+                        fields.find(field => field.name === 'state')
+                          .showDropdown ? (
+                          <img
+                            className={css.dropdown_arrow_open_menu}
+                            src={openMenuIcon}
+                            alt="Dropdown Arrow"
+                            onClick={() => toggleDropdown('state')}
+                          />
+                        ) : (
+                          <img
+                            className={css.dropdown_arrow}
+                            src={bottomArrow}
+                            alt="Dropdown Arrow"
+                            onClick={() => toggleDropdown('state')}
+                          />
+                        )}
+                      </div>
+                      {fields.find(field => field.name === 'state')
+                        ?.showDropdown &&
+                        fields.find(field => field.name === 'state')
+                          ?.options && ( // Render dropdown menu if options exist
+                          <ul className={css.menu_items_list} id="style-2">
+                            {fields
+                              .find(field => field.name === 'state')
+                              ?.options.map((option, index) => (
+                                <li key={index} className={css.menu_item}>
+                                  <label htmlFor={`state_option_${index}`}>
+                                    <input
+                                      className={css.input_checkbox}
+                                      style={{ display: 'none' }}
+                                      type="checkbox"
+                                      id={`state_option_${index}`}
+                                      checked={fields
+                                        .find(field => field.name === 'state')
+                                        ?.value.includes(option)}
+                                      onChange={() =>
+                                        handleOptionClick('state', option)
+                                      }
+                                    />
+                                    {/* Render the SVG icon */}
+                                    <span
+                                      className={css.customCheckbox}
+                                    ></span>{' '}
+                                    {option}
+                                  </label>
+                                </li>
+                              ))}
+                          </ul>
+                        )}
+                    </div>
+
+                    <div style={{ position: 'relative' }}>
+                      <div className={css.filter_thumb_all}>
+                        <p className={css.company_label}> Choose status </p>
+                        <input
+                          className={css.filter_item_input}
+                          type="text"
+                          value={
+                            fields.find(field => field.name === 'status')
+                              ?.value || ''
+                          }
+                          readOnly
+                          placeholder="Select from the list"
+                        />
+                        {fields.find(field => field.name === 'status')
+                          ?.options && ( // Render dropdown arrow if options exist
+                          <img
+                            className={css.dropdown_arrow}
+                            src={bottomArrow}
+                            alt="Dropdown Arrow"
+                            onClick={() => toggleDropdown('status')}
+                          />
+                        )}
+                      </div>
+                      {fields.find(field => field.name === 'status')
+                        ?.showDropdown &&
+                        fields.find(field => field.name === 'status')
+                          ?.options && ( // Render dropdown menu if options exist
+                          <ul className={css.menu_items_list} id="style-2">
+                            {fields
+                              .find(field => field.name === 'status')
+                              ?.options.map((option, index) => (
+                                <li key={index} className={css.menu_item}>
+                                  <label htmlFor={`status_option_${index}`}>
+                                    <input
+                                      className={css.input_checkbox}
+                                      style={{ display: 'none' }}
+                                      type="checkbox"
+                                      id={`status_option_${index}`}
+                                      checked={fields
+                                        .find(field => field.name === 'status')
+                                        ?.value.includes(option)}
+                                      onChange={() =>
+                                        handleOptionClick('status', option)
+                                      }
+                                    />
+                                    <span className={css.customCheckbox}></span>{' '}
+                                    {option}
+                                  </label>
+                                </li>
+                              ))}
+                          </ul>
+                        )}
+                    </div>
+                  </div>
 
                   <p className={css.add_dealer_company_text}>
                     Add link and price
@@ -235,9 +627,14 @@ const AddLicensePlate = () => {
                       <p className={css.company_label}>Shop name</p>
                       <input
                         type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
+                        className={css.company_input}
+                        value={directInputs.shopName}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            shopName: e.target.value,
+                          })
+                        }
                         placeholder="Amazon"
                       />
                     </li>
@@ -247,9 +644,14 @@ const AddLicensePlate = () => {
                       </p>
                       <input
                         type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
+                        className={css.company_input}
+                        value={directInputs.link}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            link: e.target.value,
+                          })
+                        }
                         placeholder="Link"
                       />
                     </li>
@@ -257,10 +659,15 @@ const AddLicensePlate = () => {
                       <p className={css.company_label}> Price ($) </p>
                       <input
                         type="text"
-                        name="number"
-                        onChange={handleChange}
-                        className={css.filter_item_input}
-                        placeholder="0.00"
+                        className={css.company_input}
+                        value={directInputs.price}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            price: e.target.value,
+                          })
+                        }
+                        placeholder="Price"
                       />
                     </li>
                   </ul>
@@ -270,7 +677,9 @@ const AddLicensePlate = () => {
                 <Link to="/license-plates">
                   <button className={css.cancel_btn}>Cancel</button>
                 </Link>
-                <button className={css.add_dealer_btn}>Add plate</button>
+                <button onClick={handleSubmit} className={css.add_dealer_btn}>
+                  Add plate
+                </button>
               </div>
             </div>
           </form>

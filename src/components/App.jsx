@@ -7,11 +7,13 @@ import LicensePlates from './LicensePlates';
 import EditDealer from './EditDealer';
 import AddLicensePlate from './AddLicensePlate';
 import PlatesFrames from './PlatesFrames';
+import LogIn from './LogIn';
 
 export const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/login" element={<LogIn />} />
         <Route path="/" element={<AppBar />}>
           {/* <Route index element={<LogIn />} /> */}
           <Route path="/license-plates" element={<LicensePlates />} />

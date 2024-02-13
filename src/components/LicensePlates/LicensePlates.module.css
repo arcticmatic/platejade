@@ -63,6 +63,12 @@
   border-radius: 2px;
   border: 2px solid var(--app-stroke-light, #b5a89c);
 }
+.item_checkbox {
+  margin-left: 30px;
+  margin-right: 20px;
+  width: 15px;
+  height: 15px;
+}
 .dealers_company_title {
   color: var(--dashboard-txt-grey, #adaabe);
   width: 150px;
@@ -108,7 +114,7 @@
   color: var(--dashboard-txt-black, #19181c);
   word-wrap: break-word;
   overflow-wrap: anywhere;
-  width: 240px;
+  width: 220px;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -117,7 +123,7 @@
 .dealer_info_thumb {
   display: flex;
   align-items: center;
-  width: 280px;
+  width: 270px;
 }
 .dealer_description_thumb {
   display: flex;
@@ -136,7 +142,7 @@
 .dealers_number {
   color: #9c8d7f;
   width: 150px;
-
+  padding-left: 12px;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -175,7 +181,6 @@
   border-radius: 5px;
   vertical-align: middle;
   margin-right: 10px;
-  margin-left: 20px;
 }
 .dealers_admin_actions_thumb {
   width: 160px;
@@ -202,4 +207,41 @@
 }
 .plates_description {
   display: flex;
+}
+.plates_thumb_chosen {
+  display: flex;
+  padding-left: 28px;
+  padding-top: 22px;
+  padding-bottom: 20px;
+  border-radius: 20px 20px 0px 0px;
+  background: var(--app-primary, #9c8d7f);
+}
+.plates_chosen_text {
+  margin-right: 20px;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.cancel_icon {
+  margin-right: 17px;
+  vertical-align: middle;
+}
+.white_border {
+  width: 1px;
+  height: 20px;
+  background-color: #fff;
+}
+.plate_text_icons_thumb {
+  display: flex;
+}
+.delete_icon {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.activate_icon {
+  vertical-align: middle;
+
+  margin-right: 5px;
 }

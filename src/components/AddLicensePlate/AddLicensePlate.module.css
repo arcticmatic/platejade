@@ -90,7 +90,7 @@
 }
 .add_dealer_company_text {
   color: var(--dashboard-txt-black, #19181c);
-
+  margin-top: 20px;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
@@ -109,7 +109,7 @@
 }
 .add_item_filter_list {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   margin-bottom: 20px;
 }
 .company_item {
@@ -139,7 +139,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 30vw;
+  width: 22vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
@@ -148,12 +148,24 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 19vw;
+  width: 22vw;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.filter_item_price_input {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 18vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
 }
 .product_description_input {
+  position: absolute;
+  z-index: 200;
+  background-color: #fff;
   margin-bottom: 20px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -245,4 +257,112 @@
 .copy_icon {
   vertical-align: middle;
   padding-left: 40px;
+}
+.menu_filters_thumb {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filter_thumb {
+  position: relative;
+}
+.dropdown_arrow {
+  position: absolute;
+  transform: translate(-300%, 100%);
+  cursor: pointer;
+}
+
+.dropdown_arrow_open_menu {
+  position: absolute;
+  transform: translate(-220%, 220%);
+  cursor: pointer;
+}
+
+.menu_items_list {
+  max-height: 120px;
+  position: absolute;
+
+  width: 90%;
+
+  z-index: 999;
+  border-radius: 10px;
+  background: var(--dashboard-bg, #fafafe);
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+.menu_item {
+  color: var(--dashboard-txt-black, #19181c);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+.menu_item:not(:last-child) {
+  margin-bottom: 10px;
+}
+.filter_thumb_all {
+  width: 26vw;
+}
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #6d6d6d;
+}
+.input_checkbox {
+  width: 20px;
+  height: 20px;
+  color: var(--app-primary, #9c8d7f);
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-right: 20px;
+  vertical-align: text-bottom;
+}
+.input-checkbox:checked {
+  /* Change background color when checked */
+  background-color: green; /* Checked background color */
+}
+
+.customCheckbox {
+  accent-color: var(--app-primary, #9c8d7f);
+  vertical-align: text-top;
+  margin-right: 10px;
+  margin-left: 10px;
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #9c8d7f;
+  border-radius: 4px;
+}
+
+.customCheckbox::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #9c8d7f;
+  background-image: url('../icons/checkBoxIcon.svg');
+  display: none;
+  z-index: 199;
+}
+
+.input_checkbox:checked + .customCheckbox {
+  background-color: #9c8d7f; /* Change this to the desired background color */
+}
+
+.input_checkbox:checked ~ .customCheckbox::after {
+  display: block;
 }
