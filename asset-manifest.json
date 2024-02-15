@@ -1,28 +1,37 @@
 {
   "files": {
-    "main.css": "/platejade/static/css/main.4605b4aa.css",
-    "main.js": "/platejade/static/js/main.6ac8d71e.js",
+    "main.css": "/platejade/static/css/main.f543c89d.css",
+    "main.js": "/platejade/static/js/main.d1ec60e0.js",
+    "static/media/iPhone.svg": "/platejade/static/media/iPhone.798de071893b0b329d64abee8afddac3.svg",
     "static/media/SFProText-Regular.ttf": "/platejade/static/media/SFProText-Regular.90da7ab18293ca42e335.ttf",
     "static/media/SF-Pro-Text-Medium.otf": "/platejade/static/media/SF-Pro-Text-Medium.d8bb87473fe937958666.otf",
+    "static/media/appStore.svg": "/platejade/static/media/appStore.1ab03042cb054b34242000c7d98db789.svg",
+    "static/media/googlePlay.svg": "/platejade/static/media/googlePlay.e7c69938784f5919f4fa7c0d86719a1e.svg",
     "static/media/plate-jade-logo.svg": "/platejade/static/media/plate-jade-logo.18147d9579aca91f6405f64afc9dfbc3.svg",
     "static/media/editIcon.svg": "/platejade/static/media/editIcon.b8268fe7756d3565cc75d064ccc8eff8.svg",
+    "static/media/deleteIconWhite.svg": "/platejade/static/media/deleteIconWhite.f332af1a826523151697ff675dc13e51.svg",
     "static/media/deleteIcon.svg": "/platejade/static/media/deleteIcon.8ab545b7e1803580706a6821d03aff20.svg",
     "static/media/linkArrow.svg": "/platejade/static/media/linkArrow.4acb936837231e4c52b4f15dad166d15.svg",
     "static/media/logoutIcon.svg": "/platejade/static/media/logoutIcon.c617e09f6b7d5b746780017c2125729d.svg",
     "static/media/dealerPhoto.svg": "/platejade/static/media/dealerPhoto.c1e4b1c7912544ae385e24519c5545a4.svg",
     "static/media/pauseIcon.svg": "/platejade/static/media/pauseIcon.2bb9284cf89b3edf9722ed2b0ac25ca9.svg",
     "static/media/startIcon.svg": "/platejade/static/media/startIcon.95e96de006d8c7c923aa7069f2bf3731.svg",
+    "static/media/activateIcon.svg": "/platejade/static/media/activateIcon.798eb99afac94ee8300311b63f842640.svg",
     "static/media/copyIcon.svg": "/platejade/static/media/copyIcon.1bca384948596bd3564f74490929c252.svg",
     "index.html": "/platejade/index.html",
+    "static/media/cancelCross.svg": "/platejade/static/media/cancelCross.0d01c705bd6094f9a2a61b5d1c829291.svg",
     "static/media/AZFilterIcon.svg": "/platejade/static/media/AZFilterIcon.5ab9bc90f5b934f5fde4096892955334.svg",
     "static/media/cross.svg": "/platejade/static/media/cross.aa771eb3c3aebbe9f045bbad4e444c8d.svg",
+    "static/media/checkBoxIcon.svg": "/platejade/static/media/checkBoxIcon.d8943134ca3d35fe284f.svg",
+    "static/media/bottomArrow.svg": "/platejade/static/media/bottomArrow.7106a5ab7536bf346f9525a61778fcb3.svg",
+    "static/media/openMenuIcon.svg": "/platejade/static/media/openMenuIcon.979e951d917d39eb6897bba8aa78d5cf.svg",
     "static/media/backArrow.svg": "/platejade/static/media/backArrow.4bd03e530d4755f9f7d68136129199dd.svg",
     "static/media/star.svg": "/platejade/static/media/star.e0961ca20c5e1036094e6a93f5acfd88.svg",
-    "main.4605b4aa.css.map": "/platejade/static/css/main.4605b4aa.css.map",
-    "main.6ac8d71e.js.map": "/platejade/static/js/main.6ac8d71e.js.map"
+    "main.f543c89d.css.map": "/platejade/static/css/main.f543c89d.css.map",
+    "main.d1ec60e0.js.map": "/platejade/static/js/main.d1ec60e0.js.map"
   },
   "entrypoints": [
-    "static/css/main.4605b4aa.css",
-    "static/js/main.6ac8d71e.js"
+    "static/css/main.f543c89d.css",
+    "static/js/main.d1ec60e0.js"
   ]
 }
