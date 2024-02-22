@@ -23,7 +23,8 @@ const AddLicensePlate = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(`${BASE_URL}/api/auth/admin/upload`, {
+      console.log('formdata', FormData);
+      const response = await fetch(`${BASE_URL}/api/auth/admin/upload-plate`, {
         method: 'POST',
         body: formData,
       });
