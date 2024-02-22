@@ -1,26 +1,26 @@
 import css from './LogIn.module.css';
 // import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+// import { useState } from 'react';
 import iPhone from '../icons/iPhone.svg';
 import appStore from '../icons/appStore.svg';
 import googlePlay from '../icons/googlePlay.svg';
-import { useLoginMutation } from '../../redux/authApi';
-import { setAuthenticated } from '../../redux/authSlice';
-import { useDispatch } from 'react-redux';
+// import { useLoginMutation } from '../../redux/authApi';
+// import { setAuthenticated } from '../../redux/authSlice';
+// import { useDispatch } from 'react-redux';
 
 const LogIn = () => {
-  const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  // const dispatch = useDispatch();
+  // const [login, { isLoading }] = useLoginMutation();
 
-  const handleLogin = async credentials => {
-    try {
-      const response = await login(credentials).unwrap();
-      // Handle successful login, e.g., store authentication token
-      dispatch(setAuthenticated(true));
-    } catch (error) {
-      // Handle login failure
-    }
-  };
+  // const handleLogin = async credentials => {
+  //   try {
+  //     const response = await login(credentials).unwrap();
+  //     // Handle successful login, e.g., store authentication token
+  //     dispatch(setAuthenticated(true));
+  //   } catch (error) {
+  //     // Handle login failure
+  //   }
+  // };
   return (
     <>
       <section className={css.login_section}>

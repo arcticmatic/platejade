@@ -5,64 +5,42 @@ import dealerPhoto from '../icons/dealerPhoto.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
-import AWS from 'aws-sdk';
 
 const AddLicensePlate = () => {
   const [categories, setCategories] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
+  const BASE_URL = 'https://platejade-back.onrender.com';
 
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [file, setFile] = useState(null);
 
-  const handleFileInputChange = event => {
-    setImageFile(event.target.files[0]);
+  const handleFileChange = event => {
+    setFile(event.target.files[0]);
   };
 
   const handleUpload = async () => {
-    if (!imageFile) {
-      console.error('No image selected');
-      return;
-    }
-
-    console.log('image file', imageFile);
-    // Create an instance of the AWS S3 service
-    const s3 = new AWS.S3({
-      accessKeyId: 'AKIAZI2LEPBOBLEXUTWX',
-      secretAccessKey: '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',
-    });
-
-    console.log('s3', s3);
-    // Define parameters for the S3 upload
-    const params = {
-      Bucket: 'plate-jade-2024',
-      Key: imageFile.name,
-      Body: imageFile,
-      ACL: 'public-read', // Set ACL to public-read to make the uploaded file publicly accessible
-    };
-
     try {
-      // Upload the image to S3
-      console.log('inside upload block');
-      const response = await s3.upload(params).promise();
-      console.log('Upload successful:', response);
-      console.log('after response');
+      const formData = new FormData();
+      formData.append('file', file);
 
-      // Get the URL of the uploaded image
-      const imageUrl = response.Location;
-      setImageUrl(imageUrl);
+      const response = await fetch(`${BASE_URL}/api/auth/admin/upload`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      console.log('image url', imageUrl);
-      // Send the imageUrl and other data to your backend API
-      // Example: axios.post('/api/upload', { imageUrl, otherData });
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      console.log('File uploaded successfully');
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading file:', error);
     }
   };
 
   useEffect(() => {
     // RECEIVE AND SET DEALERS
-    fetch('https://car-plates.onrender.com/api/auth/admin/alldealers', {
+    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
       method: 'GET',
       header: {},
     })
@@ -291,11 +269,10 @@ const AddLicensePlate = () => {
                       <input
                         type="file"
                         id="fileInput"
-                        onChange={handleFileInputChange}
-                        accept="image/*"
+                        onChange={handleFileChange}
                         style={{ display: 'none' }}
                       />
-                      {imageFile && <p>Uploaded image: {imageFile.name}</p>}
+                      {/* {imageFile && <p>Uploaded image: {imageFile.name}</p>} */}
                     </label>
                     <button onClick={handleUpload}>Upload Image</button>
                   </div>
