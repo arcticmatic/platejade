@@ -10,33 +10,14 @@ const AddLicensePlate = () => {
   const [categories, setCategories] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
+  const [uploadedImage, setUploadedImage] = useState('');
+
   const BASE_URL = 'https://platejade-back.onrender.com';
 
   const [file, setFile] = useState(null);
 
   const handleFileChange = event => {
     setFile(event.target.files[0]);
-  };
-
-  const handleUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      console.log('formdata', FormData);
-      const response = await fetch(`${BASE_URL}/api/auth/admin/upload-plate`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to upload file');
-      }
-
-      console.log('File uploaded successfully');
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
   };
 
   useEffect(() => {
@@ -63,7 +44,7 @@ const AddLicensePlate = () => {
         });
       });
     // RECEIVE AND SET CATEGORIES
-    fetch('https://car-plates.onrender.com/api/auth/plates/allcategories', {
+    fetch(`${BASE_URL}/api/auth/plates/allcategories`, {
       method: 'GET',
       header: {},
     })
@@ -85,7 +66,7 @@ const AddLicensePlate = () => {
       });
 
     // RECEIVE AND SET STATES
-    fetch('https://car-plates.onrender.com/api/auth/states', {
+    fetch(`${BASE_URL}/api/auth/states`, {
       method: 'GET',
       header: {},
     })
@@ -181,13 +162,15 @@ const AddLicensePlate = () => {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = event => {
+    event.preventDefault();
+
     const unmatchedCategory = fields.find(
       field => field.name === 'category'
     )?.value;
 
     if (unmatchedCategory && !categories.includes(unmatchedCategory)) {
-      fetch('https://car-plates.onrender.com/api/auth/categories', {
+      fetch(`${BASE_URL}/api/auth/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -196,17 +179,17 @@ const AddLicensePlate = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Response from other backend route:', data);
+          console.log('Response from backend route:', data);
         })
         .catch(error => {
-          console.error('Error sending data to other backend route:', error);
+          console.error('Error sending data to  backend route:', error);
         });
     }
 
     const unmatchedState = fields.find(field => field.name === 'state')?.value;
 
     if (unmatchedState && !states.includes(unmatchedState)) {
-      fetch('https://car-plates.onrender.com/api/auth/states', {
+      fetch(`${BASE_URL}/api/auth/states`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -227,19 +210,80 @@ const AddLicensePlate = () => {
       ...Object.entries(directInputs).map(([key, value]) => ({ [key]: value })),
     ].reduce((acc, obj) => ({ ...acc, ...obj }), {});
 
-    // Send formData to the backend
+    formData['image'] = uploadedImage;
+
     console.log('Form Data:', formData);
 
-    // // Reset values after submission
-    // setFields(
-    //   initialFields.map(field => ({ ...field, value: '', showDropdown: false }))
-    // );
-    // setDirectInputs({
-    //   directInput1: '',
-    //   directInput2: '',
-    //   // Reset direct input values
-    // });
+    fetch(`${BASE_URL}/api/auth/plates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => response.json(console.log(response.json)))
+      .then(data => {
+        console.log('Response from backend route:', data);
+      })
+      .catch(error => {
+        console.error('Error sending data to other backend route:', error);
+      });
+
+    // Reset values after submission
+    setFields(
+      initialFields.map(field => ({ ...field, value: '', showDropdown: false }))
+    );
+    setDirectInputs({
+      name: '',
+      category: '',
+      state: '',
+      dealer: '',
+      status: '',
+      productDescription: '',
+      shopName: '',
+      link: '',
+      price: '',
+      // Reset direct input values
+    });
+    setUploadedImage('');
+    alert('Form is successfully submitted');
   };
+
+  const handleUpload = async event => {
+    event.preventDefault();
+    console.log('inside func');
+
+    const originalFilename = file.name;
+
+    // Send a request to the backend to get a pre-signed URL
+    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: originalFilename }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        return res.uploadURL;
+      });
+
+    // console.log(uploadUrl);
+
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/png',
+      },
+      body: file,
+    });
+
+    const imageUrl = uploadUrl.split('?')[0];
+    console.log(imageUrl);
+    setUploadedImage(imageUrl);
+  };
+
+  console.log('uploaded image', uploadedImage);
 
   return (
     <>
@@ -258,12 +302,27 @@ const AddLicensePlate = () => {
           <form className={css.add_dealer_blocks_thumb}>
             <div>
               <div className={css.add_dealer_company_info}>
-                <div className={css.add_dealer_upload_image_thumb}>
-                  <img
-                    alt="dealer logo"
-                    className={css.logo_icon}
-                    src={dealerPhoto}
-                  />
+                <div
+                  className={
+                    !uploadedImage
+                      ? css.add_dealer_upload_image_thumb
+                      : css.uploaded_image_thumb
+                  }
+                >
+                  {!uploadedImage ? (
+                    <img
+                      alt="dealer logo"
+                      className={css.logo_icon}
+                      src={dealerPhoto}
+                    />
+                  ) : (
+                    <img
+                      className={css.uploaded_image}
+                      alt="uploaded plate"
+                      height="150"
+                      src={uploadedImage}
+                    />
+                  )}
                   <div className={css.add_dealer_upload_text}>
                     <label htmlFor="fileInput">
                       Click to upload
@@ -273,14 +332,17 @@ const AddLicensePlate = () => {
                         onChange={handleFileChange}
                         style={{ display: 'none' }}
                       />
-                      {/* {imageFile && <p>Uploaded image: {imageFile.name}</p>} */}
                     </label>
-                    <button onClick={handleUpload}>Upload Image</button>
+                    <button className={css.upload_btn} onClick={handleUpload}>
+                      <p>Upload Image</p>
+                    </button>
                   </div>
                   <div className={css.border}></div>
-                  <p className={css.add_dealer_image_size}>
-                    PNG or JPG recommended size (1000px*1000px)
-                  </p>
+                  {!uploadedImage && (
+                    <p className={css.add_dealer_image_size}>
+                      PNG or JPG recommended size (1000px*1000px)
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

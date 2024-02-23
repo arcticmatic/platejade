@@ -51,12 +51,20 @@
   padding-left: 50px;
   padding-right: 50px;
 }
+.uploaded_image_thumb {
+  width: 100%;
+  padding-top: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
 .logo_icon {
   display: block;
   margin: 0 auto;
   padding-bottom: 20px;
 }
 .add_dealer_upload_text {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 6px;
   text-align: center;
   color: var(--app-primary, #9c8d7f);
@@ -64,6 +72,10 @@
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+}
+.upload_btn {
+  width: 100px;
+  margin: 0 auto;
 }
 .border {
   margin: 0 auto;
@@ -365,4 +377,9 @@
 
 .input_checkbox:checked ~ .customCheckbox::after {
   display: block;
+}
+.uploaded_image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
 }
