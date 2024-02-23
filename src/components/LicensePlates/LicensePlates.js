@@ -17,8 +17,10 @@ const LicensePlates = () => {
   const [selectAllPlates, setSelectAllPlates] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  const BASE_URL = 'https://platejade-back.onrender.com';
+
   const getAllPlates = () => {
-    fetch('https://car-plates.onrender.com/api/auth/plates', {
+    fetch(`${BASE_URL}/api/auth/plates`, {
       method: 'GET',
       header: {},
     })
@@ -46,7 +48,7 @@ const LicensePlates = () => {
   };
 
   const handleDelete = plateId => {
-    fetch(`https://car-plates.onrender.com/api/auth/plates/${plateId}`, {
+    fetch(`${BASE_URL}/api/auth/plates/${plateId}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
@@ -63,7 +65,7 @@ const LicensePlates = () => {
   const handleEditStatus = (plateId, plateStatus) => {
     const newStatus = plateStatus === 'Active' ? 'Not available' : 'Active';
 
-    fetch(`https://car-plates.onrender.com/api/auth/plates/${plateId}`, {
+    fetch(`${BASE_URL}/api/auth/plates/${plateId}`, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
@@ -83,7 +85,7 @@ const LicensePlates = () => {
     // Send selectedItems to the backend
     console.log('Selected items:', selectedItems);
 
-    fetch('https://car-plates.onrender.com/api/auth/plates', {
+    fetch(`${BASE_URL}//api/auth/plates`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +113,7 @@ const LicensePlates = () => {
     // Send selectedItems to the backend
     console.log('Selected items:', selectedItems);
 
-    fetch('https://car-plates.onrender.com/api/auth/plates', {
+    fetch(`${BASE_URL}/api/auth/plates`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
