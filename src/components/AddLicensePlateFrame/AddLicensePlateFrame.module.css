@@ -1,0 +1,385 @@
+@font-face {
+  font-family: 'SF-400';
+  src: url(../fonts/SFProText-Regular.ttf) format('ttf');
+}
+.add_dealers_section {
+  background: var(--dashboard-bg, #fafafe);
+
+  padding-bottom: 10px;
+}
+.add_dealer_blocks_thumb {
+  display: flex;
+  justify-content: center;
+}
+
+.back_btn_thumb {
+  padding-left: 70px;
+  padding-top: 22px;
+  display: flex;
+  margin-bottom: 22px;
+}
+.back_to_dealers_btn {
+  color: #adaabe;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  border: 1px transparent;
+  background: transparent;
+}
+.add_dealer_text {
+  padding-left: 70px;
+  color: var(--dashboard-txt-black, #19181c);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 40px; /* 166.667% */
+  padding-bottom: 20px;
+}
+.add_dealer_company_info {
+  margin-right: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  width: 20vw;
+  height: 294px;
+  border-radius: 20px;
+  background: var(--app-white, #fff);
+}
+.add_dealer_upload_image_thumb {
+  width: 100%;
+  padding-top: 60px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.uploaded_image_thumb {
+  width: 100%;
+  padding-top: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.logo_icon {
+  display: block;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+.add_dealer_upload_text {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+  text-align: center;
+  color: var(--app-primary, #9c8d7f);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+.upload_btn {
+  width: 100px;
+  margin: 0 auto;
+}
+.border {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  border-top: 1px dashed #9c8d7f;
+  width: 90px;
+  height: 2px;
+}
+.add_dealer_image_size {
+  color: var(--dashboard-txt-grey, #adaabe);
+  text-align: center;
+  text-wrap: wrap;
+
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 166.667% */
+}
+.add_dealer_border {
+  margin-top: 30px;
+  background: rgba(242, 242, 242, 0.8);
+  width: 1px;
+  height: 234px;
+}
+.add_dealer_company_text {
+  color: var(--dashboard-txt-black, #19181c);
+  margin-top: 20px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: 0.38px;
+  padding-bottom: 30px;
+}
+.add_dealer_company_thumb {
+  margin-top: 30px;
+  padding-left: 40px;
+}
+.add_dealer_company_list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.add_item_filter_list {
+  display: flex;
+  /* flex-wrap: wrap; */
+  margin-bottom: 20px;
+}
+.company_item {
+  margin-right: 20px;
+}
+.filter_item {
+  margin-right: 20px;
+}
+.company_label {
+  color: var(--dashboard-txt-grey, #adaabe);
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+.product_description_label {
+  color: var(--dashboard-txt-grey, #adaabe);
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.company_input {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 22vw;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.filter_item_input {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 14vw;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.filter_item_price_input {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 18vw;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.product_description_input {
+  position: absolute;
+  z-index: 200;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 30vw;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.company_input_address {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 94%;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+
+.add_dealer_contact_person {
+  margin-bottom: 20px;
+  width: 70vw;
+  /* height: 448px; */
+  border-radius: 20px;
+  background: var(--app-white, #fff);
+}
+.dealer_contact_thumb {
+  display: flex;
+  flex-direction: column;
+}
+.person_input_address {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  width: 90%;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+  margin-bottom: 114px;
+}
+.add_dealer_person {
+  display: inline-flex;
+  padding: 15px 20px;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-primary, #9c8d7f);
+  text-align: center;
+  background-color: transparent;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 138.462% */
+  letter-spacing: -0.078px;
+  border-radius: 10px;
+  border: 1px solid var(--app-primary, #9c8d7f);
+}
+.add_dealer_buttons_thumb {
+  display: flex;
+  justify-content: flex-end;
+}
+.cancel_btn {
+  margin-bottom: 80px;
+
+  margin-right: 20px;
+  border: 1px transparent;
+  padding: 15px 20px;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+}
+.add_dealer_btn {
+  margin-bottom: 80px;
+  color: var(--app-txt-light, #dad3cc);
+  text-align: center;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 138.462% */
+  letter-spacing: -0.078px;
+  border: 1px transparent;
+
+  padding: 15px 20px;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  background: var(--app-black, #10101c);
+}
+.copy_icon {
+  vertical-align: middle;
+  padding-left: 40px;
+}
+.menu_filters_thumb {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filter_thumb {
+  position: relative;
+}
+.dropdown_arrow {
+  position: absolute;
+  transform: translate(-300%, 100%);
+  cursor: pointer;
+}
+
+.dropdown_arrow_open_menu {
+  position: absolute;
+  transform: translate(-220%, 220%);
+  cursor: pointer;
+}
+
+.menu_items_list {
+  max-height: 120px;
+  position: absolute;
+
+  width: 90%;
+
+  z-index: 999;
+  border-radius: 10px;
+  background: var(--dashboard-bg, #fafafe);
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+.menu_item {
+  color: var(--dashboard-txt-black, #19181c);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+.menu_item:not(:last-child) {
+  margin-bottom: 10px;
+}
+.filter_thumb_all {
+  width: 20vw;
+}
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: #6d6d6d;
+}
+.input_checkbox {
+  width: 20px;
+  height: 20px;
+  color: var(--app-primary, #9c8d7f);
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-right: 20px;
+  vertical-align: text-bottom;
+}
+.input-checkbox:checked {
+  /* Change background color when checked */
+  background-color: green; /* Checked background color */
+}
+
+.customCheckbox {
+  accent-color: var(--app-primary, #9c8d7f);
+  vertical-align: text-top;
+  margin-right: 10px;
+  margin-left: 10px;
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #9c8d7f;
+  border-radius: 4px;
+}
+
+.customCheckbox::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #9c8d7f;
+  background-image: url('../icons/checkBoxIcon.svg');
+  display: none;
+  z-index: 199;
+}
+
+.input_checkbox:checked + .customCheckbox {
+  background-color: #9c8d7f; /* Change this to the desired background color */
+}
+
+.input_checkbox:checked ~ .customCheckbox::after {
+  display: block;
+}
+.uploaded_image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}

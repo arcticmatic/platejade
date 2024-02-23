@@ -9,16 +9,18 @@ import pauseIcon from '../icons/pauseIcon.svg';
 import { NavLink } from 'react-router-dom';
 
 const PlatesFrames = () => {
-  const [plates, setPlates] = useState([]);
+  const [frames, setFrames] = useState([]);
+  const BASE_URL = 'https://platejade-back.onrender.com';
 
   useEffect(() => {
-    fetch('https://car-plates.onrender.com/api/auth/plates', {
+    fetch(`${BASE_URL}/api/auth/all-frames?state=Florida`, {
       method: 'GET',
       header: {},
     })
       .then(res => res.json())
       .then(result => {
-        setPlates(result.plates);
+        setFrames(result.frames);
+        console.log(result);
       });
   }, []);
 
@@ -27,10 +29,10 @@ const PlatesFrames = () => {
       <section className={css.dealers_section}>
         <div className={css.text_thumb}>
           <p className={css.section_text}>
-            License Plates
-            <span className={css.dealers_amount}>({plates.length})</span>
+            License Plates Frames
+            <span className={css.dealers_amount}>({frames.length})</span>
           </p>
-          <NavLink to="/add-license-plate">
+          <NavLink to="/add-plate-frame">
             <button className={css.add_dealer_btn}>
               <img alt="cross" className={css.cross_icon} src={cross} />
               Add new
@@ -54,23 +56,23 @@ const PlatesFrames = () => {
           </div>
           <div className={css.dealers_thumb_border}></div>
           <ul className={css.dealers_list}>
-            {plates.map(plate => {
+            {frames.map(frame => {
               return (
-                <li className={css.dealers_list_item} key={plate._id}>
+                <li className={css.dealers_list_item} key={frame._id}>
                   <div className={css.dealer_info_thumb}>
                     <div className={css.checkbox}></div>
                     <img
                       width="80"
                       height="40"
                       alt="plate logo"
-                      src={plate.image}
+                      src={frame.image}
                       className={css.plateIcon}
                     />
                   </div>
-                  <p className={css.dealers_company_name}>{plate.name}</p>
-                  <p className={css.dealers_person}>{plate.price}</p>
+                  <p className={css.dealers_company_name}>{frame.name}</p>
+                  <p className={css.dealers_person}>{frame.price}</p>
                   <div className={css.plate_link_thumb}>
-                    <a className={css.plate_link} href={plate.link}>
+                    <a className={css.plate_link} href={frame.link}>
                       <p className={css.dealers_number}>
                         <img
                           width="14"
@@ -82,16 +84,16 @@ const PlatesFrames = () => {
                         View link
                       </p>
                     </a>
-                  </div>{' '}
+                  </div>
                   <p className={css.dealers_status}>
                     <button
                       className={
-                        plate.status
+                        frame.status
                           ? css.dealers_status_btn_active
                           : css.dealers_status_btn
                       }
                     >
-                      {plate.status ? plate.status : 'Not available'}
+                      {frame.status ? frame.status : 'Not available'}
                     </button>
                   </p>
                   <div className={css.dealers_admin_actions_thumb}>
@@ -102,7 +104,7 @@ const PlatesFrames = () => {
                       height="20"
                       src={editIcon}
                     />
-                    {plate.status === 'Active' ? (
+                    {frame.status === 'Active' ? (
                       <img
                         className={css.edit_icon}
                         alt="pause icon"
