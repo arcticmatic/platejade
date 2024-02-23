@@ -85,7 +85,7 @@ const LicensePlates = () => {
     // Send selectedItems to the backend
     console.log('Selected items:', selectedItems);
 
-    fetch(`${BASE_URL}//api/auth/plates`, {
+    fetch(`${BASE_URL}/api/auth/plates`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
