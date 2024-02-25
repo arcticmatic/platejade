@@ -8,6 +8,7 @@ import EditDealer from './EditDealer';
 import AddLicensePlate from './AddLicensePlate';
 import AddLicensePlateFrame from './AddLicensePlateFrame';
 import PlatesFrames from './PlatesFrames';
+import EditLicensePlate from './EditLicensePlate';
 import LogIn from './LogIn';
 
 export const App = () => {
@@ -21,6 +22,7 @@ export const App = () => {
           <Route path="/add-license-plate" element={<AddLicensePlate />} />
           <Route path="/plate-frame" element={<PlatesFrames />} />
           <Route path="/add-plate-frame" element={<AddLicensePlateFrame />} />
+          <Route path="/edit-license-plate" element={<EditLicensePlate />} />
 
           <Route path="/users" element={<Users />} />
           <Route path="/dealers" element={<DealersPage />} />

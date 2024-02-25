@@ -10,12 +10,14 @@ import pauseIcon from '../icons/pauseIcon.svg';
 import deleteIconWhite from '../icons/deleteIconWhite.svg';
 import activateIcon from '../icons/activateIcon.svg';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LicensePlates = () => {
   const [plates, setPlates] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [selectAllPlates, setSelectAllPlates] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const navigate = useNavigate();
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -159,6 +161,15 @@ const LicensePlates = () => {
     setSelectAllPlates(false);
   };
 
+  const handleRedirect = plateName => {
+    // event.preventDefault();
+    console.log('inside');
+    navigate({
+      pathname: '/edit-license-plate',
+      search: `?plate=${plateName}`,
+    });
+  };
+
   return (
     <>
       <section className={css.dealers_section}>
@@ -283,6 +294,7 @@ const LicensePlates = () => {
                   </p>
                   <div className={css.dealers_admin_actions_thumb}>
                     <img
+                      onClick={() => handleRedirect(plate.name)}
                       className={css.edit_icon}
                       alt="edit icon"
                       width="20"

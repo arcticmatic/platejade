@@ -151,7 +151,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 22vw;
+  width: 19vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
@@ -160,7 +160,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 14vw;
+  width: 18vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
@@ -169,7 +169,7 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 18vw;
+  width: 12vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
@@ -285,7 +285,7 @@
 
 .dropdown_arrow_open_menu {
   position: absolute;
-  transform: translate(-220%, 220%);
+  transform: translate(-220%, 200%);
   cursor: pointer;
 }
 
