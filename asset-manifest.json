@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/platejade/static/css/main.3901a129.css",
-    "main.js": "/platejade/static/js/main.731af41b.js",
+    "main.css": "/platejade/static/css/main.807f88f5.css",
+    "main.js": "/platejade/static/js/main.179ae1e3.js",
     "static/media/iPhone.svg": "/platejade/static/media/iPhone.798de071893b0b329d64abee8afddac3.svg",
     "static/media/SFProText-Regular.ttf": "/platejade/static/media/SFProText-Regular.90da7ab18293ca42e335.ttf",
     "static/media/SF-Pro-Text-Medium.otf": "/platejade/static/media/SF-Pro-Text-Medium.d8bb87473fe937958666.otf",
@@ -27,11 +27,11 @@
     "static/media/openMenuIcon.svg": "/platejade/static/media/openMenuIcon.979e951d917d39eb6897bba8aa78d5cf.svg",
     "static/media/backArrow.svg": "/platejade/static/media/backArrow.4bd03e530d4755f9f7d68136129199dd.svg",
     "static/media/star.svg": "/platejade/static/media/star.e0961ca20c5e1036094e6a93f5acfd88.svg",
-    "main.3901a129.css.map": "/platejade/static/css/main.3901a129.css.map",
-    "main.731af41b.js.map": "/platejade/static/js/main.731af41b.js.map"
+    "main.807f88f5.css.map": "/platejade/static/css/main.807f88f5.css.map",
+    "main.179ae1e3.js.map": "/platejade/static/js/main.179ae1e3.js.map"
   },
   "entrypoints": [
-    "static/css/main.3901a129.css",
-    "static/js/main.731af41b.js"
+    "static/css/main.807f88f5.css",
+    "static/js/main.179ae1e3.js"
   ]
 }
