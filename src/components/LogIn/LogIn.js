@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const LogIn = () => {
   const navigate = useNavigate();
 
-  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+  // const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   // useEffect(() => {
   //   fetch('https://car-plates.onrender.com/api/auth/admin/allusers', {
