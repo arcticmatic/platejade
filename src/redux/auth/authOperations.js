@@ -25,7 +25,10 @@ const register = createAsyncThunk('/register', async credentials => {
 const logIn = createAsyncThunk('/login', async credentials => {
   try {
     const { data } = await axios.post('/auth/admin/login', credentials, {
-      mode: 'no-cors',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     });
 
     token.set(data.token);
@@ -38,7 +41,10 @@ const logIn = createAsyncThunk('/login', async credentials => {
 const logOut = createAsyncThunk('/logout', async () => {
   try {
     await axios.post('/auth/admin/logout', {
-      mode: 'no-cors',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     });
     token.unset();
   } catch (error) {
