@@ -13,11 +13,12 @@ const AddLicensePlateFrame = () => {
   const [themes, setThemes] = useState([]);
   const [attachmentTypes, setAttachmentTypes] = useState([]);
   const [features, setFeatures] = useState([]);
-  const [colorsHex, setColorsHex] = useState([]);
+  const [colors, setColors] = useState([]);
   const [colorsName, setColorsName] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
+  const [inputValues, setInputValues] = useState({});
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -183,7 +184,7 @@ const AddLicensePlateFrame = () => {
         });
       });
 
-    // RECEIVE AND SET NAMES AND HEX COLORS
+    // RECEIVE AND SET NAMES AND  COLORS
     fetch(`${BASE_URL}/api/auth/colors`, {
       method: 'GET',
       header: {},
@@ -193,10 +194,15 @@ const AddLicensePlateFrame = () => {
         const colorNamesArray = Array.from(
           new Set(result.colors.map(item => item.colorName))
         );
-        const colorHexArray = Array.from(
+        const colorArray = Array.from(
           new Set(result.colors.map(item => item.color))
         );
-        setColorsHex(colorHexArray.flat());
+
+        const colorsArrayWithoutEmptyValues = colorArray
+          .flat()
+          .filter(color => color !== '');
+
+        setColors(colorsArrayWithoutEmptyValues);
         setColorsName(colorNamesArray);
 
         setFields(prevFields => {
@@ -204,8 +210,8 @@ const AddLicensePlateFrame = () => {
             if (field.name === 'colorName') {
               return { ...field, options: colorNamesArray };
             }
-            if (field.name === 'colorHex') {
-              return { ...field, options: colorHexArray };
+            if (field.name === 'color') {
+              return { ...field, options: colorsArrayWithoutEmptyValues };
             }
             return field;
           });
@@ -256,7 +262,7 @@ const AddLicensePlateFrame = () => {
     new Set(colorsName.map(item => item.colorName))
   );
 
-  const colorHexArray = Array.from(new Set(colorsHex.map(item => item.color)));
+  const colorArray = Array.from(new Set(colors.map(item => item.color)));
 
   const themesArray = Array.from(new Set(themes.map(item => item.theme)));
 
@@ -314,9 +320,9 @@ const AddLicensePlateFrame = () => {
       showDropdown: false,
     },
     {
-      name: 'colorHex',
+      name: 'color',
       value: '',
-      options: colorHexArray,
+      options: colorArray,
       showDropdown: false,
     },
     {
@@ -339,27 +345,36 @@ const AddLicensePlateFrame = () => {
   const [directInputs, setDirectInputs] = useState({
     name: '',
     productDescription: '',
-    shopName: '',
+    firstShopName: '',
+    amazonLink: '',
     link: '',
-    price: '',
+    amazonPrice: '',
+    secondShopName: '',
+    secondShopLink: '',
+    secondShopPrice: '',
   });
 
+  // Handler function to toggle selection of a checkbox or set input values
   const handleInputChange = (name, value) => {
-    setFields(
-      fields.map(field =>
-        field.name === name ? { ...field, value: value } : field
-      )
-    );
+    setInputValues({ ...inputValues, [name]: value });
   };
 
   const handleOptionClick = (name, option) => {
-    setFields(
-      fields.map(field =>
-        field.name === name
-          ? { ...field, value: option, showDropdown: false }
-          : field
-      )
+    const selectedField = fields.find(field => field.name === name);
+    const currentValue = selectedField.value || [];
+
+    let updatedValue;
+    if (currentValue.includes(option)) {
+      updatedValue = currentValue.filter(item => item !== option);
+    } else {
+      updatedValue = [...currentValue, option];
+    }
+
+    const updatedFields = fields.map(field =>
+      field.name === name ? { ...field, value: updatedValue } : field
     );
+
+    setFields(updatedFields);
   };
 
   const toggleDropdown = name => {
@@ -375,63 +390,81 @@ const AddLicensePlateFrame = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const unmatchedMaterial = fields.find(
-      field => field.name === 'material'
-    )?.value;
+    // const unmatchedMaterial = fields.find(
+    //   field => field.name === 'material'
+    // )?.value;
 
-    if (unmatchedMaterial && !materials.includes(unmatchedMaterial)) {
-      fetch(`${BASE_URL}/api/auth/materials`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ material: unmatchedMaterial }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Response from backend route:', data);
-        })
-        .catch(error => {
-          console.error('Error sending data to  backend route:', error);
-        });
-    }
+    // if (unmatchedMaterial && !materials.includes(unmatchedMaterial)) {
+    //   fetch(`${BASE_URL}/api/auth/materials`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ material: unmatchedMaterial }),
+    //   })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log('Response from backend route:', data);
+    //     })
+    //     .catch(error => {
+    //       console.error('Error sending data to backend route:', error);
+    //     });
+    // }
 
-    const unmatchedState = fields.find(field => field.name === 'state')?.value;
+    // const unmatchedState = fields.find(field => field.name === 'state')?.value;
 
-    if (unmatchedState && !states.includes(unmatchedState)) {
-      fetch(`${BASE_URL}/api/auth/states`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ state: unmatchedState }),
-      })
-        .then(response => response.json(console.log(response.json)))
-        .then(data => {
-          console.log('Response from other backend route:', data);
-        })
-        .catch(error => {
-          console.error('Error sending data to other backend route:', error);
-        });
-    }
+    // if (unmatchedState && !states.includes(unmatchedState)) {
+    //   fetch(`${BASE_URL}/api/auth/states`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ state: unmatchedState }),
+    //   })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log('Response from other backend route:', data);
+    //     })
+    //     .catch(error => {
+    //       console.error('Error sending data to other backend route:', error);
+    //     });
+    // }
 
-    const formData = [
-      ...fields.map(field => ({ [field.name]: field.value })),
-      ...Object.entries(directInputs).map(([key, value]) => ({ [key]: value })),
-    ].reduce((acc, obj) => ({ ...acc, ...obj }), {});
+    event.preventDefault();
 
+    // Initialize formData as an empty object
+    const formData = {};
+
+    // Iterate over fields and add their values to formData
+    fields.forEach(field => {
+      formData[field.name] = field.value;
+    });
+
+    // Add directInputs to formData
+    Object.entries(directInputs).forEach(([key, value]) => {
+      formData[key] = value;
+    });
+
+    // Add uploaded image to formData
     formData['image'] = uploadedImage;
 
-    console.log('Form Data:', formData);
+    // Additional logic for specific form data based on conditions
+    if (formData.colorName === 'Multicolor') {
+      formData['color'] = ['66465', '9198E5'];
+    } else if (formData.colorName === 'Transparent') {
+      formData['color'] = [''];
+    }
 
-    fetch(`http://localhost:3000/api/auth/frames`, {
+    console.log('Form Data:', JSON.stringify(formData));
+
+    fetch(`${BASE_URL}/api/auth/frames`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
     })
-      .then(response => response.json(console.log(response.json)))
+      .then(response => response.json())
       .then(data => {
         console.log('Response from backend route:', data);
       })
@@ -443,13 +476,11 @@ const AddLicensePlateFrame = () => {
     setFields(
       initialFields.map(field => ({ ...field, value: '', showDropdown: false }))
     );
-    setDirectInputs({
-      name: '',
-
-      productDescription: '',
-
-      // Reset direct input values
-    });
+    // setDirectInputs({
+    //   name: '',
+    //   productDescription: '',
+    //   // Reset direct input values
+    // });
     setUploadedImage('');
     alert('Form is successfully submitted');
   };
@@ -457,6 +488,7 @@ const AddLicensePlateFrame = () => {
   const handleUpload = async event => {
     event.preventDefault();
     console.log('inside func');
+    console.log(file);
 
     const originalFilename = file.name;
 
@@ -506,7 +538,7 @@ const AddLicensePlateFrame = () => {
               </button>
             </Link>
           </div>
-          <p className={css.add_dealer_text}>Add Plate</p>
+          <p className={css.add_dealer_text}>Add Frame</p>
           <form className={css.add_dealer_blocks_thumb}>
             <div>
               <div className={css.add_dealer_company_info}>
@@ -716,7 +748,7 @@ const AddLicensePlateFrame = () => {
                           ?.options && ( // Render dropdown menu if options exist
                           <ul className={css.menu_items_list} id="style-2">
                             {fields
-                              .find(field => field.name === 'material')
+                              ?.find(field => field.name === 'material')
                               ?.options.map((option, index) => (
                                 <li className={css.menu_item} key={index}>
                                   <label htmlFor={`material_option_${index}`}>
@@ -725,11 +757,11 @@ const AddLicensePlateFrame = () => {
                                       style={{ display: 'none' }}
                                       type="checkbox"
                                       id={`material_option_${index}`}
-                                      checked={fields
-                                        .find(
+                                      checked={(
+                                        fields.find(
                                           field => field.name === 'material'
-                                        )
-                                        ?.value.includes(option)}
+                                        )?.value || []
+                                      ).includes(option)}
                                       onChange={() =>
                                         handleOptionClick('material', option)
                                       }
@@ -743,7 +775,6 @@ const AddLicensePlateFrame = () => {
                           </ul>
                         )}
                     </div>
-
                     <div style={{ position: 'relative' }}>
                       <div className={css.filter_thumb_all}>
                         <p className={css.company_label}> Choose type</p>
@@ -810,7 +841,6 @@ const AddLicensePlateFrame = () => {
                           </ul>
                         )}
                     </div>
-
                     <div style={{ position: 'relative' }}>
                       <div className={css.filter_thumb_all}>
                         <p className={css.company_label}> Choose finish type</p>
@@ -880,7 +910,6 @@ const AddLicensePlateFrame = () => {
                           </ul>
                         )}
                     </div>
-
                     <div style={{ position: 'relative' }}>
                       <div className={css.filter_thumb_all}>
                         <p className={css.company_label}> Choose theme</p>
@@ -948,7 +977,6 @@ const AddLicensePlateFrame = () => {
                           </ul>
                         )}
                     </div>
-
                     <div style={{ position: 'relative' }}>
                       <div className={css.filter_thumb_all}>
                         <p className={css.company_label}>
@@ -1031,7 +1059,6 @@ const AddLicensePlateFrame = () => {
                           </ul>
                         )}
                     </div>
-
                     <div style={{ position: 'relative' }}>
                       <div className={css.filter_thumb_all}>
                         <p className={css.company_label}>
@@ -1180,55 +1207,53 @@ const AddLicensePlateFrame = () => {
                           className={css.filter_item_input}
                           type="text"
                           value={
-                            fields.find(field => field.name === 'colorHex')
+                            fields.find(field => field.name === 'color')
                               ?.value || ''
                           }
                           onChange={event =>
-                            handleInputChange('colorHex', event.target.value)
+                            handleInputChange('color', event.target.value)
                           }
                           placeholder="Start typing or select from the list"
                         />
-                        {fields.find(field => field.name === 'colorHex')
+                        {fields.find(field => field.name === 'color')
                           ?.options &&
-                        fields.find(field => field.name === 'colorHex')
+                        fields.find(field => field.name === 'color')
                           .showDropdown ? (
                           <img
                             className={css.dropdown_arrow_open_menu}
                             src={openMenuIcon}
                             alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('colorHex')}
+                            onClick={() => toggleDropdown('color')}
                           />
                         ) : (
                           <img
                             className={css.dropdown_arrow}
                             src={bottomArrow}
                             alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('colorHex')}
+                            onClick={() => toggleDropdown('color')}
                           />
                         )}
                       </div>
-                      {fields.find(field => field.name === 'colorHex')
+                      {fields.find(field => field.name === 'color')
                         ?.showDropdown &&
-                        fields.find(field => field.name === 'colorHex')
+                        fields.find(field => field.name === 'color')
                           ?.options && ( // Render dropdown menu if options exist
                           <ul className={css.menu_items_list} id="style-2">
                             {fields
-                              .find(field => field.name === 'colorHex')
+                              .find(field => field.name === 'color')
                               ?.options.map((option, index) => (
                                 <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`colorHex_option_${index}`}>
+                                  <label htmlFor={`color_option_${index}`}>
                                     <input
                                       className={css.input_checkbox}
                                       style={{ display: 'none' }}
                                       type="checkbox"
-                                      id={`colorHex_option_${index}`}
+                                      id={`color_option_${index}`}
                                       checked={fields
-                                        .find(
-                                          field => field.name === 'colorHex'
-                                        )
+                                        .find(field => field.name === 'color')
                                         ?.value.includes(option)}
                                       onChange={() =>
-                                        handleOptionClick('colorHex', option)
+                                        handleOptionClick('color', option)
                                       }
                                     />
                                     {/* Render the SVG icon */}
@@ -1365,7 +1390,6 @@ const AddLicensePlateFrame = () => {
                         )}
                     </div>
                   </div>
-
                   <p className={css.add_dealer_company_text}>
                     Add link and price
                   </p>
@@ -1376,11 +1400,11 @@ const AddLicensePlateFrame = () => {
                       <input
                         type="text"
                         className={css.company_input}
-                        value={directInputs.shopName}
+                        value={directInputs.firstShopName}
                         onChange={e =>
                           setDirectInputs({
                             ...directInputs,
-                            shopName: e.target.value,
+                            firstShopName: e.target.value,
                           })
                         }
                         placeholder="Amazon"
@@ -1393,11 +1417,11 @@ const AddLicensePlateFrame = () => {
                       <input
                         type="text"
                         className={css.company_input}
-                        value={directInputs.link}
+                        value={directInputs.amazonLink}
                         onChange={e =>
                           setDirectInputs({
                             ...directInputs,
-                            link: e.target.value,
+                            amazonLink: e.target.value,
                           })
                         }
                         placeholder="Link"
@@ -1408,11 +1432,60 @@ const AddLicensePlateFrame = () => {
                       <input
                         type="text"
                         className={css.company_input}
-                        value={directInputs.price}
+                        value={directInputs.amazonPrice}
                         onChange={e =>
                           setDirectInputs({
                             ...directInputs,
-                            price: e.target.value,
+                            amazonPrice: e.target.value,
+                          })
+                        }
+                        placeholder="Price"
+                      />
+                    </li>
+                  </ul>
+                  <ul className={css.add_item_filter_list}>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}>Second shop name</p>
+                      <input
+                        type="text"
+                        className={css.company_input}
+                        value={directInputs.secondShopName}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            secondShopName: e.target.value,
+                          })
+                        }
+                        placeholder="Shop name"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}>
+                        Attach a link to the product
+                      </p>
+                      <input
+                        type="text"
+                        className={css.company_input}
+                        value={directInputs.secondShopLink}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            secondShopLink: e.target.value,
+                          })
+                        }
+                        placeholder="Link"
+                      />
+                    </li>
+                    <li className={css.filter_item}>
+                      <p className={css.company_label}> Price ($) </p>
+                      <input
+                        type="text"
+                        className={css.company_input}
+                        value={directInputs.secondShopPrice}
+                        onChange={e =>
+                          setDirectInputs({
+                            ...directInputs,
+                            secondShopPrice: e.target.value,
                           })
                         }
                         placeholder="Price"
@@ -1422,7 +1495,7 @@ const AddLicensePlateFrame = () => {
                 </div>
               </div>
               <div className={css.add_dealer_buttons_thumb}>
-                <Link to="/license-plates">
+                <Link to="/plate-frame">
                   <button className={css.cancel_btn}>Cancel</button>
                 </Link>
                 <button onClick={handleSubmit} className={css.add_dealer_btn}>

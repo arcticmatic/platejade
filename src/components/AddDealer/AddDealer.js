@@ -14,8 +14,18 @@ const AddDealer = () => {
   const [number, setNumber] = useState('');
   const [e_mail, setEmail] = useState('');
   const [address, setAddress] = useState('');
+  const [uploadedImage, setUploadedImage] = useState('');
+  const [file, setFile] = useState(null);
+
+  const BASE_URL = 'https://platejade-back.onrender.com';
+
+  const handleFileChange = event => {
+    setFile(event.target.files[0]);
+  };
 
   const handleChange = event => {
+    event.preventDefault();
+
     const { name, value } = event.target;
 
     switch (name) {
@@ -49,13 +59,15 @@ const AddDealer = () => {
   };
 
   const handleSubmit = async event => {
+    event.preventDefault();
+
     console.log('submitted');
 
     console.log('company name', companyName);
     console.log('password', generatedPassword);
     event.preventDefault();
 
-    fetch('https://car-plates.onrender.com/api/auth/admin/add-dealer', {
+    fetch(`${BASE_URL}/api/auth/admin/add-dealer`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -64,7 +76,7 @@ const AddDealer = () => {
       body: JSON.stringify({
         company_name: companyName,
         company_address: address,
-        // logo: { type: String },
+        logo: uploadedImage,
         contact_person: contactPerson,
         number: number,
         e_mail: e_mail,
@@ -137,10 +149,41 @@ const AddDealer = () => {
     setGeneratedPassword(newPassword);
   };
 
-  // const handleAddNewPerson = event => {
-  //   event.preventDefault();
-  //   setIsClickedOnce(true);
-  // };
+  const handleUpload = async event => {
+    event.preventDefault();
+    console.log('inside func');
+
+    const originalFilename = file.name;
+
+    // Send a request to the backend to get a pre-signed URL
+    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url/dealers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: originalFilename }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        return res.uploadURL;
+      });
+
+    // console.log(uploadUrl);
+
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/png',
+      },
+      body: file,
+    });
+
+    const imageUrl = uploadUrl.split('?')[0];
+    console.log(imageUrl);
+    setUploadedImage(imageUrl);
+  };
+
+  console.log('uploaded image', uploadedImage);
 
   return (
     <>
@@ -159,17 +202,47 @@ const AddDealer = () => {
           <form onSubmit={handleSubmit} className={css.add_dealer_blocks_thumb}>
             <div>
               <div className={css.add_dealer_company_info}>
-                <div className={css.add_dealer_upload_image_thumb}>
-                  <img
-                    alt="dealer logo"
-                    className={css.logo_icon}
-                    src={dealerPhoto}
-                  />
-                  <p className={css.add_dealer_upload_text}> Click to upload</p>
+                <div
+                  className={
+                    !uploadedImage
+                      ? css.add_dealer_upload_image_thumb
+                      : css.uploaded_image_thumb
+                  }
+                >
+                  {!uploadedImage ? (
+                    <img
+                      alt="dealer logo"
+                      className={css.logo_icon}
+                      src={dealerPhoto}
+                    />
+                  ) : (
+                    <img
+                      className={css.uploaded_image}
+                      alt="uploaded plate"
+                      height="150"
+                      src={uploadedImage}
+                    />
+                  )}
+                  <div className={css.add_dealer_upload_text}>
+                    <label htmlFor="fileInput">
+                      Click to upload
+                      <input
+                        type="file"
+                        id="fileInput"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                    <button className={css.upload_btn} onClick={handleUpload}>
+                      <p>Upload Image</p>
+                    </button>
+                  </div>
                   <div className={css.border}></div>
-                  <p className={css.add_dealer_image_size}>
-                    PNG or JPG recommended size (1000px*1000px)
-                  </p>
+                  {!uploadedImage && (
+                    <p className={css.add_dealer_image_size}>
+                      PNG or JPG recommended size (1000px*1000px)
+                    </p>
+                  )}
                 </div>
                 <div className={css.add_dealer_border}></div>
                 <div className={css.add_dealer_company_thumb}>
@@ -229,7 +302,9 @@ const AddDealer = () => {
                   onClick={
                     !generatedPassword
                       ? handleGeneratePassword
-                      : () => {
+                      : event => {
+                          event.preventDefault();
+
                           console.log('click');
                         }
                   }

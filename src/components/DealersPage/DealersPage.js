@@ -12,8 +12,10 @@ const DealersPage = () => {
   const [refresh, setRefresh] = useState(true);
   const navigate = useNavigate();
 
+  const BASE_URL = 'https://platejade-back.onrender.com';
+
   const getAllDealers = () => {
-    fetch('https://car-plates.onrender.com/api/auth/admin/alldealers', {
+    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
       method: 'GET',
       header: {},
     })
@@ -24,13 +26,10 @@ const DealersPage = () => {
   };
 
   const handleDelete = dealerId => {
-    fetch(
-      `https://car-plates.onrender.com/api/auth/admin/delete-dealer/${dealerId}`,
-      {
-        method: 'DELETE',
-        headers: {},
-      }
-    )
+    fetch(`${BASE_URL} /api/auth/admin/delete-dealer/${dealerId}`, {
+      method: 'DELETE',
+      headers: {},
+    })
       .then(res => res.json())
       .then(result => {
         console.log('refresh');

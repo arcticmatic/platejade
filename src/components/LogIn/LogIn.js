@@ -1,26 +1,59 @@
 import css from './LogIn.module.css';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 // import { NavLink } from 'react-router-dom';
-// import { useState } from 'react';
 import iPhone from '../icons/iPhone.svg';
 import appStore from '../icons/appStore.svg';
 import googlePlay from '../icons/googlePlay.svg';
-// import { useLoginMutation } from '../../redux/authApi';
-// import { setAuthenticated } from '../../redux/authSlice';
-// import { useDispatch } from 'react-redux';
+import authOperations from '../../redux/auth/authOperations';
+import authSelectors from '../../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const LogIn = () => {
-  // const dispatch = useDispatch();
-  // const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
 
-  // const handleLogin = async credentials => {
-  //   try {
-  //     const response = await login(credentials).unwrap();
-  //     // Handle successful login, e.g., store authentication token
-  //     dispatch(setAuthenticated(true));
-  //   } catch (error) {
-  //     // Handle login failure
-  //   }
-  // };
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+
+  if (isLoggedIn) {
+  }
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    console.log(name, value);
+    switch (name) {
+      case 'email':
+        setEmail(value);
+        break;
+
+      case 'password':
+        setPassword(value);
+        break;
+
+      default:
+        return;
+    }
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    console.log('inside func');
+    dispatch(authOperations.logIn({ email, password }));
+
+    reset();
+    navigate('/');
+  };
+
+  const reset = () => {
+    setEmail('');
+    setPassword('');
+  };
+
   return (
     <>
       <section className={css.login_section}>
@@ -59,27 +92,36 @@ const LogIn = () => {
               If you have forgotten your login or password,
             </p>
             <p className={css.login_description}>contact the administrator</p>
-            <form className={css.login_form}>
-              <p className={css.input_title}>Login</p>
-              <label>
-                <input
-                  name="username"
-                  placeholder="David"
-                  className={css.login_input}
-                />
-              </label>
-              <p className={css.input_title}>Password</p>
-              <label>
-                <input
-                  name="password"
-                  placeholder="David"
-                  className={css.login_input}
-                />
-              </label>
+            <form onSubmit={handleSubmit} className={css.login_form}>
+              <div>
+                <label>
+                  <p className={css.input_title}>Login</p>
+                  <input
+                    name="email"
+                    value={email}
+                    placeholder="David"
+                    className={css.login_input}
+                    onChange={handleChange}
+                  />
+                </label>
+                <label>
+                  <p className={css.input_title}>Password</p>
+
+                  <input
+                    name="password"
+                    value={password}
+                    placeholder="David"
+                    className={css.login_input}
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
+              <div>
+                <button type="submit" className={css.login_btn}>
+                  Login
+                </button>
+              </div>
             </form>
-            <button type="submit" className={css.login_btn}>
-              Login
-            </button>
           </div>
         </div>
       </section>

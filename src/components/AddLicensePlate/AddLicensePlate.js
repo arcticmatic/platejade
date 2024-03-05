@@ -128,7 +128,7 @@ const AddLicensePlate = () => {
   const [fields, setFields] = useState(initialFields);
   const [directInputs, setDirectInputs] = useState({
     name: '',
-    productDescription: '',
+    description: '',
     shopName: '',
     link: '',
     price: '',
@@ -239,7 +239,7 @@ const AddLicensePlate = () => {
       state: '',
       dealer: '',
       status: '',
-      productDescription: '',
+      description: '',
       shopName: '',
       link: '',
       price: '',
@@ -450,11 +450,11 @@ const AddLicensePlate = () => {
                       <input
                         type="text"
                         className={css.company_input}
-                        value={directInputs.productDescription}
+                        value={directInputs.description}
                         onChange={e =>
                           setDirectInputs({
                             ...directInputs,
-                            productDescription: e.target.value,
+                            description: e.target.value,
                           })
                         }
                         placeholder="Product description"
@@ -714,7 +714,7 @@ const AddLicensePlate = () => {
                 </div>
               </div>
               <div className={css.add_dealer_buttons_thumb}>
-                <Link to="/license-plates">
+                <Link to="/">
                   <button className={css.cancel_btn}>Cancel</button>
                 </Link>
                 <button onClick={handleSubmit} className={css.add_dealer_btn}>

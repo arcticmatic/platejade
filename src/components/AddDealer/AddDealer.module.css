@@ -265,3 +265,27 @@
   vertical-align: middle;
   padding-left: 40px;
 }
+.uploaded_image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+.upload_btn {
+  outline: none;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--app-primary, #9c8d7f);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 2px;
+}
+.add_dealer_upload_text {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+}

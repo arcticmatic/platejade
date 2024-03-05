@@ -3,8 +3,17 @@ import PlateJadeLogo from '../icons/plate-jade-logo.svg';
 import { NavLink } from 'react-router-dom';
 import starIcon from '../icons/star.svg';
 import logoutIcon from '../icons/logoutIcon.svg';
+import authSelectors from '../../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { authOperations } from '../../redux/auth';
 
 const Header = () => {
+  const email = useSelector(authSelectors.getEmail);
+  const dispatch = useDispatch();
+
+  console.log('email', email);
+
   return (
     <>
       <section>
@@ -17,7 +26,7 @@ const Header = () => {
             />
           </div>
           <div>
-            <NavLink to="/license-plates" className={css.nav_link}>
+            <NavLink to="/" className={css.nav_link}>
               License Plates
             </NavLink>
             <NavLink to="/plate-frame" className={css.nav_link}>
@@ -40,10 +49,11 @@ const Header = () => {
                   src={starIcon}
                 />
               </p>
-              <p className={css.user_email}>admin@gmail.com</p>
+              <p className={css.user_email}>admin@gmail.com </p>
             </div>
             <div className={css.grey_border}></div>
             <img
+              onClick={() => dispatch(authOperations.logOut())}
               alt="plate jade logo"
               className={css.logout_icon}
               src={logoutIcon}

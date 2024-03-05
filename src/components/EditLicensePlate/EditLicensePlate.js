@@ -133,7 +133,7 @@ const EditLicensePlate = () => {
   const [fields, setFields] = useState(initialFields);
   const [directInputs, setDirectInputs] = useState({
     name: '',
-    productDescription: '',
+    description: '',
     shopName: '',
     link: '',
     price: '',
@@ -268,13 +268,13 @@ const EditLicensePlate = () => {
       }))
     );
     setDirectInputs({
-      name: '',
+      //   name: '',
       category: '',
       state: '',
       dealer: '',
       status: '',
-      productDescription: '',
-      shopName: '',
+      //   productDescription: '',
+      //   shopName: '',
       link: '',
       price: '',
       // Reset direct input values
@@ -324,7 +324,7 @@ const EditLicensePlate = () => {
       <section className={css.add_dealers_section}>
         {currentPlate.map(plate => {
           return (
-            <div className={css.add_dealers_admin_thumb}>
+            <div className={css.add_dealers_admin_thumb} key={plate.name}>
               <div className={css.back_btn_thumb}>
                 <img alt="back" className={css.back_icon} src={backArrow} />
 
@@ -405,14 +405,13 @@ const EditLicensePlate = () => {
                                 name: e.target.value,
                               })
                             }
-                            placeholder="Name"
+                            placeholder={plate.name}
                           />
                         </li>
                         <li className={css.company_item}>
                           <div style={{ position: 'relative' }}>
                             <div className={css.filter_thumb_all}>
                               <p className={css.company_label}>
-                                {' '}
                                 Choose a dealer{' '}
                               </p>
                               <input
@@ -423,7 +422,7 @@ const EditLicensePlate = () => {
                                     ?.value || ''
                                 }
                                 readOnly
-                                placeholder="Select from the list"
+                                placeholder={plate.dealer}
                               />
                               {fields.find(field => field.name === 'dealer')
                                 ?.options &&
@@ -500,14 +499,14 @@ const EditLicensePlate = () => {
                           <input
                             type="text"
                             className={css.company_input}
-                            value={directInputs.productDescription}
+                            value={directInputs.description}
                             onChange={e =>
                               setDirectInputs({
                                 ...directInputs,
-                                productDescription: e.target.value,
+                                description: e.target.value,
                               })
                             }
-                            placeholder="Product description"
+                            placeholder={plate.description}
                           />
                         </li>
                       </ul>
@@ -537,7 +536,7 @@ const EditLicensePlate = () => {
                                   event.target.value
                                 )
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={plate.category}
                             />
                             {fields.find(field => field.name === 'category')
                               ?.options &&
@@ -611,7 +610,7 @@ const EditLicensePlate = () => {
                               onChange={event =>
                                 handleInputChange('state', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={plate.state}
                             />
                             {fields.find(field => field.name === 'state')
                               ?.options &&
@@ -679,7 +678,7 @@ const EditLicensePlate = () => {
                                   ?.value || ''
                               }
                               readOnly
-                              placeholder="Select from the list"
+                              placeholder={plate.status}
                             />
                             {fields.find(field => field.name === 'status')
                               ?.options && ( // Render dropdown arrow if options exist
@@ -744,7 +743,7 @@ const EditLicensePlate = () => {
                                 shopName: e.target.value,
                               })
                             }
-                            placeholder="Amazon"
+                            placeholder={plate.shopName}
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -761,7 +760,7 @@ const EditLicensePlate = () => {
                                 link: e.target.value,
                               })
                             }
-                            placeholder="Link"
+                            placeholder={plate.link}
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -776,14 +775,14 @@ const EditLicensePlate = () => {
                                 price: e.target.value,
                               })
                             }
-                            placeholder="Price"
+                            placeholder={plate.price}
                           />
                         </li>
                       </ul>
                     </div>
                   </div>
                   <div className={css.add_dealer_buttons_thumb}>
-                    <Link to="/license-plates">
+                    <Link to="/">
                       <button className={css.cancel_btn}>Cancel</button>
                     </Link>
                     <button

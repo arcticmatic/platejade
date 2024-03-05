@@ -73,7 +73,10 @@
   font-weight: 500;
   line-height: 20px; /* 142.857% */
 }
-
+.upload_btn {
+  width: 100px;
+  margin: 0 auto;
+}
 .border {
   margin: 0 auto;
   margin-bottom: 10px;

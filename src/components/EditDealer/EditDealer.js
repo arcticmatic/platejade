@@ -8,11 +8,15 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const EditDealer = () => {
+  const BASE_URL = 'https://platejade-back.onrender.com';
+
   const [searchParams] = useSearchParams();
 
   const [generatedPassword, setGeneratedPassword] = useState('');
   const [currentDealer, setCurrentDealer] = useState([]);
   const [refresh, setRefresh] = useState(true);
+  const [uploadedImage, setUploadedImage] = useState('');
+  const [file, setFile] = useState(null);
 
   const [formData, setFormData] = useState({
     company_name: '',
@@ -24,7 +28,13 @@ const EditDealer = () => {
     password: '',
   });
 
+  const handleFileChange = event => {
+    setFile(event.target.files[0]);
+  };
+
   const handleChange = event => {
+    event.preventDefault();
+
     const { name, value } = event.target;
     setFormData(prevData => ({
       ...prevData,
@@ -33,6 +43,8 @@ const EditDealer = () => {
   };
 
   const handleSubmit = event => {
+    event.preventDefault();
+
     const payload = {};
     Object.entries(formData).forEach(([key, value]) => {
       if (value.trim() !== '') {
@@ -48,17 +60,14 @@ const EditDealer = () => {
     console.log('password', generatedPassword);
     event.preventDefault();
 
-    fetch(
-      `https://car-plates.onrender.com/api/auth/admin/edit-dealer/${dealerId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }
-    )
+    fetch(`${BASE_URL}/api/auth/admin/edit-dealer/${dealerId}`, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
       .then(res => res.json())
       .then(res => console.log(res));
 
@@ -127,18 +136,51 @@ const EditDealer = () => {
 
   useEffect(() => {
     setRefresh(false);
-    fetch(
-      `https://car-plates.onrender.com/api/auth/admin/dealer?company_name=${currentUser}`,
-      {
-        method: 'GET',
-        header: {},
-      }
-    )
+    fetch(`${BASE_URL}/api/auth/admin/dealer?company_name=${currentUser}`, {
+      method: 'GET',
+      header: {},
+    })
       .then(res => res.json())
       .then(result => {
         setCurrentDealer(result.dealers);
       });
   }, [refresh, currentUser]);
+
+  const handleUpload = async event => {
+    event.preventDefault();
+    console.log('inside func');
+
+    const originalFilename = file.name;
+
+    // Send a request to the backend to get a pre-signed URL
+    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url/dealers`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: originalFilename }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        return res.uploadURL;
+      });
+
+    // console.log(uploadUrl);
+
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/png',
+      },
+      body: file,
+    });
+
+    const imageUrl = uploadUrl.split('?')[0];
+    console.log(imageUrl);
+    setUploadedImage(imageUrl);
+  };
+
+  console.log('uploaded image', uploadedImage);
 
   return (
     <>
@@ -162,19 +204,50 @@ const EditDealer = () => {
               >
                 <div>
                   <div className={css.add_dealer_company_info}>
-                    <div className={css.add_dealer_upload_image_thumb}>
-                      <img
-                        alt="dealer logo"
-                        className={css.logo_icon}
-                        src={dealerPhoto}
-                      />
-                      <p className={css.add_dealer_upload_text}>
-                        Click to upload
-                      </p>
+                    <div
+                      className={
+                        !uploadedImage
+                          ? css.add_dealer_upload_image_thumb
+                          : css.uploaded_image_thumb
+                      }
+                    >
+                      {!uploadedImage ? (
+                        <img
+                          alt="dealer logo"
+                          className={css.logo_icon}
+                          src={dealerPhoto}
+                        />
+                      ) : (
+                        <img
+                          className={css.uploaded_image}
+                          alt="uploaded plate"
+                          height="150"
+                          src={uploadedImage}
+                        />
+                      )}
+                      <div className={css.add_dealer_upload_text}>
+                        <label htmlFor="fileInput">
+                          Click to upload
+                          <input
+                            type="file"
+                            id="fileInput"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                        <button
+                          className={css.upload_btn}
+                          onClick={handleUpload}
+                        >
+                          <p>Upload Image</p>
+                        </button>
+                      </div>
                       <div className={css.border}></div>
-                      <p className={css.add_dealer_image_size}>
-                        PNG or JPG recommended size (1000px*1000px)
-                      </p>
+                      {!uploadedImage && (
+                        <p className={css.add_dealer_image_size}>
+                          PNG or JPG recommended size (1000px*1000px)
+                        </p>
+                      )}
                     </div>
                     <div className={css.add_dealer_border}></div>
                     <div className={css.add_dealer_company_thumb}>
