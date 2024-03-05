@@ -15,8 +15,16 @@ const LogIn = () => {
 
   const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
-  if (isLoggedIn) {
-  }
+  // useEffect(() => {
+  //   fetch('https://car-plates.onrender.com/api/auth/admin/allusers', {
+  //     method: 'GET',
+  //     header: {},
+  //   })
+  //     .then(res => res.json())
+  //     .then(result => {
+  //       setUsers(result.users);
+  //     });
+  // }, []);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
