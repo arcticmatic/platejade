@@ -21,6 +21,10 @@
   letter-spacing: 0px;
   text-align: center;
 }
+.nav_link_active:visited {
+  width: 100px;
+  background: #dad3cc33;
+}
 .nav_link:not(:last-child) {
   margin-right: 30px;
 }
