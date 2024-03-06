@@ -32,8 +32,8 @@ const DealersPage = () => {
     })
       .then(res => res.json())
       .then(result => {
-        console.log('refresh');
-        // setDealers(result.dealers);
+        // console.log('refresh');
+        setDealers(result.dealers);
         // console.log('result.dealers', result.dealers);
       });
     setRefresh(true);
