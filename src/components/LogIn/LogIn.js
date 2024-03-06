@@ -2,29 +2,18 @@ import css from './LogIn.module.css';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 // import { NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 import iPhone from '../icons/iPhone.svg';
 import appStore from '../icons/appStore.svg';
 import googlePlay from '../icons/googlePlay.svg';
 import authOperations from '../../redux/auth/authOperations';
 import authSelectors from '../../redux/auth/authSelectors';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const LogIn = () => {
   const navigate = useNavigate();
-
-  // const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
-
-  // useEffect(() => {
-  //   fetch('https://car-plates.onrender.com/api/auth/admin/allusers', {
-  //     method: 'GET',
-  //     header: {},
-  //   })
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       setUsers(result.users);
-  //     });
-  // }, []);
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +21,7 @@ const LogIn = () => {
   const dispatch = useDispatch();
 
   const handleChange = event => {
+    event.preventDefault();
     const { name, value } = event.target;
     console.log(name, value);
     switch (name) {
@@ -54,13 +44,18 @@ const LogIn = () => {
     dispatch(authOperations.logIn({ email, password }));
 
     reset();
-    navigate('/');
   };
 
-  const reset = () => {
+  const reset = event => {
     setEmail('');
     setPassword('');
   };
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log(isLoggedIn);
+      navigate('/');
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <>

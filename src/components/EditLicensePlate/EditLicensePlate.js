@@ -18,6 +18,7 @@ const EditLicensePlate = () => {
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
 
   const [file, setFile] = useState(null);
 
@@ -280,7 +281,8 @@ const EditLicensePlate = () => {
       // Reset direct input values
     });
     setUploadedImage('');
-    alert('Form is successfully submitted');
+    setShowNotification(true);
+    setRefresh(true);
   };
 
   const handleUpload = async event => {
@@ -313,7 +315,7 @@ const EditLicensePlate = () => {
     });
 
     const imageUrl = uploadUrl.split('?')[0];
-    console.log(imageUrl);
+    // console.log(imageUrl);
     setUploadedImage(imageUrl);
   };
 
@@ -328,13 +330,13 @@ const EditLicensePlate = () => {
               <div className={css.back_btn_thumb}>
                 <img alt="back" className={css.back_icon} src={backArrow} />
 
-                <Link to="/license-plates">
+                <Link to="/">
                   <button className={css.back_to_dealers_btn}>
                     Back to plates
                   </button>
                 </Link>
               </div>
-              <p className={css.add_dealer_text}>Add Plate</p>
+              <p className={css.add_dealer_text}>Edit Plate</p>
               <form className={css.add_dealer_blocks_thumb}>
                 <div>
                   <div className={css.add_dealer_company_info}>
@@ -385,6 +387,18 @@ const EditLicensePlate = () => {
                     </div>
                   </div>
                 </div>
+
+                {showNotification && (
+                  <div className={css.notification_modal}>
+                    <p className={css.notification_message}>
+                      You have successfully edited the plate
+                    </p>
+                    <Link to="/">
+                      <button className={css.notification_button}>OK</button>
+                    </Link>
+                  </div>
+                )}
+
                 <div className={css.dealer_contact_thumb}>
                   <div className={css.add_dealer_contact_person}>
                     <div className={css.add_dealer_company_thumb}>

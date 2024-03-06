@@ -11,6 +11,8 @@ const AddLicensePlate = () => {
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -86,7 +88,8 @@ const AddLicensePlate = () => {
           return updatedFields;
         });
       });
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
 
   const categoriesArray = Array.from(
     new Set(categories.map(item => item.category))
@@ -246,7 +249,9 @@ const AddLicensePlate = () => {
       // Reset direct input values
     });
     setUploadedImage('');
-    alert('Form is successfully submitted');
+
+    setShowNotification(true);
+    setRefresh(true);
   };
 
   const handleUpload = async event => {
@@ -292,7 +297,7 @@ const AddLicensePlate = () => {
           <div className={css.back_btn_thumb}>
             <img alt="back" className={css.back_icon} src={backArrow} />
 
-            <Link to="/license-plates">
+            <Link to="/">
               <button className={css.back_to_dealers_btn}>
                 Back to plates
               </button>
@@ -346,6 +351,18 @@ const AddLicensePlate = () => {
                 </div>
               </div>
             </div>
+
+            {showNotification && (
+              <div className={css.notification_modal}>
+                <p className={css.notification_message}>
+                  You have successfully added the plate
+                </p>
+                <Link to="/">
+                  <button className={css.notification_button}>OK</button>
+                </Link>
+              </div>
+            )}
+
             <div className={css.dealer_contact_thumb}>
               <div className={css.add_dealer_contact_person}>
                 <div className={css.add_dealer_company_thumb}>

@@ -17,6 +17,7 @@ const EditDealer = () => {
   const [refresh, setRefresh] = useState(true);
   const [uploadedImage, setUploadedImage] = useState('');
   const [file, setFile] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
 
   const [formData, setFormData] = useState({
     company_name: '',
@@ -108,8 +109,8 @@ const EditDealer = () => {
     //     'Your phone number must start with + and consist of 12 numbers'
     //   );
     // }
-
-    // navigate('/user', { replace: true });
+    setShowNotification(true);
+    setRefresh(true);
   };
 
   // const handleCopy = () => {
@@ -340,6 +341,18 @@ const EditDealer = () => {
                     </button>
                   </div>
                 </div>
+
+                {showNotification && (
+                  <div className={css.notification_modal}>
+                    <p className={css.notification_message}>
+                      You have successfully added the dealer
+                    </p>
+                    <Link to="/dealers">
+                      <button className={css.notification_button}>OK</button>
+                    </Link>
+                  </div>
+                )}
+
                 <div className={css.dealer_contact_thumb}>
                   <div className={css.add_dealer_contact_person}>
                     <div className={css.add_dealer_company_thumb}>

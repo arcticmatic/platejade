@@ -30,7 +30,7 @@ const PlatesFrames = () => {
       .then(res => res.json())
       .then(result => {
         setFrames(result.frames);
-        console.log(result);
+        // console.log(result);
       });
 
     setRefresh(false);
@@ -79,10 +79,29 @@ const PlatesFrames = () => {
     // Deselect all plates by setting selectAllPlates to false
     setSelectAllFrames(false);
   };
+  const handleEditStatus = (frameId, plateStatus) => {
+    const newStatus =
+      plateStatus.toString() === 'Active' ? 'Not available' : 'Active';
+
+    fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: newStatus,
+      }),
+    })
+      .then(res => res.json())
+      .then(result => {
+        setRefresh(true);
+      });
+  };
 
   const handleActiveSubmit = () => {
     // Send selectedItems to the backend
-    console.log('Selected items:', selectedItems);
+    // console.log('Selected items:', selectedItems);
 
     fetch(`${BASE_URL}/api/auth/frames`, {
       method: 'PATCH',
@@ -245,7 +264,7 @@ const PlatesFrames = () => {
                     />
                   </div>
                   <p className={css.dealers_company_name}>{frame.name}</p>
-                  <p className={css.dealers_person}>{frame.price}</p>
+                  <p className={css.dealers_person}>${frame.amazonPrice}</p>
                   <div className={css.plate_link_thumb}>
                     <a className={css.plate_link} href={frame.link}>
                       <p className={css.dealers_number}>
@@ -263,7 +282,7 @@ const PlatesFrames = () => {
                   <p className={css.dealers_status}>
                     <button
                       className={
-                        frame.status
+                        frame.status.toString() === 'Active'
                           ? css.dealers_status_btn_active
                           : css.dealers_status_btn
                       }
@@ -280,8 +299,11 @@ const PlatesFrames = () => {
                       height="20"
                       src={editIcon}
                     />
-                    {frame.status === 'Active' ? (
+                    {frame.status.toString() === 'Active' ? (
                       <img
+                        onClick={() =>
+                          handleEditStatus(frame._id, frame.status)
+                        }
                         className={css.edit_icon}
                         alt="pause icon"
                         width="20"
@@ -290,6 +312,9 @@ const PlatesFrames = () => {
                       />
                     ) : (
                       <img
+                        onClick={() =>
+                          handleEditStatus(frame._id, frame.status)
+                        }
                         className={css.edit_icon}
                         alt="start icon"
                         width="20"

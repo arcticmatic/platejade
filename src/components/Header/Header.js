@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { authOperations } from '../../redux/auth';
 
 const Header = () => {
+  const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+
   const email = useSelector(authSelectors.getEmail);
   const dispatch = useDispatch();
 
@@ -49,7 +51,7 @@ const Header = () => {
                   src={starIcon}
                 />
               </p>
-              <p className={css.user_email}>admin@gmail.com </p>
+              <p className={css.user_email}>{isLoggedIn ? email : ''}</p>
             </div>
             <div className={css.grey_border}></div>
             <img

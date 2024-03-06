@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 const Users = () => {
   const [users, setUsers] = useState([]);
 
+  const BASE_URL = 'https://platejade-back.onrender.com';
+
   useEffect(() => {
-    fetch('https://car-plates.onrender.com/api/auth/admin/allusers', {
+    fetch(`${BASE_URL}/api/auth/admin/allusers`, {
       method: 'GET',
       header: {},
     })
@@ -27,8 +29,6 @@ const Users = () => {
         <div className={css.dealers_thumb}>
           <div className={css.dealers_thumb_titles}>
             <div className={css.dealers_thumb_titles}>
-              <div className={css.checkbox}></div>
-
               <p className={css.dealers_company_title}>Name</p>
             </div>
 
@@ -43,8 +43,6 @@ const Users = () => {
               return (
                 <li className={css.dealers_list_item} key={user._id}>
                   <div className={css.dealer_info_thumb}>
-                    <div className={css.checkbox}></div>
-
                     <p className={css.dealers_company_name}>{user.name}</p>
                   </div>
 

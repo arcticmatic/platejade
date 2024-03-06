@@ -16,6 +16,7 @@ const AddDealer = () => {
   const [address, setAddress] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
   const [file, setFile] = useState(null);
+  const [showNotification, setShowNotification] = useState(false);
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -126,6 +127,8 @@ const AddDealer = () => {
     // }
 
     // navigate('/user', { replace: true });
+
+    setShowNotification(true);
   };
 
   // const handleCopy = () => {
@@ -179,7 +182,7 @@ const AddDealer = () => {
     });
 
     const imageUrl = uploadUrl.split('?')[0];
-    console.log(imageUrl);
+    // console.log(imageUrl);
     setUploadedImage(imageUrl);
   };
 
@@ -332,6 +335,18 @@ const AddDealer = () => {
                 </button>
               </div>
             </div>
+
+            {showNotification && (
+              <div className={css.notification_modal}>
+                <p className={css.notification_message}>
+                  You have successfully added the dealer
+                </p>
+                <Link to="/dealers">
+                  <button className={css.notification_button}>OK</button>
+                </Link>
+              </div>
+            )}
+
             <div className={css.dealer_contact_thumb}>
               <div className={css.add_dealer_contact_person}>
                 <div className={css.add_dealer_company_thumb}>

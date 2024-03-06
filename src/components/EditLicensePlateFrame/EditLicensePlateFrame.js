@@ -26,6 +26,7 @@ const EditLicensePlateFrame = () => {
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
   const [inputValues, setInputValues] = useState({});
+  const [showNotification, setShowNotification] = useState(false);
 
   const [file, setFile] = useState(null);
 
@@ -404,7 +405,7 @@ const EditLicensePlateFrame = () => {
     //   field => field.name === 'category'
     // )?.value;
 
-    const unmatchedState = fields.find(field => field.name === 'state')?.value;
+    // const unmatchedState = fields.find(field => field.name === 'state')?.value;
 
     // if (unmatchedState && !states.includes(unmatchedState)) {
     //   fetch(`${BASE_URL}/api/auth/states`, {
@@ -486,7 +487,8 @@ const EditLicensePlateFrame = () => {
       // Reset direct input values
     });
     setUploadedImage('');
-    alert('Form is successfully submitted');
+    setShowNotification(true);
+    setRefresh(true);
   };
 
   const handleUpload = async event => {
@@ -591,6 +593,18 @@ const EditLicensePlateFrame = () => {
                     </div>
                   </div>
                 </div>
+
+                {showNotification && (
+                  <div className={css.notification_modal}>
+                    <p className={css.notification_message}>
+                      You have successfully edited the frame
+                    </p>
+                    <Link to="/plate-frame">
+                      <button className={css.notification_button}>OK</button>
+                    </Link>
+                  </div>
+                )}
+
                 <div className={css.dealer_contact_thumb}>
                   <div className={css.add_dealer_contact_person}>
                     <div className={css.add_dealer_company_thumb}>

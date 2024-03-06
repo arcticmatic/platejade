@@ -266,7 +266,7 @@ const LicensePlates = () => {
                     />
                   </div>
                   <p className={css.dealers_company_name}>{plate.name}</p>
-                  <p className={css.dealers_person}>{plate.price}</p>
+                  <p className={css.dealers_person}>${plate.price}</p>
                   <div className={css.plate_link_thumb}>
                     <a className={css.plate_link} href={plate.link}>
                       <p className={css.dealers_number}>

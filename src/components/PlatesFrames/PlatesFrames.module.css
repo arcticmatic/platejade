@@ -108,7 +108,7 @@
   color: var(--dashboard-txt-black, #19181c);
   word-wrap: break-word;
   overflow-wrap: anywhere;
-  width: 240px;
+  width: 160px;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -117,14 +117,14 @@
 .dealer_info_thumb {
   display: flex;
   align-items: center;
-  width: 280px;
+  width: 220px;
 }
 .dealer_description_thumb {
   display: flex;
   align-items: center;
 }
 .dealers_person {
-  width: 180px;
+  width: 120px;
   color: var(--dashboard-txt-black, #19181c);
   font-size: 14px;
   font-style: normal;
@@ -145,7 +145,7 @@
   overflow-wrap: anywhere;
 }
 .dealers_status {
-  width: 240px;
+  width: 180px;
   word-wrap: break-word;
   overflow-wrap: anywhere;
 }
@@ -189,7 +189,7 @@
   margin-left: 20px;
 }
 .plate_link_thumb {
-  width: 220px;
+  width: 160px;
 }
 .plate_link {
   display: flex;

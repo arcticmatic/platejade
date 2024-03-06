@@ -19,6 +19,8 @@ const AddLicensePlateFrame = () => {
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
   const [inputValues, setInputValues] = useState({});
+  const [showNotification, setShowNotification] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -240,7 +242,9 @@ const AddLicensePlateFrame = () => {
           return updatedFields;
         });
       });
-  }, []);
+
+    setRefresh(false);
+  }, [refresh]);
 
   const materialsArray = Array.from(
     new Set(materials.map(item => item.material))
@@ -430,8 +434,6 @@ const AddLicensePlateFrame = () => {
     //     });
     // }
 
-    event.preventDefault();
-
     // Initialize formData as an empty object
     const formData = {};
 
@@ -482,13 +484,15 @@ const AddLicensePlateFrame = () => {
     //   // Reset direct input values
     // });
     setUploadedImage('');
-    alert('Form is successfully submitted');
+
+    setShowNotification(true);
+    // setRefresh(true);
   };
 
   const handleUpload = async event => {
     event.preventDefault();
-    console.log('inside func');
-    console.log(file);
+    // console.log('inside func');
+    // console.log(file);
 
     const originalFilename = file.name;
 
@@ -586,6 +590,18 @@ const AddLicensePlateFrame = () => {
                 </div>
               </div>
             </div>
+
+            {showNotification && (
+              <div className={css.notification_modal}>
+                <p className={css.notification_message}>
+                  You have successfully added the frame
+                </p>
+                <Link to="/plate-frame">
+                  <button className={css.notification_button}>OK</button>
+                </Link>
+              </div>
+            )}
+
             <div className={css.dealer_contact_thumb}>
               <div className={css.add_dealer_contact_person}>
                 <div className={css.add_dealer_company_thumb}>

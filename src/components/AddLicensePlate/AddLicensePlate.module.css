@@ -383,3 +383,57 @@
   margin: 0 auto;
   width: 100%;
 }
+.upload_btn {
+  outline: none;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--app-primary, #9c8d7f);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 2px;
+}
+.notification_modal {
+  border-radius: 20px;
+  z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 420px;
+  height: 212px;
+}
+
+.notification_message {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.4px;
+
+  margin-bottom: 60px;
+}
+
+.notification_button {
+  display: block;
+  margin: 0 auto;
+  background-color: #000;
+  color: #dad3cc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* .notification-button:hover {
+  background-color: #0056b3;
+} */
