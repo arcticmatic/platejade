@@ -279,10 +279,16 @@
   transform: translate(-300%, 100%);
   cursor: pointer;
 }
-
+.dropdown_arrow_dealers {
+  position: absolute;
+  left: 96%;
+  transform: translate(-96%, -200%);
+}
 .dropdown_arrow_open_menu {
   position: absolute;
-  transform: translate(-220%, 200%);
+  left: 90%;
+  top: 70%;
+  transform: translate(-90%, -70%);
   cursor: pointer;
 }
 

@@ -497,16 +497,14 @@ const AddLicensePlateFrame = () => {
     const originalFilename = file.name;
 
     // Send a request to the backend to get a pre-signed URL
-    const uploadUrl = await fetch(
-      `http://localhost:3000/api/auth/admin/s3Url/frames`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: originalFilename }),
-      }
-    )
+    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url/frames`, {
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: originalFilename }),
+    })
       .then(res => res.json())
       .then(res => {
         return res.uploadURL;
@@ -644,14 +642,14 @@ const AddLicensePlateFrame = () => {
                           fields.find(field => field.name === 'dealer')
                             .showDropdown ? (
                             <img
-                              className={css.dropdown_arrow_open_menu}
+                              className={css.dropdown_arrow_open_menu_dealers}
                               src={openMenuIcon}
                               alt="Dropdown Arrow"
                               onClick={() => toggleDropdown('dealer')}
                             />
                           ) : (
                             <img
-                              className={css.dropdown_arrow}
+                              className={css.dropdown_arrow_dealers}
                               src={bottomArrow}
                               alt="Dropdown Arrow"
                               onClick={() => toggleDropdown('dealer')}
