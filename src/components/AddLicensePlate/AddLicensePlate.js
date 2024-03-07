@@ -423,7 +423,10 @@ const AddLicensePlate = () => {
                           ?.showDropdown &&
                           fields.find(field => field.name === 'dealer')
                             ?.options && ( // Render dropdown menu if options exist
-                            <ul className={css.menu_items_list} id="style-2">
+                            <ul
+                              className={css.menu_items_list_dealers}
+                              id="style-2"
+                            >
                               {fields
                                 .find(field => field.name === 'dealer')
                                 ?.options.map((option, index) => (

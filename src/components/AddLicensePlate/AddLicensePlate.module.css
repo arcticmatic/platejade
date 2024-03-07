@@ -302,6 +302,19 @@
   padding-bottom: 20px;
   padding-top: 20px;
 }
+.menu_items_list_dealers {
+  max-height: 120px;
+  position: absolute;
+
+  width: 79%;
+
+  z-index: 999;
+  border-radius: 10px;
+  background: var(--dashboard-bg, #fafafe);
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
 .menu_item {
   color: var(--dashboard-txt-black, #19181c);
   font-size: 14px;
