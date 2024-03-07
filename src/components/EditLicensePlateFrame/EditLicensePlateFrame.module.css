@@ -279,21 +279,48 @@
 }
 .dropdown_arrow {
   position: absolute;
-  transform: translate(-300%, 100%);
+  left: 94%;
+  top: 72%;
+  transform: translate(-94%, -72%);
   cursor: pointer;
 }
-
+.dropdown_arrow_dealers {
+  position: absolute;
+  left: 96%;
+  transform: translate(-96%, -200%);
+}
 .dropdown_arrow_open_menu {
   position: absolute;
-  transform: translate(-220%, 200%);
+  left: 94%;
+  top: 70%;
+  transform: translate(-94%, -70%);
   cursor: pointer;
 }
-
+.dropdown_arrow_open_menu_dealers {
+  position: absolute;
+  left: 96%;
+  top: 70%;
+  transform: translate(-96%, -70%);
+  cursor: pointer;
+}
 .menu_items_list {
   max-height: 120px;
   position: absolute;
 
-  width: 90%;
+  width: 98%;
+
+  z-index: 999;
+  border-radius: 10px;
+  background: var(--dashboard-bg, #fafafe);
+  overflow-y: scroll;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+.menu_items_list_dealers {
+  max-height: 120px;
+  position: absolute;
+
+  width: 103%;
 
   z-index: 999;
   border-radius: 10px;
