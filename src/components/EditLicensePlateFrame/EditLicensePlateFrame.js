@@ -451,12 +451,22 @@ const EditLicensePlateFrame = () => {
     // console.log('Form Data:', formData);
     const frameId = currentFrame[0]._id;
 
+    const payload = {};
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value.trim() !== '') {
+        payload[key] = value;
+      }
+    });
+    console.log('payload', payload);
+
+    // console.log('Form Data:', formData);
+
     fetch(`${BASE_URL}/api/auth/admin/frames/${frameId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
       .then(response => response.json(console.log(response.json)))
       .then(data => {
@@ -488,7 +498,7 @@ const EditLicensePlateFrame = () => {
     });
     setUploadedImage('');
     setShowNotification(true);
-    setRefresh(true);
+    // setRefresh(true);
   };
 
   const handleUpload = async event => {
