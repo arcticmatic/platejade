@@ -457,3 +457,11 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.filter_thumb {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filter_option {
+  margin-right: 30px;
+  margin-bottom: 10px;
+}

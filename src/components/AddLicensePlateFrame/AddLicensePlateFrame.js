@@ -15,6 +15,7 @@ const AddLicensePlateFrame = () => {
   const [features, setFeatures] = useState([]);
   const [colors, setColors] = useState([]);
   const [colorsName, setColorsName] = useState([]);
+  const [conditions, setConditions] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
@@ -243,6 +244,28 @@ const AddLicensePlateFrame = () => {
         });
       });
 
+    // RECEIVE AND SET CONDITIONS
+    fetch(`${BASE_URL}/api/auth/conditions`, {
+      method: 'GET',
+      header: {},
+    })
+      .then(res => res.json())
+      .then(result => {
+        const conditionsArray = Array.from(
+          new Set(result.conditions.map(item => item.condition))
+        );
+        setConditions(conditionsArray);
+        setFields(prevFields => {
+          const updatedFields = prevFields.map(field => {
+            if (field.name === 'condition') {
+              return { ...field, options: conditionsArray };
+            }
+            return field;
+          });
+          return updatedFields;
+        });
+      });
+
     setRefresh(false);
   }, [refresh]);
 
@@ -273,6 +296,14 @@ const AddLicensePlateFrame = () => {
   const statesArray = Array.from(new Set(states.map(item => item.state)));
 
   const dealersArray = Array.from(new Set(dealers.map(item => item.dealers)));
+
+  console.log(themesArray);
+
+  const conditionsArray = Array.from(
+    new Set(conditions.map(item => item.condition))
+  );
+
+  console.log(conditionsArray);
 
   const initialFields = [
     {
@@ -341,7 +372,13 @@ const AddLicensePlateFrame = () => {
       options: dealersArray,
       showDropdown: false,
     },
-    { name: 'name', value: '' },
+    {
+      name: 'condition',
+      value: '',
+      options: conditionsArray,
+      showDropdown: false,
+    },
+    // { name: 'name', value: '' },
     // Input without menu example
   ];
 
@@ -726,685 +763,82 @@ const AddLicensePlateFrame = () => {
                       className={css.filter_thumb}
                       style={{ position: 'relative' }}
                     >
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}>Material</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'material')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('material', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'material')
-                          ?.options &&
-                        fields.find(field => field.name === 'material')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('material')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('material')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'material')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'material')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              ?.find(field => field.name === 'material')
-                              ?.options.map((option, index) => (
-                                <li className={css.menu_item} key={index}>
-                                  <label htmlFor={`material_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`material_option_${index}`}
-                                      checked={(
-                                        fields.find(
-                                          field => field.name === 'material'
-                                        )?.value || []
-                                      ).includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('material', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span className={css.customCheckbox}></span>
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}> Choose type</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'type')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('type', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'type')?.options &&
-                        fields.find(field => field.name === 'type')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('type')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('type')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'type')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'type')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'type')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`type_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`type_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'type')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('type', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}> Choose finish type</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'finishType')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('finishType', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'finishType')
-                          ?.options &&
-                        fields.find(field => field.name === 'finishType')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('finishType')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('finishType')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'finishType')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'finishType')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'finishType')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`finishType_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`finishType_option_${index}`}
-                                      checked={fields
-                                        .find(
-                                          field => field.name === 'finishType'
-                                        )
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('finishType', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}> Choose theme</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'theme')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('theme', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'theme')
-                          ?.options &&
-                        fields.find(field => field.name === 'theme')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('theme')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('theme')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'theme')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'theme')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'theme')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`theme_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`theme_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'theme')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('theme', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}>
-                          {' '}
-                          Choose attachment type
-                        </p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(
-                              field => field.name === 'attachmentType'
-                            )?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange(
-                              'attachmentType',
-                              event.target.value
-                            )
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'attachmentType')
-                          ?.options &&
-                        fields.find(field => field.name === 'attachmentType')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('attachmentType')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('attachmentType')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'attachmentType')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'attachmentType')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'attachmentType')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label
-                                    htmlFor={`attachmentType_option_${index}`}
+                      {fields
+                        .filter(field => field.name !== 'dealer') // Filter out fields with name "dealer"
+                        .map((field, index) => (
+                          <div
+                            key={index}
+                            className={css.filter_option}
+                            style={{ position: 'relative' }}
+                          >
+                            <div className={css.filter_thumb_all}>
+                              <p className={css.company_label}>
+                                Add {field.name}
+                              </p>
+                              <input
+                                className={css.filter_item_input}
+                                type="text"
+                                value={field.value || ''}
+                                onChange={event =>
+                                  handleInputChange(
+                                    field.name,
+                                    event.target.value
+                                  )
+                                }
+                                placeholder={`Start typing or select from the list`}
+                              />
+                              {field.options && field.showDropdown ? (
+                                <img
+                                  className={css.dropdown_arrow_open_menu}
+                                  src={openMenuIcon}
+                                  alt="Dropdown Arrow"
+                                  onClick={() => toggleDropdown(field.name)}
+                                />
+                              ) : (
+                                <img
+                                  className={css.dropdown_arrow}
+                                  src={bottomArrow}
+                                  alt="Dropdown Arrow"
+                                  onClick={() => toggleDropdown(field.name)}
+                                />
+                              )}
+                            </div>
+                            {field.showDropdown && field.options && (
+                              <ul
+                                className={css.menu_items_list}
+                                id={`style-2`}
+                              >
+                                {field.options.map((option, optionIndex) => (
+                                  <li
+                                    className={css.menu_item}
+                                    key={optionIndex}
                                   >
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`attachmentType_option_${index}`}
-                                      checked={fields
-                                        .find(
-                                          field =>
-                                            field.name === 'attachmentType'
-                                        )
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick(
-                                          'attachmentType',
+                                    <label
+                                      htmlFor={`${field.name}_option_${optionIndex}`}
+                                    >
+                                      <input
+                                        className={css.input_checkbox}
+                                        style={{ display: 'none' }}
+                                        type="checkbox"
+                                        id={`${field.name}_option_${optionIndex}`}
+                                        checked={(field.value || []).includes(
                                           option
-                                        )
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}>
-                          {' '}
-                          Choose additional features
-                        </p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'feature')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('feature', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'feature')
-                          ?.options &&
-                        fields.find(field => field.name === 'feature')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('feature')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('feature')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'feature')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'feature')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'feature')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`feature_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`feature_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'feature')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('feature', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}>Choose color name</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'colorName')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('colorName', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'colorName')
-                          ?.options &&
-                        fields.find(field => field.name === 'colorName')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('colorName')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('colorName')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'colorName')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'colorName')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'colorName')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`colorName_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`colorName_option_${index}`}
-                                      checked={fields
-                                        .find(
-                                          field => field.name === 'colorName'
-                                        )
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('colorName', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}>Choose color hex</p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'color')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('color', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'color')
-                          ?.options &&
-                        fields.find(field => field.name === 'color')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('color')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('color')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'color')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'color')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'color')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`color_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`color_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'color')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('color', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}> Choose state </p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'state')
-                              ?.value || ''
-                          }
-                          onChange={event =>
-                            handleInputChange('state', event.target.value)
-                          }
-                          placeholder="Start typing or select from the list"
-                        />
-                        {fields.find(field => field.name === 'state')
-                          ?.options &&
-                        fields.find(field => field.name === 'state')
-                          .showDropdown ? (
-                          <img
-                            className={css.dropdown_arrow_open_menu}
-                            src={openMenuIcon}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('state')}
-                          />
-                        ) : (
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('state')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'state')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'state')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'state')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`state_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`state_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'state')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('state', option)
-                                      }
-                                    />
-                                    {/* Render the SVG icon */}
-                                    <span
-                                      className={css.customCheckbox}
-                                    ></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                    </div>
-
-                    <div style={{ position: 'relative' }}>
-                      <div className={css.filter_thumb_all}>
-                        <p className={css.company_label}> Choose status </p>
-                        <input
-                          className={css.filter_item_input}
-                          type="text"
-                          value={
-                            fields.find(field => field.name === 'status')
-                              ?.value || ''
-                          }
-                          readOnly
-                          placeholder="Select from the list"
-                        />
-                        {fields.find(field => field.name === 'status')
-                          ?.options && ( // Render dropdown arrow if options exist
-                          <img
-                            className={css.dropdown_arrow}
-                            src={bottomArrow}
-                            alt="Dropdown Arrow"
-                            onClick={() => toggleDropdown('status')}
-                          />
-                        )}
-                      </div>
-                      {fields.find(field => field.name === 'status')
-                        ?.showDropdown &&
-                        fields.find(field => field.name === 'status')
-                          ?.options && ( // Render dropdown menu if options exist
-                          <ul className={css.menu_items_list} id="style-2">
-                            {fields
-                              .find(field => field.name === 'status')
-                              ?.options.map((option, index) => (
-                                <li key={index} className={css.menu_item}>
-                                  <label htmlFor={`status_option_${index}`}>
-                                    <input
-                                      className={css.input_checkbox}
-                                      style={{ display: 'none' }}
-                                      type="checkbox"
-                                      id={`status_option_${index}`}
-                                      checked={fields
-                                        .find(field => field.name === 'status')
-                                        ?.value.includes(option)}
-                                      onChange={() =>
-                                        handleOptionClick('status', option)
-                                      }
-                                    />
-                                    <span className={css.customCheckbox}></span>{' '}
-                                    {option}
-                                  </label>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
+                                        )}
+                                        onChange={() =>
+                                          handleOptionClick(field.name, option)
+                                        }
+                                      />
+                                      <span
+                                        className={css.customCheckbox}
+                                      ></span>
+                                      {option}
+                                    </label>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        ))}
                     </div>
                   </div>
                   <p className={css.add_dealer_company_text}>
