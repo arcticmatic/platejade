@@ -25,6 +25,8 @@ const EditLicensePlateFrame = () => {
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
+  const [uploadedBackground, setUploadedBackground] = useState('');
+
   const [inputValues, setInputValues] = useState({});
   const [showNotification, setShowNotification] = useState(false);
 
@@ -438,6 +440,7 @@ const EditLicensePlateFrame = () => {
 
     // Add uploaded image to formData
     formData['image'] = uploadedImage;
+    formData['backgroundImages'] = uploadedBackground;
 
     // Additional logic for specific form data based on conditions
     if (formData.colorName === 'Multicolor') {
@@ -535,7 +538,44 @@ const EditLicensePlateFrame = () => {
     setUploadedImage(imageUrl);
   };
 
-  console.log('uploaded image', uploadedImage);
+  const handleUploadBackground = async event => {
+    event.preventDefault();
+    // console.log('inside func');
+    // console.log(file);
+
+    const originalFilename = file.name;
+
+    // Send a request to the backend to get a pre-signed URL
+    const uploadUrl = await fetch(
+      `${BASE_URL}/api/auth/admin/s3Url/backgrounds`,
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: originalFilename }),
+      }
+    )
+      .then(res => res.json())
+      .then(res => {
+        return res.uploadURL;
+      });
+
+    // console.log(uploadUrl);
+
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'image/png',
+      },
+      body: file,
+    });
+
+    const imageUrl = uploadUrl.split('?')[0];
+    console.log(imageUrl);
+    setUploadedBackground(imageUrl);
+  };
 
   return (
     <>
@@ -596,6 +636,54 @@ const EditLicensePlateFrame = () => {
                       </div>
                       <div className={css.border}></div>
                       {!uploadedImage && (
+                        <p className={css.add_dealer_image_size}>
+                          PNG or JPG recommended size (1000px*1000px)
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={css.add_dealer_company_info}>
+                    <div
+                      className={
+                        !uploadedBackground
+                          ? css.add_dealer_upload_image_thumb
+                          : css.uploaded_image_thumb
+                      }
+                    >
+                      {!uploadedBackground ? (
+                        <img
+                          alt="dealer logo"
+                          className={css.logo_icon}
+                          src={dealerPhoto}
+                        />
+                      ) : (
+                        <img
+                          className={css.uploaded_image}
+                          alt="uploaded plate"
+                          height="150"
+                          src={uploadedBackground}
+                        />
+                      )}
+                      <div className={css.add_dealer_upload_text}>
+                        <label htmlFor="fileInput">
+                          Click to upload background
+                          <input
+                            type="file"
+                            id="fileInput"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                        <button
+                          className={css.upload_btn}
+                          onClick={handleUploadBackground}
+                        >
+                          <p>Upload Background</p>
+                        </button>
+                      </div>
+                      <div className={css.border}></div>
+                      {!uploadedBackground && (
                         <p className={css.add_dealer_image_size}>
                           PNG or JPG recommended size (1000px*1000px)
                         </p>

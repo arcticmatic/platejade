@@ -465,3 +465,7 @@
   margin-right: 30px;
   margin-bottom: 10px;
 }
+.images_thumb {
+  display: flex;
+  flex-direction: column;
+}
