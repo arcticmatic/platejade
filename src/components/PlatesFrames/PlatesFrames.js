@@ -20,6 +20,8 @@ const PlatesFrames = () => {
   const [refresh, setRefresh] = useState(true);
   const [selectAllFrames, setSelectAllFrames] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,20 +65,16 @@ const PlatesFrames = () => {
   };
 
   const handleSelectAllFrames = () => {
-    // If selectAllPlates is true, deselect all plates
     if (selectAllFrames) {
       setSelectedItems([]);
     } else {
-      // If selectAllPlates is false, select all plates
       setSelectedItems(frames.map(frame => frame._id));
     }
-    // Toggle the selectAllPlates state
     setSelectAllFrames(!selectAllFrames);
   };
 
   const handleDeselectAllPlates = () => {
     setSelectedItems([]);
-    // Deselect all plates by setting selectAllPlates to false
     setSelectAllFrames(false);
   };
   const handleEditStatus = (frameId, plateStatus) => {
@@ -168,6 +166,10 @@ const PlatesFrames = () => {
     });
   };
 
+  const handlePasswordCheck = () => {
+    setShowNotification(true);
+  };
+
   return (
     <>
       <section className={css.dealers_section}>
@@ -238,6 +240,23 @@ const PlatesFrames = () => {
                   onClick={handleActiveSubmit}
                 />
                 <p className={css.plates_chosen_text}>Activate All</p>
+              </div>
+            </div>
+          )}
+          {showNotification && (
+            <div className={css.notification_modal}>
+              <p className={css.notification_message}>
+                Please, confirm the deletion of the frame by entering your
+                password below:
+              </p>
+              <input className={css.notification_input} />
+              <div className={css.notification_buttons_thumb}>
+                <button className={css.notification_button_confirm}>
+                  Confirm
+                </button>
+                <button className={css.notification_button_cancel}>
+                  Cancel
+                </button>
               </div>
             </div>
           )}
@@ -322,8 +341,9 @@ const PlatesFrames = () => {
                         src={startIcon}
                       />
                     )}
+
                     <img
-                      onClick={() => handleDelete(frame._id)}
+                      onClick={handlePasswordCheck}
                       className={css.delete_icon}
                       alt="delete icon"
                       width="20"
