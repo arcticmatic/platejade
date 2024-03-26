@@ -14,8 +14,6 @@ const Header = () => {
   const email = useSelector(authSelectors.getEmail);
   const dispatch = useDispatch();
 
-  console.log('email', email);
-
   return (
     <>
       <section>

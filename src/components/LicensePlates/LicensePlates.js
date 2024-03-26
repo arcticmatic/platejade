@@ -11,13 +11,23 @@ import deleteIconWhite from '../icons/deleteIconWhite.svg';
 import activateIcon from '../icons/activateIcon.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import authSelectors from '../../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
 
 const LicensePlates = () => {
+  const email = useSelector(authSelectors.getEmail);
+
   const [plates, setPlates] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [selectAllPlates, setSelectAllPlates] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
+  const [showNotification, setShowNotification] = useState(false);
+  const [result, setResult] = useState('');
+  const [multipleChoiceResult, setMultipleChoiceResult] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [plateId, setPlateId] = useState('');
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -49,20 +59,32 @@ const LicensePlates = () => {
     }
   };
 
-  const handleDelete = plateId => {
-    fetch(`${BASE_URL}/api/auth/plates/${plateId}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(result => {
-        console.log('refresh');
-      });
-    setRefresh(true);
+  const handleChange = event => {
+    event.preventDefault();
+    const { value } = event.target;
+
+    setPassword(value);
   };
+
+  const handlePlateClick = id => {
+    setShowNotification(true);
+    setPlateId(id);
+  };
+
+  // const handleDelete = plateId => {
+  //   fetch(`${BASE_URL}/api/auth/plates/${plateId}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(res => res.json())
+  //     .then(result => {
+  //       console.log('refresh');
+  //     });
+  //   setRefresh(true);
+  // };
 
   const handleEditStatus = (plateId, plateStatus) => {
     const newStatus = plateStatus === 'Active' ? 'Not available' : 'Active';
@@ -83,38 +105,7 @@ const LicensePlates = () => {
       });
   };
 
-  const handleSubmit = () => {
-    // Send selectedItems to the backend
-    console.log('Selected items:', selectedItems);
-
-    fetch(`${BASE_URL}/api/auth/plates`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ids: selectedItems }),
-    })
-      .then(response =>
-        response.json(
-          setPlates(prevItems =>
-            prevItems.filter(item => !selectedItems.includes(item))
-          ),
-          setSelectedItems([]),
-          setRefresh(true)
-        )
-      )
-      .then(data => {
-        console.log('Response from other backend route');
-      })
-      .catch(error => {
-        console.error('Error sending data to other backend route:', error);
-      });
-  };
-
   const handleActiveSubmit = () => {
-    // Send selectedItems to the backend
-    console.log('Selected items:', selectedItems);
-
     fetch(`${BASE_URL}/api/auth/plates`, {
       method: 'PATCH',
       headers: {
@@ -168,6 +159,97 @@ const LicensePlates = () => {
       pathname: '/edit-license-plate',
       search: `?plate=${plateName}`,
     });
+  };
+
+  const handleMultiplePlatesClick = () => {
+    setShowNotification(true);
+  };
+
+  const handlePasswordCheck = () => {
+    fetch(`${BASE_URL}/api/auth/admin/check-password`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => setResult(res.status));
+
+    console.log('plate id:', plateId);
+
+    if (result === 'success') {
+      fetch(`${BASE_URL}/api/auth/plates/${plateId}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(result => {
+          console.log('refresh');
+        });
+      setRefresh(true);
+
+      setShowNotification(false);
+    } else {
+      setPassword('');
+    }
+  };
+  const handleMultipleItemsPasswordCheck = () => {
+    fetch(`${BASE_URL}/api/auth/admin/check-password`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => setMultipleChoiceResult(res.status));
+
+    if (result === 'success') {
+      fetch(`${BASE_URL}/api/auth/plates`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selectedItems }),
+      })
+        .then(response =>
+          response.json(
+            setPlates(prevItems =>
+              prevItems.filter(item => !selectedItems.includes(item))
+            ),
+            setSelectedItems([]),
+            setRefresh(true)
+          )
+        )
+        .then(data => {
+          console.log('Response from other backend route');
+        })
+        .catch(error => {
+          console.error('Error sending data to other backend route:', error);
+        });
+      setRefresh(true);
+
+      setShowNotification(false);
+    } else {
+      setPassword('');
+    }
+  };
+  const handleOnCancelClick = () => {
+    setResult('');
+    setMultipleChoiceResult('');
+    setShowNotification(false);
   };
 
   return (
@@ -226,7 +308,7 @@ const LicensePlates = () => {
                   alt="delete"
                   src={deleteIconWhite}
                   className={css.delete_icon}
-                  onClick={handleSubmit}
+                  onClick={handleMultiplePlatesClick}
                 />
                 <p className={css.plates_chosen_text}>Delete All</p>
               </div>
@@ -240,6 +322,84 @@ const LicensePlates = () => {
                   onClick={handleActiveSubmit}
                 />
                 <p className={css.plates_chosen_text}>Activate All</p>
+              </div>
+            </div>
+          )}
+
+          {showNotification && (
+            <div className={css.notification_modal}>
+              <p className={css.notification_message}>
+                Please, confirm the deletion of the plate by entering your
+                password below:
+              </p>
+              {result && result !== 'success' ? (
+                <p className={css.notification_wrong_password_text}>
+                  Password is wrong!
+                </p>
+              ) : (
+                ''
+              )}
+
+              <input
+                className={css.notification_input}
+                name="password"
+                value={password}
+                placeholder="Enter the password"
+                type="text"
+                onChange={handleChange}
+              />
+              <div className={css.notification_buttons_thumb}>
+                <button
+                  className={css.notification_button_confirm}
+                  onClick={() => handlePasswordCheck()}
+                >
+                  Confirm
+                </button>
+                <button
+                  className={css.notification_button_cancel}
+                  onClick={() => handleOnCancelClick()}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {showNotification && (
+            <div className={css.notification_modal}>
+              <p className={css.notification_message}>
+                Please, confirm the deletion of the plates by entering your
+                password below:
+              </p>
+              {multipleChoiceResult && multipleChoiceResult !== 'success' ? (
+                <p className={css.notification_wrong_password_text}>
+                  Password is wrong!
+                </p>
+              ) : (
+                ''
+              )}
+
+              <input
+                className={css.notification_input}
+                name="password"
+                value={password}
+                placeholder="Enter the password"
+                type="text"
+                onChange={handleChange}
+              />
+              <div className={css.notification_buttons_thumb}>
+                <button
+                  className={css.notification_button_confirm}
+                  onClick={() => handleMultipleItemsPasswordCheck()}
+                >
+                  Confirm
+                </button>
+                <button
+                  className={css.notification_button_cancel}
+                  onClick={() => handleOnCancelClick()}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}
@@ -325,7 +485,7 @@ const LicensePlates = () => {
                       />
                     )}
                     <img
-                      onClick={() => handleDelete(plate._id)}
+                      onClick={() => handlePlateClick(plate._id)}
                       className={css.delete_icon}
                       alt="delete icon"
                       width="20"

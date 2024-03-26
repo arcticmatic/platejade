@@ -62,12 +62,6 @@ const AddDealer = () => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    console.log('submitted');
-
-    console.log('company name', companyName);
-    console.log('password', generatedPassword);
-    event.preventDefault();
-
     fetch(`${BASE_URL}/api/auth/admin/add-dealer`, {
       method: 'POST',
       headers: {

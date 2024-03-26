@@ -70,6 +70,15 @@
   font-weight: 400;
   line-height: 20px;
 }
+.dealers_company_email {
+  width: 140px;
+  color: var(--dashboard-txt-grey, #adaabe);
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
 .dealers_companies_thumb {
   display: flex;
   align-items: center;
@@ -123,7 +132,7 @@
   align-items: center;
 }
 .dealers_person {
-  width: 200px;
+  width: 180px;
   color: var(--dashboard-txt-black, #19181c);
   font-size: 14px;
   font-style: normal;
@@ -134,7 +143,7 @@
 }
 .dealers_number {
   color: var(--dashboard-txt-black, #19181c);
-  width: 150px;
+  width: 140px;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -143,7 +152,7 @@
   overflow-wrap: anywhere;
 }
 .dealers_email {
-  width: 160px;
+  width: 240px;
   word-wrap: break-word;
   overflow-wrap: anywhere;
   color: var(--dashboard-txt-black, #19181c);
@@ -152,11 +161,27 @@
   font-weight: 500;
   line-height: 20px;
 }
+.checkbox {
+  margin-left: 30px;
+  margin-right: 20px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  border: 2px solid var(--app-stroke-light, #b5a89c);
+}
+.item_checkbox {
+  margin-left: 30px;
+  margin-right: 20px;
+  width: 15px;
+  height: 15px;
+}
 .dealerIcon {
   vertical-align: middle;
   margin-right: 10px;
   margin-left: 20px;
 }
+
 .dealers_admin_actions_thumb {
   display: flex;
   padding-right: 60px;
@@ -166,4 +191,101 @@
 }
 .delete_icon {
   margin-left: 20px;
+}
+.notification_modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 420px;
+  height: 212px;
+}
+
+.notification_message {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.4px;
+
+  margin-bottom: 20px;
+}
+.notification_buttons_thumb {
+  display: flex;
+}
+.notification_button_confirm {
+  display: block;
+  margin: 0 auto;
+  background-color: #000;
+  color: #dad3cc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.notification_button_cancel {
+  display: block;
+  margin: 0 auto;
+  background-color: #fff;
+  color: #9c8d7f;
+  border: 1px solid #9c8d7f;
+  padding: 14px 20px;
+  border-radius: 10px;
+}
+.notification_input {
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 80%;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+  margin-bottom: 30px;
+}
+.notification_wrong_password_text {
+  color: red;
+  margin-bottom: 10px;
+}
+.plates_thumb_chosen {
+  display: flex;
+  padding-left: 28px;
+  padding-top: 22px;
+  padding-bottom: 20px;
+  border-radius: 20px 20px 0px 0px;
+  background: var(--app-primary, #9c8d7f);
+}
+.plates_chosen_text {
+  margin-right: 20px;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.cancel_icon {
+  margin-right: 17px;
+  vertical-align: middle;
+}
+.white_border {
+  width: 1px;
+  height: 20px;
+  background-color: #fff;
+}
+.plate_text_icons_thumb {
+  display: flex;
+}
+.delete_icon {
+  vertical-align: middle;
+  margin-right: 5px;
 }

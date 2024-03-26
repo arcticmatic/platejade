@@ -12,15 +12,24 @@ import deleteIconWhite from '../icons/deleteIconWhite.svg';
 import activateIcon from '../icons/activateIcon.svg';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import authSelectors from '../../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
 
 const PlatesFrames = () => {
   const BASE_URL = 'https://platejade-back.onrender.com';
+
+  const email = useSelector(authSelectors.getEmail);
 
   const [frames, setFrames] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [selectAllFrames, setSelectAllFrames] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [result, setResult] = useState('');
+  const [multipleChoiceResult, setMultipleChoiceResult] = useState('');
+
+  const [password, setPassword] = useState('');
+  const [frameId, setFrameId] = useState('');
 
   const navigate = useNavigate();
 
@@ -38,20 +47,27 @@ const PlatesFrames = () => {
     setRefresh(false);
   }, [refresh]);
 
-  const handleDelete = frameId => {
-    fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(result => {
-        console.log('refresh');
-      });
-    setRefresh(true);
+  const handleChange = event => {
+    event.preventDefault();
+    const { value } = event.target;
+
+    setPassword(value);
   };
+
+  // const handleDelete = frameId => {
+  //   fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then(res => res.json())
+  //     .then(result => {
+  //       console.log('refresh');
+  //     });
+  //   setRefresh(true);
+  // };
   // Function to handle checkbox selection
   const handleCheckboxChange = event => {
     const { value, checked } = event.target;
@@ -129,33 +145,56 @@ const PlatesFrames = () => {
       });
   };
 
-  const handleSubmit = () => {
-    // Send selectedItems to the backend
-    console.log('Selected items:', selectedItems);
+  // const handleSubmit = () => {
+  //   setShowNotification(true);
 
-    fetch(`${BASE_URL}/api/auth/frames`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ids: selectedItems }),
-    })
-      .then(response =>
-        response.json(
-          setFrames(prevItems =>
-            prevItems.filter(item => !selectedItems.includes(item))
-          ),
-          setSelectedItems([]),
-          setRefresh(true)
-        )
-      )
-      .then(data => {
-        console.log('Response from other backend route');
-      })
-      .catch(error => {
-        console.error('Error sending data to other backend route:', error);
-      });
-  };
+  //   // Send selectedItems to the backend
+  //   console.log('Selected items:', selectedItems);
+
+  //   fetch(`${BASE_URL}/api/auth/admin/check-password`, {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email: email,
+  //       password: password,
+  //     }),
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => setResult(res.status));
+
+  //   if (result === 'success') {
+  //     fetch(`${BASE_URL}/api/auth/frames`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ ids: selectedItems }),
+  //     })
+  //       .then(response =>
+  //         response.json(
+  //           setFrames(prevItems =>
+  //             prevItems.filter(item => !selectedItems.includes(item))
+  //           ),
+  //           setSelectedItems([]),
+  //           setRefresh(true)
+  //         )
+  //       )
+  //       .then(data => {
+  //         console.log('Response from other backend route');
+  //       })
+  //       .catch(error => {
+  //         console.error('Error sending data to other backend route:', error);
+  //       });
+  //     setRefresh(true);
+
+  //     setShowNotification(false);
+  //   } else {
+  //     setPassword('');
+  //   }
+  // };
 
   const handleRedirect = frameName => {
     // event.preventDefault();
@@ -166,8 +205,105 @@ const PlatesFrames = () => {
     });
   };
 
-  const handlePasswordCheck = () => {
+  const handleFrameClick = id => {
     setShowNotification(true);
+    setFrameId(id);
+    // console.log(frameId);
+  };
+
+  const handleMultipleFramesClick = () => {
+    setShowNotification(true);
+    //  setFrameId(id);
+    // console.log(frameId);
+  };
+
+  const handleMultipleItemsPasswordCheck = () => {
+    fetch(`${BASE_URL}/api/auth/admin/check-password`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => setMultipleChoiceResult(res.status));
+
+    if (result === 'success') {
+      fetch(`${BASE_URL}/api/auth/frames`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selectedItems }),
+      })
+        .then(response =>
+          response.json(
+            setFrames(prevItems =>
+              prevItems.filter(item => !selectedItems.includes(item))
+            ),
+            setSelectedItems([]),
+            setRefresh(true)
+          )
+        )
+        .then(data => {
+          console.log('Response from other backend route');
+        })
+        .catch(error => {
+          console.error('Error sending data to other backend route:', error);
+        });
+      setRefresh(true);
+
+      setShowNotification(false);
+    } else {
+      setPassword('');
+    }
+  };
+
+  const handlePasswordCheck = () => {
+    fetch(`${BASE_URL}/api/auth/admin/check-password`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => setResult(res.status));
+
+    // console.log('frame id:', frameId);
+
+    if (result === 'success') {
+      fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(result => {
+          console.log('refresh');
+        });
+      setRefresh(true);
+
+      setShowNotification(false);
+    } else {
+      setPassword('');
+    }
+  };
+
+  const handleOnCancelClick = () => {
+    setResult('');
+    setMultipleChoiceResult('');
+    setShowNotification(false);
   };
 
   return (
@@ -226,7 +362,7 @@ const PlatesFrames = () => {
                   alt="delete"
                   src={deleteIconWhite}
                   className={css.delete_icon}
-                  onClick={handleSubmit}
+                  onClick={handleMultipleFramesClick}
                 />
                 <p className={css.plates_chosen_text}>Delete All</p>
               </div>
@@ -249,12 +385,72 @@ const PlatesFrames = () => {
                 Please, confirm the deletion of the frame by entering your
                 password below:
               </p>
-              <input className={css.notification_input} />
+              {result && result !== 'success' ? (
+                <p className={css.notification_wrong_password_text}>
+                  Password is wrong!
+                </p>
+              ) : (
+                ''
+              )}
+
+              <input
+                className={css.notification_input}
+                name="password"
+                value={password}
+                placeholder="Enter the password"
+                type="text"
+                onChange={handleChange}
+              />
               <div className={css.notification_buttons_thumb}>
-                <button className={css.notification_button_confirm}>
+                <button
+                  className={css.notification_button_confirm}
+                  onClick={() => handlePasswordCheck()}
+                >
                   Confirm
                 </button>
-                <button className={css.notification_button_cancel}>
+                <button
+                  className={css.notification_button_cancel}
+                  onClick={() => handleOnCancelClick()}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {showNotification && (
+            <div className={css.notification_modal}>
+              <p className={css.notification_message}>
+                Please, confirm the deletion of the frame by entering your
+                password below:
+              </p>
+              {multipleChoiceResult && multipleChoiceResult !== 'success' ? (
+                <p className={css.notification_wrong_password_text}>
+                  Password is wrong!
+                </p>
+              ) : (
+                ''
+              )}
+
+              <input
+                className={css.notification_input}
+                name="password"
+                value={password}
+                placeholder="Enter the password"
+                type="text"
+                onChange={handleChange}
+              />
+              <div className={css.notification_buttons_thumb}>
+                <button
+                  className={css.notification_button_confirm}
+                  onClick={() => handleMultipleItemsPasswordCheck()}
+                >
+                  Confirm
+                </button>
+                <button
+                  className={css.notification_button_cancel}
+                  onClick={() => handleOnCancelClick()}
+                >
                   Cancel
                 </button>
               </div>
@@ -343,7 +539,7 @@ const PlatesFrames = () => {
                     )}
 
                     <img
-                      onClick={handlePasswordCheck}
+                      onClick={() => handleFrameClick(frame._id)}
                       className={css.delete_icon}
                       alt="delete icon"
                       width="20"
