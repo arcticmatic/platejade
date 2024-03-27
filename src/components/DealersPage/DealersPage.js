@@ -20,7 +20,7 @@ const DealersPage = () => {
   const [result, setResult] = useState('');
   const [selectAllDealers, setSelectAllDealers] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
-  // const [multipleChoiceResult, setMultipleChoiceResult] = useState('');
+  const [multipleChoiceResult, setMultipleChoiceResult] = useState('');
 
   const [password, setPassword] = useState('');
   const [dealerId, setDealerId] = useState('');
@@ -142,7 +142,7 @@ const DealersPage = () => {
 
   const handleOnCancelClick = () => {
     setResult('');
-    // setMultipleChoiceResult('');
+    setMultipleChoiceResult('');
     setShowNotification(false);
   };
 

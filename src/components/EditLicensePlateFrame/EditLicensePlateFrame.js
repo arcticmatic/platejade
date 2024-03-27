@@ -44,8 +44,11 @@ const EditLicensePlateFrame = () => {
     })
       .then(res => res.json())
       .then(result => {
+        const availableDealers = result.dealers.filter(
+          item => item.company_name !== undefined
+        );
         const dealersArray = Array.from(
-          new Set(result.dealers.map(item => item.company_name))
+          new Set(availableDealers.map(item => item.company_name))
         );
         setDealers(dealersArray);
 
@@ -448,6 +451,11 @@ const EditLicensePlateFrame = () => {
     } else if (formData.colorName === 'Transparent') {
       formData['color'] = [''];
     }
+
+    const dealersArray = fields.find(field => field.name === 'dealer')?.value;
+    const dealersString = dealersArray ? dealersArray.join(', ') : '';
+
+    formData['dealer'] = dealersString;
 
     console.log('Form Data:', JSON.stringify(formData));
 

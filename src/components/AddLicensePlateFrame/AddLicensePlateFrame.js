@@ -40,8 +40,11 @@ const AddLicensePlateFrame = () => {
     })
       .then(res => res.json())
       .then(result => {
+        const availableDealers = result.dealers.filter(
+          item => item.company_name !== undefined
+        );
         const dealersArray = Array.from(
-          new Set(result.dealers.map(item => item.company_name))
+          new Set(availableDealers.map(item => item.company_name))
         );
         setDealers(dealersArray);
 
@@ -472,36 +475,37 @@ const AddLicensePlateFrame = () => {
     //     });
     // }
 
-    // Initialize formData as an empty object
     const formData = {};
 
-    // Iterate over fields and add their values to formData
     fields.forEach(field => {
       formData[field.name] = field.value;
     });
 
-    // Add directInputs to formData
+    const dealersArray = fields.find(field => field.name === 'dealer')?.value;
+    const dealersString = dealersArray ? dealersArray.join(', ') : '';
+
+    formData['dealer'] = dealersString;
+
     Object.entries(directInputs).forEach(([key, value]) => {
       formData[key] = value;
     });
 
-    // Add uploaded image to formData
     formData['image'] = uploadedImage;
     formData['backgroundImages'] = uploadedBackground;
 
-    // Additional logic for specific form data based on conditions
     if (formData.colorName === 'Multicolor') {
       formData['color'] = ['66465', '9198E5'];
     } else if (formData.colorName === 'Transparent') {
       formData['color'] = [''];
     }
 
-    console.log('Form Data:', JSON.stringify(formData));
+    // console.log('Form Data:', JSON.stringify(formData));
 
     fetch(`${BASE_URL}/api/auth/frames`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(formData),
     })
@@ -513,7 +517,6 @@ const AddLicensePlateFrame = () => {
         console.error('Error sending data to other backend route:', error);
       });
 
-    // Reset values after submission
     setFields(
       initialFields.map(field => ({ ...field, value: '', showDropdown: false }))
     );
@@ -530,8 +533,6 @@ const AddLicensePlateFrame = () => {
 
   const handleUpload = async event => {
     event.preventDefault();
-    // console.log('inside func');
-    // console.log(file);
 
     const originalFilename = file.name;
 

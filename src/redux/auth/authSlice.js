@@ -3,6 +3,7 @@ import authOperations from './authOperations';
 
 const initialState = {
   user: null,
+  role: null,
   token: null,
   isLoggedIn: false,
   isFetchingCurrentUser: false,
@@ -20,12 +21,15 @@ const authSlice = createSlice({
       // })
       .addCase(authOperations.logIn.fulfilled, (state, action) => {
         state.user = action.payload.user;
+        state.role = action.payload.role;
+        state.name = action.payload.name;
         state.token = action.payload.token;
         state.isLoggedIn = true;
       })
       .addCase(authOperations.logOut.fulfilled, state => {
         state.user = null;
         state.token = null;
+        state.role = null;
         state.isLoggedIn = false;
         window.location.reload();
       })

@@ -10,6 +10,7 @@ import { authOperations } from '../../redux/auth';
 
 const Header = () => {
   const isLoggedIn = useSelector(authSelectors.getIsLoggedIn);
+  const role = useSelector(authSelectors.getRole);
 
   const email = useSelector(authSelectors.getEmail);
   const dispatch = useDispatch();
@@ -30,14 +31,18 @@ const Header = () => {
               License Plates
             </NavLink>
             <NavLink to="/plate-frame" className={css.nav_link}>
-              Plate Frame
+              Plate Frames
             </NavLink>
-            <NavLink to="/users" className={css.nav_link}>
-              Users
-            </NavLink>
-            <NavLink to="/dealers" className={css.nav_link}>
-              Dealers
-            </NavLink>
+            {role === 'Admin' && (
+              <>
+                <NavLink to="/users" className={css.nav_link}>
+                  Users
+                </NavLink>
+                <NavLink to="/dealers" className={css.nav_link}>
+                  Dealers
+                </NavLink>
+              </>
+            )}
           </div>
           <div className={css.log_out_thumb}>
             <div>

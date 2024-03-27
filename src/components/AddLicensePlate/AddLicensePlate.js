@@ -5,8 +5,13 @@ import dealerPhoto from '../icons/dealerPhoto.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
+import authSelectors from '../../redux/auth/authSelectors';
+import { useSelector } from 'react-redux';
 
 const AddLicensePlate = () => {
+  const role = useSelector(authSelectors.getRole);
+  const dealerName = useSelector(authSelectors.getName);
+
   const [categories, setCategories] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
@@ -30,8 +35,11 @@ const AddLicensePlate = () => {
     })
       .then(res => res.json())
       .then(result => {
+        const availableDealers = result.dealers.filter(
+          item => item.company_name !== undefined
+        );
         const dealersArray = Array.from(
-          new Set(result.dealers.map(item => item.company_name))
+          new Set(availableDealers.map(item => item.company_name))
         );
         setDealers(dealersArray);
 
@@ -422,42 +430,70 @@ const AddLicensePlate = () => {
                         {fields.find(field => field.name === 'dealer')
                           ?.showDropdown &&
                           fields.find(field => field.name === 'dealer')
-                            ?.options && ( // Render dropdown menu if options exist
+                            ?.options && (
                             <ul
                               className={css.menu_items_list_dealers}
                               id="style-2"
                             >
-                              {fields
-                                .find(field => field.name === 'dealer')
-                                ?.options.map((option, index) => (
-                                  <li
-                                    type="text"
-                                    key={index}
-                                    className={css.menu_item}
+                              {role === 'Admin' ? (
+                                fields
+                                  .find(field => field.name === 'dealer')
+                                  ?.options.map((option, index) => (
+                                    <li
+                                      type="text"
+                                      key={index}
+                                      className={css.menu_item}
+                                    >
+                                      <label htmlFor={`dealer_option_${index}`}>
+                                        <input
+                                          className={css.input_checkbox}
+                                          style={{ display: 'none' }}
+                                          type="checkbox"
+                                          id={`dealer_option_${index}`}
+                                          checked={fields
+                                            .find(
+                                              field => field.name === 'dealer'
+                                            )
+                                            ?.value.includes(option)}
+                                          onChange={() =>
+                                            handleOptionClick('dealer', option)
+                                          }
+                                        />
+                                        {/* Render the SVG icon */}
+                                        <span
+                                          className={css.customCheckbox}
+                                        ></span>{' '}
+                                        {option}
+                                      </label>
+                                    </li>
+                                  ))
+                              ) : (
+                                <li
+                                  type="text"
+                                  key={dealerName}
+                                  className={css.menu_item}
+                                >
+                                  <label
+                                    htmlFor={`dealer_option_${dealerName}`}
                                   >
-                                    <label htmlFor={`dealer_option_${index}`}>
-                                      <input
-                                        className={css.input_checkbox}
-                                        style={{ display: 'none' }}
-                                        type="checkbox"
-                                        id={`dealer_option_${index}`}
-                                        checked={fields
-                                          .find(
-                                            field => field.name === 'dealer'
-                                          )
-                                          ?.value.includes(option)}
-                                        onChange={() =>
-                                          handleOptionClick('dealer', option)
-                                        }
-                                      />
-                                      {/* Render the SVG icon */}
-                                      <span
-                                        className={css.customCheckbox}
-                                      ></span>{' '}
-                                      {option}
-                                    </label>
-                                  </li>
-                                ))}
+                                    <input
+                                      className={css.input_checkbox}
+                                      style={{ display: 'none' }}
+                                      type="checkbox"
+                                      id={`dealer_option_${dealerName}`}
+                                      checked={fields
+                                        .find(field => field.name === 'dealer')
+                                        ?.value.includes(dealerName)}
+                                      onChange={() =>
+                                        handleOptionClick('dealer', dealerName)
+                                      }
+                                    />
+                                    {/* Render the SVG icon */}
+                                    <span className={css.customCheckbox}></span>
+                                    {dealerName}
+                                  </label>
+                                </li>
+                              )}
                             </ul>
                           )}
                       </div>

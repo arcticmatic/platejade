@@ -23,7 +23,6 @@ const LogIn = () => {
   const handleChange = event => {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log(name, value);
     switch (name) {
       case 'email':
         setEmail(value);
@@ -40,7 +39,7 @@ const LogIn = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log('inside func');
+
     dispatch(authOperations.logIn({ email, password }));
 
     reset();

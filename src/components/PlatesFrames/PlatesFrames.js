@@ -19,12 +19,18 @@ const PlatesFrames = () => {
   const BASE_URL = 'https://platejade-back.onrender.com';
 
   const email = useSelector(authSelectors.getEmail);
+  const role = useSelector(authSelectors.getRole);
+  const dealerName = useSelector(authSelectors.getName);
 
   const [frames, setFrames] = useState([]);
+  const [dealerFrames, setDealerFrames] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const [selectAllFrames, setSelectAllFrames] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [multipleChoiceNotification, setMultipleChoiceNotification] =
+    useState(false);
+
   const [result, setResult] = useState('');
   const [multipleChoiceResult, setMultipleChoiceResult] = useState('');
 
@@ -34,18 +40,28 @@ const PlatesFrames = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/auth/all-frames?state=Florida`, {
-      method: 'GET',
-      header: {},
-    })
-      .then(res => res.json())
-      .then(result => {
-        setFrames(result.frames);
-        // console.log(result);
-      });
-
+    if (role === 'Admin') {
+      fetch(`${BASE_URL}/api/auth/frames`, {
+        method: 'GET',
+        header: {},
+      })
+        .then(res => res.json())
+        .then(result => {
+          setFrames(result.frames);
+        });
+    }
+    if (role === 'Dealer') {
+      fetch(`${BASE_URL}/api/auth/dealer-frames?dealer=${dealerName}`, {
+        method: 'GET',
+        header: {},
+      })
+        .then(res => res.json())
+        .then(res => {
+          setDealerFrames(res.frames);
+        });
+    }
     setRefresh(false);
-  }, [refresh]);
+  }, [refresh, dealerName, role]);
 
   const handleChange = event => {
     event.preventDefault();
@@ -54,21 +70,6 @@ const PlatesFrames = () => {
     setPassword(value);
   };
 
-  // const handleDelete = frameId => {
-  //   fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then(res => res.json())
-  //     .then(result => {
-  //       console.log('refresh');
-  //     });
-  //   setRefresh(true);
-  // };
-  // Function to handle checkbox selection
   const handleCheckboxChange = event => {
     const { value, checked } = event.target;
     if (checked) {
@@ -145,57 +146,6 @@ const PlatesFrames = () => {
       });
   };
 
-  // const handleSubmit = () => {
-  //   setShowNotification(true);
-
-  //   // Send selectedItems to the backend
-  //   console.log('Selected items:', selectedItems);
-
-  //   fetch(`${BASE_URL}/api/auth/admin/check-password`, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       email: email,
-  //       password: password,
-  //     }),
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => setResult(res.status));
-
-  //   if (result === 'success') {
-  //     fetch(`${BASE_URL}/api/auth/frames`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ ids: selectedItems }),
-  //     })
-  //       .then(response =>
-  //         response.json(
-  //           setFrames(prevItems =>
-  //             prevItems.filter(item => !selectedItems.includes(item))
-  //           ),
-  //           setSelectedItems([]),
-  //           setRefresh(true)
-  //         )
-  //       )
-  //       .then(data => {
-  //         console.log('Response from other backend route');
-  //       })
-  //       .catch(error => {
-  //         console.error('Error sending data to other backend route:', error);
-  //       });
-  //     setRefresh(true);
-
-  //     setShowNotification(false);
-  //   } else {
-  //     setPassword('');
-  //   }
-  // };
-
   const handleRedirect = frameName => {
     // event.preventDefault();
     console.log('inside');
@@ -208,13 +158,10 @@ const PlatesFrames = () => {
   const handleFrameClick = id => {
     setShowNotification(true);
     setFrameId(id);
-    // console.log(frameId);
   };
 
   const handleMultipleFramesClick = () => {
-    setShowNotification(true);
-    //  setFrameId(id);
-    // console.log(frameId);
+    setMultipleChoiceNotification(true);
   };
 
   const handleMultipleItemsPasswordCheck = () => {
@@ -230,37 +177,42 @@ const PlatesFrames = () => {
       }),
     })
       .then(res => res.json())
-      .then(res => setMultipleChoiceResult(res.status));
+      .then(res => {
+        setMultipleChoiceResult(res.status);
+        if (res.status === 'success') {
+          fetch(`${BASE_URL}/api/auth/frames`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ids: selectedItems }),
+          })
+            .then(response =>
+              response.json(
+                setFrames(prevItems =>
+                  prevItems.filter(item => !selectedItems.includes(item))
+                ),
+                setSelectedItems([]),
+                setRefresh(true)
+              )
+            )
+            .then(data => {
+              console.log('Response from other backend route');
+            })
+            .catch(error => {
+              console.error(
+                'Error sending data to other backend route:',
+                error
+              );
+            });
 
-    if (result === 'success') {
-      fetch(`${BASE_URL}/api/auth/frames`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ids: selectedItems }),
-      })
-        .then(response =>
-          response.json(
-            setFrames(prevItems =>
-              prevItems.filter(item => !selectedItems.includes(item))
-            ),
-            setSelectedItems([]),
-            setRefresh(true)
-          )
-        )
-        .then(data => {
-          console.log('Response from other backend route');
-        })
-        .catch(error => {
-          console.error('Error sending data to other backend route:', error);
-        });
-      setRefresh(true);
-
-      setShowNotification(false);
-    } else {
-      setPassword('');
-    }
+          setRefresh(true);
+          setPassword('');
+          setMultipleChoiceNotification(false);
+        } else {
+          setPassword('');
+        }
+      });
   };
 
   const handlePasswordCheck = () => {
@@ -276,34 +228,36 @@ const PlatesFrames = () => {
       }),
     })
       .then(res => res.json())
-      .then(res => setResult(res.status));
+      .then(res => {
+        setResult(res.status);
+        if (res.status === 'success') {
+          fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
+            method: 'DELETE',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          })
+            .then(res => res.json())
+            .then(result => {
+              console.log('refresh');
+            });
 
-    // console.log('frame id:', frameId);
+          setRefresh(true);
 
-    if (result === 'success') {
-      fetch(`${BASE_URL}/api/auth/frames/${frameId}`, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(res => res.json())
-        .then(result => {
-          console.log('refresh');
-        });
-      setRefresh(true);
-
-      setShowNotification(false);
-    } else {
-      setPassword('');
-    }
+          setShowNotification(false);
+        } else {
+          setPassword('');
+        }
+      });
   };
 
   const handleOnCancelClick = () => {
     setResult('');
     setMultipleChoiceResult('');
     setShowNotification(false);
+    setMultipleChoiceNotification(false);
+    setSelectedItems([]);
   };
 
   return (
@@ -312,7 +266,9 @@ const PlatesFrames = () => {
         <div className={css.text_thumb}>
           <p className={css.section_text}>
             License Plates Frames
-            <span className={css.dealers_amount}>({frames.length})</span>
+            <span className={css.dealers_amount}>
+              ({role === 'Admin' ? frames.length : dealerFrames.length})
+            </span>
           </p>
           <NavLink to="/add-plate-frame">
             <button className={css.add_dealer_btn}>
@@ -418,7 +374,7 @@ const PlatesFrames = () => {
             </div>
           )}
 
-          {showNotification && (
+          {multipleChoiceNotification && (
             <div className={css.notification_modal}>
               <p className={css.notification_message}>
                 Please, confirm the deletion of the frame by entering your
@@ -459,97 +415,189 @@ const PlatesFrames = () => {
 
           <div className={css.dealers_thumb_border}></div>
           <ul className={css.dealers_list}>
-            {frames.map(frame => {
-              return (
-                <li className={css.dealers_list_item} key={frame._id}>
-                  <div className={css.dealer_info_thumb}>
-                    <input
-                      className={css.item_checkbox}
-                      type="checkbox"
-                      value={frame._id}
-                      checked={selectedItems.includes(frame._id)}
-                      onChange={handleCheckboxChange}
-                    />
-                    <img
-                      width="80"
-                      height="40"
-                      alt="plate logo"
-                      src={frame.image}
-                      className={css.plateIcon}
-                    />
-                  </div>
-                  <p className={css.dealers_company_name}>{frame.name}</p>
-                  <p className={css.dealers_person}>${frame.amazonPrice}</p>
-                  <div className={css.plate_link_thumb}>
-                    <a className={css.plate_link} href={frame.link}>
-                      <p className={css.dealers_number}>
+            {role === 'Admin'
+              ? frames.map(frame => {
+                  return (
+                    <li className={css.dealers_list_item} key={frame._id}>
+                      <div className={css.dealer_info_thumb}>
+                        <input
+                          className={css.item_checkbox}
+                          type="checkbox"
+                          value={frame._id}
+                          checked={selectedItems.includes(frame._id)}
+                          onChange={handleCheckboxChange}
+                        />
                         <img
-                          width="14"
-                          height="14"
+                          width="80"
+                          height="40"
                           alt="plate logo"
-                          src={linkArrow}
+                          src={frame.image}
                           className={css.plateIcon}
                         />
-                        View link
+                      </div>
+                      <p className={css.dealers_company_name}>{frame.name}</p>
+                      <p className={css.dealers_person}>${frame.amazonPrice}</p>
+                      <div className={css.plate_link_thumb}>
+                        <a className={css.plate_link} href={frame.link}>
+                          <p className={css.dealers_number}>
+                            <img
+                              width="14"
+                              height="14"
+                              alt="plate logo"
+                              src={linkArrow}
+                              className={css.plateIcon}
+                            />
+                            View link
+                          </p>
+                        </a>
+                      </div>
+                      <p className={css.dealers_status}>
+                        <button
+                          className={
+                            frame.status.toString() === 'Active'
+                              ? css.dealers_status_btn_active
+                              : css.dealers_status_btn
+                          }
+                        >
+                          {frame.status ? frame.status : 'Not available'}
+                        </button>
                       </p>
-                    </a>
-                  </div>
-                  <p className={css.dealers_status}>
-                    <button
-                      className={
-                        frame.status.toString() === 'Active'
-                          ? css.dealers_status_btn_active
-                          : css.dealers_status_btn
-                      }
-                    >
-                      {frame.status ? frame.status : 'Not available'}
-                    </button>
-                  </p>
-                  <div className={css.dealers_admin_actions_thumb}>
-                    <img
-                      onClick={() => handleRedirect(frame.name)}
-                      className={css.edit_icon}
-                      alt="edit icon"
-                      width="20"
-                      height="20"
-                      src={editIcon}
-                    />
-                    {frame.status.toString() === 'Active' ? (
-                      <img
-                        onClick={() =>
-                          handleEditStatus(frame._id, frame.status)
-                        }
-                        className={css.edit_icon}
-                        alt="pause icon"
-                        width="20"
-                        height="20"
-                        src={pauseIcon}
-                      />
-                    ) : (
-                      <img
-                        onClick={() =>
-                          handleEditStatus(frame._id, frame.status)
-                        }
-                        className={css.edit_icon}
-                        alt="start icon"
-                        width="20"
-                        height="20"
-                        src={startIcon}
-                      />
-                    )}
+                      <div className={css.dealers_admin_actions_thumb}>
+                        <img
+                          onClick={() => handleRedirect(frame.name)}
+                          className={css.edit_icon}
+                          alt="edit icon"
+                          width="20"
+                          height="20"
+                          src={editIcon}
+                        />
+                        {frame.status.toString() === 'Active' ? (
+                          <img
+                            onClick={() =>
+                              handleEditStatus(frame._id, frame.status)
+                            }
+                            className={css.edit_icon}
+                            alt="pause icon"
+                            width="20"
+                            height="20"
+                            src={pauseIcon}
+                          />
+                        ) : (
+                          <img
+                            onClick={() =>
+                              handleEditStatus(frame._id, frame.status)
+                            }
+                            className={css.edit_icon}
+                            alt="start icon"
+                            width="20"
+                            height="20"
+                            src={startIcon}
+                          />
+                        )}
 
-                    <img
-                      onClick={() => handleFrameClick(frame._id)}
-                      className={css.delete_icon}
-                      alt="delete icon"
-                      width="20"
-                      height="20"
-                      src={deleteIcon}
-                    />
-                  </div>
-                </li>
-              );
-            })}
+                        <img
+                          onClick={() => handleFrameClick(frame._id)}
+                          className={css.delete_icon}
+                          alt="delete icon"
+                          width="20"
+                          height="20"
+                          src={deleteIcon}
+                        />
+                      </div>
+                    </li>
+                  );
+                })
+              : dealerFrames.map(frame => {
+                  return (
+                    <li className={css.dealers_list_item} key={frame._id}>
+                      <div className={css.dealer_info_thumb}>
+                        <input
+                          className={css.item_checkbox}
+                          type="checkbox"
+                          value={frame._id}
+                          checked={selectedItems.includes(frame._id)}
+                          onChange={handleCheckboxChange}
+                        />
+                        <img
+                          width="80"
+                          height="40"
+                          alt="plate logo"
+                          src={frame.image}
+                          className={css.plateIcon}
+                        />
+                      </div>
+                      <p className={css.dealers_company_name}>{frame.name}</p>
+                      <p className={css.dealers_person}>${frame.amazonPrice}</p>
+                      <div className={css.plate_link_thumb}>
+                        <a className={css.plate_link} href={frame.link}>
+                          <p className={css.dealers_number}>
+                            <img
+                              width="14"
+                              height="14"
+                              alt="plate logo"
+                              src={linkArrow}
+                              className={css.plateIcon}
+                            />
+                            View link
+                          </p>
+                        </a>
+                      </div>
+                      <p className={css.dealers_status}>
+                        <button
+                          className={
+                            frame.status.toString() === 'Active'
+                              ? css.dealers_status_btn_active
+                              : css.dealers_status_btn
+                          }
+                        >
+                          {frame.status ? frame.status : 'Not available'}
+                        </button>
+                      </p>
+                      <div className={css.dealers_admin_actions_thumb}>
+                        <img
+                          onClick={() => handleRedirect(frame.name)}
+                          className={css.edit_icon}
+                          alt="edit icon"
+                          width="20"
+                          height="20"
+                          src={editIcon}
+                        />
+                        {frame.status.toString() === 'Active' ? (
+                          <img
+                            onClick={() =>
+                              handleEditStatus(frame._id, frame.status)
+                            }
+                            className={css.edit_icon}
+                            alt="pause icon"
+                            width="20"
+                            height="20"
+                            src={pauseIcon}
+                          />
+                        ) : (
+                          <img
+                            onClick={() =>
+                              handleEditStatus(frame._id, frame.status)
+                            }
+                            className={css.edit_icon}
+                            alt="start icon"
+                            width="20"
+                            height="20"
+                            src={startIcon}
+                          />
+                        )}
+
+                        <img
+                          onClick={() => handleFrameClick(frame._id)}
+                          className={css.delete_icon}
+                          alt="delete icon"
+                          width="20"
+                          height="20"
+                          src={deleteIcon}
+                        />
+                      </div>
+                    </li>
+                  );
+                })}
           </ul>
         </div>
       </section>
