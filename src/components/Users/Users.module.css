@@ -144,7 +144,7 @@
   /* align-items: center; */
   justify-content: space-between;
   padding-top: 20px;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 .dealers_company_name {
   color: var(--dashboard-txt-black, #19181c);
