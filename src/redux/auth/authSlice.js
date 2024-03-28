@@ -31,7 +31,7 @@ const authSlice = createSlice({
         state.token = null;
         state.role = null;
         state.isLoggedIn = false;
-        window.location.reload();
+        // window.location.reload();
       })
       .addCase(authOperations.fetchCurrentUser.pending, state => {
         state.isFetchingCurrentUser = true;
