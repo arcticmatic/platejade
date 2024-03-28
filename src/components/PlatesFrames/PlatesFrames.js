@@ -90,6 +90,18 @@ const PlatesFrames = () => {
     setSelectAllFrames(!selectAllFrames);
   };
 
+  const handleSelectAllDealerFrames = () => {
+    // If selectAllPlates is true, deselect all plates
+    if (selectAllFrames) {
+      setSelectedItems([]);
+    } else {
+      // If selectAllPlates is false, select all plates
+      setSelectedItems(dealerFrames.map(frame => frame._id));
+    }
+    // Toggle the selectAllPlates state
+    setSelectAllFrames(!selectAllFrames);
+  };
+
   const handleDeselectAllPlates = () => {
     setSelectedItems([]);
     setSelectAllFrames(false);
@@ -285,7 +297,11 @@ const PlatesFrames = () => {
                   className={css.item_checkbox}
                   type="checkbox"
                   checked={selectAllFrames}
-                  onChange={handleSelectAllFrames}
+                  onChange={
+                    role === 'Admin'
+                      ? handleSelectAllFrames
+                      : handleSelectAllDealerFrames
+                  }
                 />
                 <p className={css.dealers_company_title}>View</p>
               </div>
@@ -341,13 +357,17 @@ const PlatesFrames = () => {
                 Please, confirm the deletion of the frame by entering your
                 password below:
               </p>
-              {result && result !== 'success' ? (
-                <p className={css.notification_wrong_password_text}>
+              {
+                <p
+                  className={
+                    result && result !== 'success'
+                      ? css.notification_wrong_password_text
+                      : css.notification_wrong_password_hidden
+                  }
+                >
                   Password is wrong!
                 </p>
-              ) : (
-                ''
-              )}
+              }
 
               <input
                 className={css.notification_input}
@@ -380,13 +400,18 @@ const PlatesFrames = () => {
                 Please, confirm the deletion of the frame by entering your
                 password below:
               </p>
-              {multipleChoiceResult && multipleChoiceResult !== 'success' ? (
-                <p className={css.notification_wrong_password_text}>
+
+              {
+                <p
+                  className={
+                    multipleChoiceResult && multipleChoiceResult !== 'success'
+                      ? css.notification_wrong_password_text
+                      : css.notification_wrong_password_hidden
+                  }
+                >
                   Password is wrong!
                 </p>
-              ) : (
-                ''
-              )}
+              }
 
               <input
                 className={css.notification_input}

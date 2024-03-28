@@ -144,6 +144,18 @@ const LicensePlates = () => {
     setSelectAllPlates(!selectAllPlates);
   };
 
+  const handleSelectAllDealerPlates = () => {
+    // If selectAllPlates is true, deselect all plates
+    if (selectAllPlates) {
+      setSelectedItems([]);
+    } else {
+      // If selectAllPlates is false, select all plates
+      setSelectedItems(dealerPlates.map(plate => plate._id));
+    }
+    // Toggle the selectAllPlates state
+    setSelectAllPlates(!selectAllPlates);
+  };
+
   const handleDeselectAllPlates = () => {
     setSelectedItems([]);
     // Deselect all plates by setting selectAllPlates to false
@@ -283,7 +295,11 @@ const LicensePlates = () => {
                   className={css.item_checkbox}
                   type="checkbox"
                   checked={selectAllPlates}
-                  onChange={handleSelectAllPlates}
+                  onChange={
+                    role === 'Admin'
+                      ? handleSelectAllPlates
+                      : handleSelectAllDealerPlates
+                  }
                 />
                 <p className={css.dealers_company_title}>View</p>
               </div>
@@ -340,13 +356,17 @@ const LicensePlates = () => {
                 Please, confirm the deletion of the plate by entering your
                 password below:
               </p>
-              {result && result !== 'success' ? (
-                <p className={css.notification_wrong_password_text}>
+              {
+                <p
+                  className={
+                    result && result !== 'success'
+                      ? css.notification_wrong_password_text
+                      : css.notification_wrong_password_hidden
+                  }
+                >
                   Password is wrong!
                 </p>
-              ) : (
-                ''
-              )}
+              }
 
               <input
                 className={css.notification_input}
@@ -379,14 +399,17 @@ const LicensePlates = () => {
                 Please, confirm the deletion of the plates by entering your
                 password below:
               </p>
-              {multipleChoiceResult && multipleChoiceResult !== 'success' ? (
-                <p className={css.notification_wrong_password_text}>
+              {
+                <p
+                  className={
+                    multipleChoiceResult && multipleChoiceResult !== 'success'
+                      ? css.notification_wrong_password_text
+                      : css.notification_wrong_password_hidden
+                  }
+                >
                   Password is wrong!
                 </p>
-              ) : (
-                ''
-              )}
-
+              }
               <input
                 className={css.notification_input}
                 name="password"

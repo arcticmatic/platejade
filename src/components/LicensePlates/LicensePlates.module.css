@@ -304,9 +304,13 @@
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .notification_wrong_password_text {
   color: red;
+  margin-bottom: 10px;
+}
+.notification_wrong_password_hidden {
+  visibility: hidden;
   margin-bottom: 10px;
 }

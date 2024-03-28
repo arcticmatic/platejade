@@ -296,7 +296,7 @@ const AddLicensePlate = () => {
     setUploadedImage(imageUrl);
   };
 
-  console.log('uploaded image', uploadedImage);
+  // console.log('uploaded image', uploadedImage);
 
   return (
     <>
