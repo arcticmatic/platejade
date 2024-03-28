@@ -224,9 +224,10 @@
 .actions_thumb {
   width: 60px;
 }
-/* .dropdown_arrow {
-  margin-right: 40px;
-} */
+.dropdown_arrow {
+  width: 15px;
+  height: 8px;
+}
 .user_details_menu_thumb {
   display: flex;
   flex-wrap: wrap;

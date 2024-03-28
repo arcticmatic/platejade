@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import authSelectors from '../../redux/auth/authSelectors';
 import { useSelector } from 'react-redux';
 import openMenuIcon from '../icons/openMenuIcon.svg';
+import closeMenuIcon from '../icons/closeArrow.svg';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -75,12 +76,12 @@ const Users = () => {
                       <p className={css.dealers_email}>{user.firstAddress}</p>
                       <div className={css.actions_thumb}>
                         <img
-                          className={
+                          className={css.dropdown_arrow}
+                          src={
                             openMenuIndex === index
-                              ? css.dropdown_arrow
-                              : css.dropdown_arrow_close
+                              ? closeMenuIcon
+                              : openMenuIcon
                           }
-                          src={openMenuIcon}
                           alt="Dropdown Arrow"
                           onClick={() => onOpenMenu(index)}
                         />
