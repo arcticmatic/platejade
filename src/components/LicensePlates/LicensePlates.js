@@ -460,7 +460,7 @@ const LicensePlates = () => {
                       <p className={css.dealers_company_name}>{plate.name}</p>
                       <p className={css.dealers_person}>${plate.price}</p>
                       <div className={css.plate_link_thumb}>
-                        <a className={css.plate_link} href={plate.link}>
+                        <a className={css.plate_link} href={plate.link} target="_blank" rel="noopener noreferrer">
                           <p className={css.dealers_number}>
                             <img
                               width="14"

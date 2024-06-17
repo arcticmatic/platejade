@@ -113,22 +113,27 @@
 .add_dealer_company_thumb {
   margin-top: 30px;
   padding-left: 40px;
+  padding-right: 40px;
 }
 .add_dealer_company_list {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 20px;
+  gap: 20px;
 }
 .add_item_filter_list {
   display: flex;
   /* flex-wrap: wrap; */
   margin-bottom: 20px;
+  gap: 20px;
 }
 .company_item {
-  margin-right: 20px;
+  flex: 1;
+  min-width: calc(50% - 10px);
+  box-sizing: border-box;
 }
 .filter_item {
-  margin-right: 20px;
+  min-width: calc((100% - 20px*2)/3);
 }
 .company_label {
   color: var(--dashboard-txt-grey, #adaabe);
@@ -151,11 +156,27 @@
   padding-top: 15px;
   padding-bottom: 15px;
   padding-left: 20px;
-  width: 19vw;
   flex-shrink: 0;
   border-radius: 10px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+  resize: none;
+  height: 50px;
 }
+
+.company_input:focus {
+  white-space: normal;
+}
+.company_input_description {
+  flex: 1 1 100%;
+  box-sizing: border-box;
+}
+
 .filter_item_input {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -273,21 +294,23 @@
 .menu_filters_thumb {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
 }
 .filter_thumb {
   position: relative;
 }
 .dropdown_arrow {
   position: absolute;
-  left: 94%;
+  left: 96%;
   top: 72%;
-  transform: translate(-94%, -72%);
+  transform: translate(-96%, -72%);
   cursor: pointer;
 }
 .dropdown_arrow_dealers {
   position: absolute;
   left: 96%;
-  transform: translate(-96%, -200%);
+  top: 72%;
+  transform: translate(-96%, -72%);
 }
 .dropdown_arrow_open_menu {
   position: absolute;
@@ -320,7 +343,7 @@
   max-height: 120px;
   position: absolute;
 
-  width: 103%;
+  width: 100%;
 
   z-index: 999;
   border-radius: 10px;
@@ -339,9 +362,9 @@
 .menu_item:not(:last-child) {
   margin-bottom: 10px;
 }
-.filter_thumb_all {
+/* .filter_thumb_all {
   width: 20vw;
-}
+} */
 ::-webkit-scrollbar {
   width: 3px;
 }

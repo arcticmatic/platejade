@@ -509,19 +509,21 @@ const EditLicensePlate = () => {
                           </div>
                         </li>
 
-                        <li>
+                        <li className={css.company_input_description}>
                           <p className={css.product_description_label}>
                             Product description
                           </p>
-                          <input
+                          <textarea
                             type="text"
                             className={css.company_input}
                             value={directInputs.description}
-                            onChange={e =>
-                              setDirectInputs({
-                                ...directInputs,
-                                description: e.target.value,
-                              })
+                            onChange={e => {
+                                setDirectInputs({
+                                  ...directInputs,
+                                  description: e.target.value,
+                                })
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                              }
                             }
                             placeholder={plate.description}
                           />

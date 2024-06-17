@@ -463,7 +463,7 @@ const PlatesFrames = () => {
                       <p className={css.dealers_company_name}>{frame.name}</p>
                       <p className={css.dealers_person}>${frame.amazonPrice}</p>
                       <div className={css.plate_link_thumb}>
-                        <a className={css.plate_link} href={frame.link}>
+                        <a className={css.plate_link} href={frame.amazonLink || frame.secondShopLink} target="_blank" rel="noopener noreferrer">
                           <p className={css.dealers_number}>
                             <img
                               width="14"
