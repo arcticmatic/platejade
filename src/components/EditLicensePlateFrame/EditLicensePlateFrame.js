@@ -38,7 +38,7 @@ const EditLicensePlateFrame = () => {
 
   useEffect(() => {
     // RECEIVE AND SET DEALERS
-    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
+    fetch(`${BASE_URL}/api/auth/all-dealers`, {
       method: 'GET',
       header: {},
     })
@@ -351,9 +351,12 @@ const EditLicensePlateFrame = () => {
   const [directInputs, setDirectInputs] = useState({
     name: '',
     description: '',
-    shopName: '',
-    link: '',
-    price: '',
+    firstShopName: '',
+    amazonLink: '',
+    amazonPrice: '',
+    secondShopName: '',
+    secondShopLink: '',
+    secondShopPrice: '',
   });
 
   // Handler function to toggle selection of a checkbox or set input values
@@ -400,6 +403,16 @@ const EditLicensePlateFrame = () => {
       .then(res => res.json())
       .then(result => {
         setCurrentFrame(result.frame);
+        setDirectInputs({
+          name: result.frame[0].name || '',
+          description: result.frame[0].description || '',
+          firstShopName: result.frame[0].firstShopName || '',
+          amazonLink: result.frame[0].amazonLink || '',
+          amazonPrice: result.frame[0].amazonPrice || '',
+          secondShopName: result.frame[0].secondShopName || '',
+          secondShopLink: result.frame[0].secondShopLink || '',
+          secondShopPrice: result.frame[0].secondShopPrice || '',
+        });
       });
   }, [refresh, currentPlateFrame]);
 
@@ -731,7 +744,7 @@ const EditLicensePlateFrame = () => {
                                 name: e.target.value,
                               })
                             }
-                            placeholder="Name"
+                            // placeholder="Name"
                           />
                         </li>
                         <li className={css.company_item}>
@@ -748,7 +761,7 @@ const EditLicensePlateFrame = () => {
                                     ?.value || ''
                                 }
                                 readOnly
-                                placeholder="Select from the list"
+                                placeholder={frame.dealer}
                               />
                               {fields.find(field => field.name === 'dealer')
                                 ?.options &&
@@ -825,16 +838,16 @@ const EditLicensePlateFrame = () => {
                           <textarea 
                             type="text"
                             className={css.company_input}
-                            value={directInputs.productDescription}
+                            value={directInputs.description}
                             onChange={e => {
                                 setDirectInputs({
                                   ...directInputs,
-                                  productDescription: e.target.value,
+                                  description: e.target.value,
                                 });
                                 e.target.style.height = `${e.target.scrollHeight}px`;
                               }
                             }
-                            placeholder="Product description"
+                            // placeholder="Product description"
                           />
                         </li>
                       </ul>
@@ -861,7 +874,7 @@ const EditLicensePlateFrame = () => {
                                   event.target.value
                                 )
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.material}
                             />
                             {fields.find(field => field.name === 'material')
                               ?.options &&
@@ -936,7 +949,7 @@ const EditLicensePlateFrame = () => {
                               onChange={event =>
                                 handleInputChange('type', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.type}
                             />
                             {fields.find(field => field.name === 'type')
                               ?.options &&
@@ -1013,7 +1026,7 @@ const EditLicensePlateFrame = () => {
                                   event.target.value
                                 )
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.finishType}
                             />
                             {fields.find(field => field.name === 'finishType')
                               ?.options &&
@@ -1089,7 +1102,7 @@ const EditLicensePlateFrame = () => {
                               onChange={event =>
                                 handleInputChange('theme', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.theme}
                             />
                             {fields.find(field => field.name === 'theme')
                               ?.options &&
@@ -1166,7 +1179,7 @@ const EditLicensePlateFrame = () => {
                                   event.target.value
                                 )
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.attachmentType}
                             />
                             {fields.find(
                               field => field.name === 'attachmentType'
@@ -1250,7 +1263,7 @@ const EditLicensePlateFrame = () => {
                               onChange={event =>
                                 handleInputChange('feature', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.feature}
                             />
                             {fields.find(field => field.name === 'feature')
                               ?.options &&
@@ -1327,7 +1340,7 @@ const EditLicensePlateFrame = () => {
                                   event.target.value
                                 )
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.colorName}
                             />
                             {fields.find(field => field.name === 'colorName')
                               ?.options &&
@@ -1403,7 +1416,7 @@ const EditLicensePlateFrame = () => {
                               onChange={event =>
                                 handleInputChange('color', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.color}
                             />
                             {fields.find(field => field.name === 'color')
                               ?.options &&
@@ -1473,7 +1486,7 @@ const EditLicensePlateFrame = () => {
                               onChange={event =>
                                 handleInputChange('state', event.target.value)
                               }
-                              placeholder="Start typing or select from the list"
+                              placeholder={frame.state}
                             />
                             {fields.find(field => field.name === 'state')
                               ?.options &&
@@ -1541,7 +1554,7 @@ const EditLicensePlateFrame = () => {
                                   ?.value || ''
                               }
                               readOnly
-                              placeholder="Select from the list"
+                              placeholder={frame.status}
                             />
                             {fields.find(field => field.name === 'status')
                               ?.options && ( // Render dropdown arrow if options exist
@@ -1606,7 +1619,7 @@ const EditLicensePlateFrame = () => {
                                 firstShopName: e.target.value,
                               })
                             }
-                            placeholder="Amazon"
+                            // placeholder="Amazon"
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -1623,7 +1636,7 @@ const EditLicensePlateFrame = () => {
                                 amazonLink: e.target.value,
                               })
                             }
-                            placeholder="Link"
+                            // placeholder="Link"
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -1638,7 +1651,7 @@ const EditLicensePlateFrame = () => {
                                 amazonPrice: e.target.value,
                               })
                             }
-                            placeholder="Price"
+                            // placeholder="Price"
                           />
                         </li>
                       </ul>
@@ -1655,7 +1668,7 @@ const EditLicensePlateFrame = () => {
                                 secondShopName: e.target.value,
                               })
                             }
-                            placeholder="Shop name"
+                            // placeholder="Shop name"
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -1672,7 +1685,7 @@ const EditLicensePlateFrame = () => {
                                 secondShopLink: e.target.value,
                               })
                             }
-                            placeholder="Link"
+                            // placeholder="Link"
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -1687,7 +1700,7 @@ const EditLicensePlateFrame = () => {
                                 secondShopPrice: e.target.value,
                               })
                             }
-                            placeholder="Price"
+                            // placeholder="Price"
                           />
                         </li>
                       </ul>

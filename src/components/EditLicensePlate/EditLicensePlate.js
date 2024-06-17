@@ -1,7 +1,7 @@
 import css from './EditLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
-import dealerPhoto from '../icons/dealerPhoto.svg';
+// import dealerPhoto from '../icons/dealerPhoto.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
@@ -28,7 +28,7 @@ const EditLicensePlate = () => {
 
   useEffect(() => {
     // RECEIVE AND SET DEALERS
-    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
+    fetch(`${BASE_URL}/api/auth/all-dealers`, {
       method: 'GET',
       header: {},
     })
@@ -177,11 +177,23 @@ const EditLicensePlate = () => {
     setRefresh(false);
     fetch(`${BASE_URL}/api/auth/admin/plates/${currentLicensePlate}`, {
       method: 'GET',
-      header: {},
+      headers: {},
     })
       .then(res => res.json())
       .then(result => {
-        setCurrentPlate(result.plate);
+        
+         setCurrentPlate(result.plate);
+          setDirectInputs({
+            name: result.plate[0].name || '',
+            description: result.plate[0].description || '',
+            shopName: result.plate[0].shopName || '',
+            link: result.plate[0].link || '',
+            price: result.plate[0].price || '',
+          });
+
+      })
+      .catch(error => {
+        console.error("Error fetching plate data:", error);
       });
   }, [refresh, currentLicensePlate]);
 
@@ -318,11 +330,12 @@ const EditLicensePlate = () => {
     });
 
     const imageUrl = uploadUrl.split('?')[0];
-    // console.log(imageUrl);
+   console.log(imageUrl);
     setUploadedImage(imageUrl);
+    console.log('uploaded image', uploadedImage);
   };
 
-  // console.log('uploaded image', uploadedImage);
+  
 
   return (
     <>
@@ -353,8 +366,8 @@ const EditLicensePlate = () => {
                       {!uploadedImage ? (
                         <img
                           alt="dealer logo"
-                          className={css.logo_icon}
-                          src={dealerPhoto}
+                          className={css.uploaded_image}
+                          src={plate.image}
                         />
                       ) : (
                         <img
@@ -422,7 +435,7 @@ const EditLicensePlate = () => {
                                 name: e.target.value,
                               })
                             }
-                            placeholder={plate.name}
+                            // placeholder={plate.name}
                           />
                         </li>
                         <li className={css.company_item}>
@@ -525,7 +538,7 @@ const EditLicensePlate = () => {
                                 e.target.style.height = `${e.target.scrollHeight}px`;
                               }
                             }
-                            placeholder={plate.description}
+                            // placeholder={plate.description}
                           />
                         </li>
                       </ul>
@@ -762,7 +775,7 @@ const EditLicensePlate = () => {
                                 shopName: e.target.value,
                               })
                             }
-                            placeholder={plate.shopName}
+                            //placeholder={plate.shopName}
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -779,7 +792,7 @@ const EditLicensePlate = () => {
                                 link: e.target.value,
                               })
                             }
-                            placeholder={plate.link}
+                            // placeholder={plate.link}
                           />
                         </li>
                         <li className={css.filter_item}>
@@ -794,7 +807,7 @@ const EditLicensePlate = () => {
                                 price: e.target.value,
                               })
                             }
-                            placeholder={plate.price}
+                            // placeholder={plate.price}
                           />
                         </li>
                       </ul>
