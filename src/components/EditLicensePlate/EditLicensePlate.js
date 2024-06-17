@@ -1,7 +1,7 @@
 import css from './EditLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
-// import dealerPhoto from '../icons/dealerPhoto.svg';
+import dealerPhoto from '../icons/dealerPhoto.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
@@ -366,8 +366,8 @@ const EditLicensePlate = () => {
                       {!uploadedImage ? (
                         <img
                           alt="dealer logo"
-                          className={css.uploaded_image}
-                          src={plate.image}
+                          className={css.logo_icon}
+                          src={dealerPhoto}
                         />
                       ) : (
                         <img

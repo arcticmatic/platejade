@@ -72,6 +72,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 }
 .upload_btn {
   width: 100px;
