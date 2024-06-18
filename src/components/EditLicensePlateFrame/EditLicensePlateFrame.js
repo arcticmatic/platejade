@@ -42,6 +42,7 @@ const EditLicensePlateFrame = () => {
 
   const handleBackgroundFileChange = event => {
     setBackgroundFile(event.target.files[0]);
+    console.log(event.target.files[0])
     setBackgroundFileSelected(true);
   };
 
@@ -701,7 +702,7 @@ const EditLicensePlateFrame = () => {
                       {!backgroundFileSelected ? "Click to select background" : ""}
                           <input
                             type="file"
-                            id="fileInput"
+                            id="backgroundFileInput"
                             onChange={handleBackgroundFileChange}
                             style={{ display: 'none' }}
                           />
@@ -711,7 +712,7 @@ const EditLicensePlateFrame = () => {
                       className={css.upload_btn}
                       onClick={handleUploadBackground}
                     >
-                      <p>Upload Background</p>
+                      <p>Click to upload background</p>
                     </button>
                     )}
                       </div>

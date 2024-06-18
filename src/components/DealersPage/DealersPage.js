@@ -3,6 +3,7 @@ import cross from '../icons/cross.svg';
 import AZFilterIcon from '../icons/AZFilterIcon.svg';
 import editIcon from '../icons/editIcon.svg';
 import deleteIcon from '../icons/deleteIcon.svg';
+import dealerPhoto from '../icons/dealerPhoto.svg';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -33,7 +34,7 @@ const DealersPage = () => {
   const role = useSelector(authSelectors.getRole);
 
   const getAllDealers = () => {
-    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
+    fetch(`${BASE_URL}/api/auth/all-dealers`, {
       method: 'GET',
       header: {},
     })
@@ -377,7 +378,7 @@ const DealersPage = () => {
                         />
                         <img
                           alt="dealer logo"
-                          src={dealer.logo}
+                          src={dealer.logo ? dealer.logo : dealerPhoto}
                           className={css.dealerIcon}
                         />
                         <p className={css.dealers_company_name}>

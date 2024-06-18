@@ -221,8 +221,8 @@ const AddDealer = () => {
                     />
                   )}
                   <div className={css.add_dealer_upload_text}>
-                    <label htmlFor="fileInput">
-                      Click to upload
+                    <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+                      Click to select
                       <input
                         type="file"
                         id="fileInput"

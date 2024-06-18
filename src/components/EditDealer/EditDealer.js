@@ -227,8 +227,8 @@ const EditDealer = () => {
                         />
                       )}
                       <div className={css.add_dealer_upload_text}>
-                        <label htmlFor="fileInput">
-                          Click to upload
+                        <label htmlFor="fileInput" >
+                          Click to select image
                           <input
                             type="file"
                             id="fileInput"

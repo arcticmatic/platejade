@@ -26,6 +26,7 @@
   line-height: 20px; /* 142.857% */
   border: 1px transparent;
   background: transparent;
+  cursor: pointer;
 }
 .add_dealer_text {
   padding-left: 70px;
@@ -432,6 +433,7 @@
   border-radius: 10px;
   margin: 0 auto;
   margin-top: 2px;
+  cursor: pointer;
 }
 .notification_modal {
   border-radius: 20px;

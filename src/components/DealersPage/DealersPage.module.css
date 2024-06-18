@@ -32,7 +32,7 @@
   background: var(--app-black, #10101c);
   color: #dad3cc;
   outline: none;
-
+  cursor: pointer;
   padding: 15px 20px;
 }
 .cross_icon {
@@ -180,6 +180,7 @@
   vertical-align: middle;
   margin-right: 10px;
   margin-left: 20px;
+  width: 10%;
 }
 
 .dealers_admin_actions_thumb {
@@ -188,9 +189,11 @@
 }
 .edit_icon {
   margin-left: 20px;
+  cursor: pointer;
 }
 .delete_icon {
   margin-left: 20px;
+  cursor: pointer;
 }
 .notification_modal {
   display: flex;

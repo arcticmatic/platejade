@@ -28,6 +28,7 @@
   line-height: 20px; /* 142.857% */
   border: 1px transparent;
   background: transparent;
+  cursor: pointer;
 }
 .add_dealer_text {
   padding-left: 70px;
@@ -178,6 +179,7 @@
   align-items: center;
   gap: 5px;
   border: 1px solid;
+  cursor: pointer;
 }
 .password_generated_btn {
   margin-top: 43px;
@@ -190,6 +192,7 @@
   align-items: center;
   gap: 5px;
   border: 1px solid var(--dashboard-stroke, rgba(242, 242, 242, 0.8));
+  cursor: pointer;
 }
 
 .add_dealer_contact_person {
@@ -235,7 +238,7 @@
 }
 .cancel_btn {
   margin-bottom: 80px;
-
+  cursor: pointer;
   margin-right: 20px;
   border: 1px transparent;
   padding: 15px 20px;
@@ -254,7 +257,7 @@
   line-height: 18px; /* 138.462% */
   letter-spacing: -0.078px;
   border: 1px transparent;
-
+  cursor: pointer;
   padding: 15px 20px;
   align-items: center;
   gap: 5px;
@@ -283,6 +286,7 @@
   border-radius: 10px;
   margin: 0 auto;
   margin-top: 2px;
+  cursor: pointer;
 }
 .add_dealer_upload_text {
   display: flex;

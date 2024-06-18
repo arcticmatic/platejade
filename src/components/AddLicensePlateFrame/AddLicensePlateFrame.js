@@ -716,7 +716,7 @@ const AddLicensePlateFrame = () => {
                       className={css.upload_btn}
                       onClick={handleUploadBackground}
                     >
-                      <p>Upload Background</p>
+                      <p>Click to upload background</p>
                     </button>
                     )}
                   </div>
