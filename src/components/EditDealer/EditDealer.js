@@ -240,7 +240,7 @@ const EditDealer = () => {
                           className={css.upload_btn}
                           onClick={handleUpload}
                         >
-                          <p>Upload Image</p>
+                          <p>Click to upload</p>
                         </button>
                       </div>
                       <div className={css.border}></div>

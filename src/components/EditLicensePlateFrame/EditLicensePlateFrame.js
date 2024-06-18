@@ -651,7 +651,7 @@ const EditLicensePlateFrame = () => {
                       )}
                       <div className={css.add_dealer_upload_text}>
                         <label htmlFor="fileInput"style={{ cursor: 'pointer' }}>
-                        {!fileSelected ? "Click to upload" : ""}
+                        {!fileSelected ? "Click to select image" : ""}
                           <input
                             type="file"
                             id="fileInput"
@@ -661,7 +661,7 @@ const EditLicensePlateFrame = () => {
                         </label>
                         {fileSelected && (
                         <button className={css.upload_btn} onClick={handleUpload}>
-                          <p>Upload Image</p>
+                          <p>Click to upload</p>
                         </button>
                         )}
                       </div>
@@ -698,7 +698,7 @@ const EditLicensePlateFrame = () => {
                       )}
                       <div className={css.add_dealer_upload_text}>
                       <label htmlFor="backgroundFileInput" style={{ cursor: 'pointer' }}>
-                      {!backgroundFileSelected ? "Click to upload background" : ""}
+                      {!backgroundFileSelected ? "Click to select background" : ""}
                           <input
                             type="file"
                             id="fileInput"
