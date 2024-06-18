@@ -27,7 +27,7 @@ const AddLicensePlate = () => {
   const handleFileChange = event => {
     setFile(event.target.files[0]);
     setFileSelected(true);
-    console.log('File selected:', event.target.files[0]); // Логування вибраного файлу
+    console.log('File selected:', event.target.files[0]);
   };
 
   useEffect(() => {
@@ -302,7 +302,7 @@ const AddLicensePlate = () => {
       const imageUrl = uploadUrl.split('?')[0];
       console.log('Image URL:', imageUrl);
       setUploadedImage(imageUrl);
-      setFileSelected(false); // Скидання стану вибору файлу після завантаження
+      setFileSelected(false);
     } catch (error) {
       console.error('Upload failed:', error);
     }

@@ -21,6 +21,7 @@ const EditLicensePlate = () => {
   const [showNotification, setShowNotification] = useState(false);
 
   const [file, setFile] = useState(null);
+  
 
   const handleFileChange = event => {
     const selectedFile = event.target.files[0];

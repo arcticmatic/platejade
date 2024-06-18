@@ -31,9 +31,18 @@ const EditLicensePlateFrame = () => {
   const [showNotification, setShowNotification] = useState(false);
 
   const [file, setFile] = useState(null);
+  const [fileSelected, setFileSelected] = useState(false);
+  const [backgroundFile, setBackgroundFile] = useState(null);
+  const [backgroundFileSelected, setBackgroundFileSelected] = useState(false);
 
   const handleFileChange = event => {
     setFile(event.target.files[0]);
+    setFileSelected(true);
+  };
+
+  const handleBackgroundFileChange = event => {
+    setBackgroundFile(event.target.files[0]);
+    setBackgroundFileSelected(true);
   };
 
   useEffect(() => {
@@ -557,6 +566,7 @@ const EditLicensePlateFrame = () => {
     const imageUrl = uploadUrl.split('?')[0];
     console.log(imageUrl);
     setUploadedImage(imageUrl);
+    setFileSelected(false);
   };
 
   const handleUploadBackground = async event => {
@@ -564,7 +574,7 @@ const EditLicensePlateFrame = () => {
     // console.log('inside func');
     // console.log(file);
 
-    const originalFilename = file.name;
+    const originalFilename = backgroundFile.name;
 
     // Send a request to the backend to get a pre-signed URL
     const uploadUrl = await fetch(
@@ -590,12 +600,13 @@ const EditLicensePlateFrame = () => {
       headers: {
         'Content-Type': 'image/png',
       },
-      body: file,
+      body: backgroundFile,
     });
 
     const imageUrl = uploadUrl.split('?')[0];
     console.log(imageUrl);
     setUploadedBackground(imageUrl);
+    setBackgroundFileSelected(false);
   };
 
   return (
@@ -627,8 +638,8 @@ const EditLicensePlateFrame = () => {
                       {!uploadedImage ? (
                         <img
                           alt="dealer logo"
-                          className={css.logo_icon}
-                          src={dealerPhoto}
+                          className={css.uploaded_image}
+                          src={frame.image}
                         />
                       ) : (
                         <img
@@ -639,8 +650,8 @@ const EditLicensePlateFrame = () => {
                         />
                       )}
                       <div className={css.add_dealer_upload_text}>
-                        <label htmlFor="fileInput">
-                          Click to upload
+                        <label htmlFor="fileInput"style={{ cursor: 'pointer' }}>
+                        {!fileSelected ? "Click to upload" : ""}
                           <input
                             type="file"
                             id="fileInput"
@@ -648,12 +659,11 @@ const EditLicensePlateFrame = () => {
                             style={{ display: 'none' }}
                           />
                         </label>
-                        <button
-                          className={css.upload_btn}
-                          onClick={handleUpload}
-                        >
+                        {fileSelected && (
+                        <button className={css.upload_btn} onClick={handleUpload}>
                           <p>Upload Image</p>
                         </button>
+                        )}
                       </div>
                       <div className={css.border}></div>
                       {!uploadedImage && (
@@ -675,8 +685,8 @@ const EditLicensePlateFrame = () => {
                       {!uploadedBackground ? (
                         <img
                           alt="dealer logo"
-                          className={css.logo_icon}
-                          src={dealerPhoto}
+                          className={frame.backgroundImages[0] !== "" ? css.uploaded_image : css.logo_icon}
+                          src={frame.backgroundImages[0] !== "" ? frame.backgroundImages : dealerPhoto}
                         />
                       ) : (
                         <img
@@ -687,21 +697,23 @@ const EditLicensePlateFrame = () => {
                         />
                       )}
                       <div className={css.add_dealer_upload_text}>
-                        <label htmlFor="fileInput">
-                          Click to upload background
+                      <label htmlFor="backgroundFileInput" style={{ cursor: 'pointer' }}>
+                      {!backgroundFileSelected ? "Click to upload background" : ""}
                           <input
                             type="file"
                             id="fileInput"
-                            onChange={handleFileChange}
+                            onChange={handleBackgroundFileChange}
                             style={{ display: 'none' }}
                           />
                         </label>
-                        <button
-                          className={css.upload_btn}
-                          onClick={handleUploadBackground}
-                        >
-                          <p>Upload Background</p>
-                        </button>
+                        {backgroundFileSelected && (
+                    <button
+                      className={css.upload_btn}
+                      onClick={handleUploadBackground}
+                    >
+                      <p>Upload Background</p>
+                    </button>
+                    )}
                       </div>
                       <div className={css.border}></div>
                       {!uploadedBackground && (
