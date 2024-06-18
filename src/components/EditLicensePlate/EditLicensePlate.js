@@ -1,7 +1,7 @@
 import css from './EditLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
-import dealerPhoto from '../icons/dealerPhoto.svg';
+// import dealerPhoto from '../icons/dealerPhoto.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
@@ -13,7 +13,7 @@ const EditLicensePlate = () => {
   const [searchParams] = useSearchParams();
   const [currentPlate, setCurrentPlate] = useState([]);
   const [refresh, setRefresh] = useState(true);
-
+  const [fileSelected, setFileSelected] = useState(false);
   const [categories, setCategories] = useState([]);
   const [states, setStates] = useState([]);
   const [dealers, setDealers] = useState([]);
@@ -23,7 +23,9 @@ const EditLicensePlate = () => {
   const [file, setFile] = useState(null);
 
   const handleFileChange = event => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+    setFileSelected(!!selectedFile);
   };
 
   useEffect(() => {
@@ -303,36 +305,40 @@ const EditLicensePlate = () => {
   const handleUpload = async event => {
     event.preventDefault();
     console.log('inside func');
+    if (!file) {
+      console.error("No file selected");
+      return;
+    }
 
-    const originalFilename = file.name;
+    try {
+      const originalFilename = file.name;
+  
+      // Send a request to the backend to get a pre-signed URL
+      const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: originalFilename }),
+      })
+        .then(res => res.json())
+        .then(res => res.uploadURL);
+  
 
-    // Send a request to the backend to get a pre-signed URL
-    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: originalFilename }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        return res.uploadURL;
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type, 
+        },
+        body: file,
       });
-
-    // console.log(uploadUrl);
-
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'image/png',
-      },
-      body: file,
-    });
-
-    const imageUrl = uploadUrl.split('?')[0];
-   console.log(imageUrl);
-    setUploadedImage(imageUrl);
-    console.log('uploaded image', uploadedImage);
+  
+      const imageUrl = uploadUrl.split('?')[0];
+      setUploadedImage(imageUrl);
+      console.log('uploaded image', imageUrl);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
 
   
@@ -356,29 +362,14 @@ const EditLicensePlate = () => {
               <form className={css.add_dealer_blocks_thumb}>
                 <div>
                   <div className={css.add_dealer_company_info}>
-                    <div
-                      className={
-                        !uploadedImage
-                          ? css.add_dealer_upload_image_thumb
-                          : css.uploaded_image_thumb
-                      }
-                    >
+                    <div className={!uploadedImage ? css.add_dealer_upload_image_thumb : css.uploaded_image_thumb}>
                       {!uploadedImage ? (
-                        <img
-                          alt="dealer logo"
-                          className={css.logo_icon}
-                          src={dealerPhoto}
-                        />
+                        <img alt="dealer logo" className={css.uploaded_image} src={plate.image} />
                       ) : (
-                        <img
-                          className={css.uploaded_image}
-                          alt="uploaded plate"
-                          height="150"
-                          src={uploadedImage}
-                        />
+                        <img className={css.uploaded_image} alt="uploaded plate" height="150" src={uploadedImage} />
                       )}
                       <div className={css.add_dealer_upload_text}>
-                        <label htmlFor="fileInput">
+                        <label htmlFor="fileInput" className={css.upload_label} style={{ cursor: 'pointer' }}>
                           Click to upload
                           <input
                             type="file"
@@ -387,12 +378,11 @@ const EditLicensePlate = () => {
                             style={{ display: 'none' }}
                           />
                         </label>
-                        <button
-                          className={css.upload_btn}
-                          onClick={handleUpload}
-                        >
-                          <p>Upload Image</p>
-                        </button>
+                        {fileSelected && (
+                          <button className={css.upload_btn} onClick={handleUpload}>
+                            <p>Upload Image</p>
+                          </button>
+                        )}
                       </div>
                       <div className={css.border}></div>
                       {!uploadedImage && (
@@ -834,3 +824,5 @@ const EditLicensePlate = () => {
   );
 };
 export default EditLicensePlate;
+
+

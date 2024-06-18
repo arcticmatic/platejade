@@ -1,7 +1,7 @@
 import css from './AddLicensePlate.module.css';
 import { Link } from 'react-router-dom';
 import backArrow from '../icons/backArrow.svg';
-import dealerPhoto from '../icons/dealerPhoto.svg';
+import imageUpload from '../icons/imageUpload.svg';
 import bottomArrow from '../icons/bottomArrow.svg';
 import openMenuIcon from '../icons/openMenuIcon.svg';
 import { useState, useEffect } from 'react';
@@ -18,6 +18,7 @@ const AddLicensePlate = () => {
   const [uploadedImage, setUploadedImage] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [fileSelected, setFileSelected] = useState(false);
 
   const BASE_URL = 'https://platejade-back.onrender.com';
 
@@ -25,11 +26,13 @@ const AddLicensePlate = () => {
 
   const handleFileChange = event => {
     setFile(event.target.files[0]);
+    setFileSelected(true);
+    console.log('File selected:', event.target.files[0]); // Логування вибраного файлу
   };
 
   useEffect(() => {
     // RECEIVE AND SET DEALERS
-    fetch(`${BASE_URL}/api/auth/admin/alldealers`, {
+    fetch(`${BASE_URL}/api/auth/all-dealers`, {
       method: 'GET',
       header: {},
     })
@@ -265,35 +268,44 @@ const AddLicensePlate = () => {
   const handleUpload = async event => {
     event.preventDefault();
     console.log('inside func');
-
+  
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+  
     const originalFilename = file.name;
-
-    // Send a request to the backend to get a pre-signed URL
-    const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: originalFilename }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        return res.uploadURL;
+    console.log('Original filename:', originalFilename);
+  
+    try {
+      const uploadUrl = await fetch(`${BASE_URL}/api/auth/admin/s3Url`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: originalFilename }),
+      })
+        .then(res => res.json())
+        .then(res => {
+          console.log('Upload URL:', res.uploadURL);
+          return res.uploadURL;
+        });
+  
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file,
       });
-
-    // console.log(uploadUrl);
-
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'image/png',
-      },
-      body: file,
-    });
-
-    const imageUrl = uploadUrl.split('?')[0];
-    console.log(imageUrl);
-    setUploadedImage(imageUrl);
+  
+      const imageUrl = uploadUrl.split('?')[0];
+      console.log('Image URL:', imageUrl);
+      setUploadedImage(imageUrl);
+      setFileSelected(false); // Скидання стану вибору файлу після завантаження
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
   };
 
   // console.log('uploaded image', uploadedImage);
@@ -314,49 +326,53 @@ const AddLicensePlate = () => {
           <p className={css.add_dealer_text}>Add Plate</p>
           <form className={css.add_dealer_blocks_thumb}>
             <div>
-              <div className={css.add_dealer_company_info}>
-                <div
-                  className={
-                    !uploadedImage
-                      ? css.add_dealer_upload_image_thumb
-                      : css.uploaded_image_thumb
-                  }
-                >
-                  {!uploadedImage ? (
-                    <img
-                      alt="dealer logo"
-                      className={css.logo_icon}
-                      src={dealerPhoto}
+         <div className={css.add_dealer_company_info}>
+         <div className={
+            !uploadedImage
+              ? css.add_dealer_upload_image_thumb
+              : css.uploaded_image_thumb
+          }>
+            {!uploadedImage ? (
+              <>
+                <img
+                  alt="dealer logo"
+                  className={css.logo_icon}
+                  src={imageUpload}
+                />
+                <div className={css.add_dealer_upload_text}>
+                  <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+                    {!fileSelected ? "Click to upload" : ""}
+                    <input
+                      type="file"
+                      id="fileInput"
+                      onChange={handleFileChange}
+                      style={{ display: 'none', cursor: 'pointer' }}
                     />
-                  ) : (
-                    <img
-                      className={css.uploaded_image}
-                      alt="uploaded plate"
-                      height="150"
-                      src={uploadedImage}
-                    />
-                  )}
-                  <div className={css.add_dealer_upload_text}>
-                    <label htmlFor="fileInput">
-                      Click to upload
-                      <input
-                        type="file"
-                        id="fileInput"
-                        onChange={handleFileChange}
-                        style={{ display: 'none' }}
-                      />
-                    </label>
+                  </label>
+                  {fileSelected && (
                     <button className={css.upload_btn} onClick={handleUpload}>
-                      <p>Upload Image</p>
+                      Upload Image
                     </button>
-                  </div>
-                  <div className={css.border}></div>
-                  {!uploadedImage && (
-                    <p className={css.add_dealer_image_size}>
-                      PNG or JPG recommended size (1000px*1000px)
-                    </p>
                   )}
                 </div>
+              </>
+            ) : (
+              <>
+                <img
+                  className={css.uploaded_image}
+                  alt="uploaded plate"
+                  height="150"
+                  src={uploadedImage}
+                />
+              </>
+            )}
+            <div className={css.border}></div>
+            {!uploadedImage && (
+              <p className={css.add_dealer_image_size}>
+                PNG or JPG recommended size (1000px*1000px)
+              </p>
+            )}
+          </div>
               </div>
             </div>
 
