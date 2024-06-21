@@ -487,11 +487,16 @@ const EditLicensePlateFrame = () => {
 
     const payload = {};
     Object.entries(formData).forEach(([key, value]) => {
-      if (value.trim() !== '') {
-        payload[key] = value;
+      if (typeof value === 'string' && value.trim() !== '') {
+          payload[key] = value;
+      } else if (Array.isArray(value) && value.length > 0) {
+          payload[key] = value;
+      } else if (typeof value === 'object' && value !== null && Object.keys(value).length > 0) {
+          payload[key] = value;
+      } else if (typeof value !== 'string' && value !== '') {
+          payload[key] = value;
       }
-    });
-    console.log('payload', payload);
+  });
 
     // console.log('Form Data:', formData);
 
