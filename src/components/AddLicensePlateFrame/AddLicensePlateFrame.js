@@ -503,7 +503,7 @@ const AddLicensePlateFrame = () => {
     formData['backgroundImages'] = uploadedBackground;
 
     if (formData.colorName === 'Multicolor') {
-      formData['color'] = ['66465', '9198E5'];
+      formData['color'] = ['E66465', '9198E5'];
     } else if (formData.colorName === 'Transparent') {
       formData['color'] = [''];
     }

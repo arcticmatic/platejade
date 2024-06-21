@@ -218,7 +218,11 @@ const EditLicensePlateFrame = () => {
         const colorArray = Array.from(
           new Set(result.colors.map(item => item.color))
         );
-        setColors(colorArray.flat());
+        const colorsArrayWithoutEmptyValues = colorArray
+        .flat()
+        .filter(color => color !== '');
+
+        setColors(colorsArrayWithoutEmptyValues);
         setColorsName(colorNamesArray);
 
         setFields(prevFields => {
@@ -227,7 +231,7 @@ const EditLicensePlateFrame = () => {
               return { ...field, options: colorNamesArray };
             }
             if (field.name === 'color') {
-              return { ...field, options: colorArray };
+              return { ...field, options: colorsArrayWithoutEmptyValues };
             }
             return field;
           });
@@ -470,7 +474,7 @@ const EditLicensePlateFrame = () => {
 
     // Additional logic for specific form data based on conditions
     if (formData.colorName === 'Multicolor') {
-      formData['color'] = ['66465', '9198E5'];
+      formData['color'] = ['E66465', '9198E5'];
     } else if (formData.colorName === 'Transparent') {
       formData['color'] = [''];
     }
